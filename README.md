@@ -24,8 +24,8 @@ Specifications
 | Algo                   | Yespower           |
 | Premine                | 2580000               |
 | Block Spacing          | 60 seconds             |
-| Max Supply             | 84,000,000 (21 Million)|
-| Block Reward           | 10 - 1  BTE           |
+| Max Supply             | 84,000,000 (84 Million)|
+| Block Reward           | 50  BTE           |
 
 License
 -------
