@@ -1,7 +1,7 @@
 Bitweb Core
 =====================================
 
-**[Website](https://bitweb.tech) | [Explorer 1](https://blocks.bitweb.tech) | [Explorer 2](http://explorer.customspeed.nl) | [Explorer 3](http://explorer.bitweb.tech)| [Official Ann](https://bitcointalk.org/index.php?topic=5174488.0) | [Discord](https://discord.gg/unGuGEB)**
+**[Website](https://github.com/SACSaveCoin/BTE/) | [Explorer](https://blocks.bitweb.tech) | [Official Ann](https://bitcointalk.org/index.php?topic=5174488.0) | [Wallet](https://github.com/SACSaveCoin/BTE/releases)**
 
 
 What is Bitweb?
@@ -14,7 +14,7 @@ out collectively by the network. Bitweb Core is the name of open source
 software which enables the use of this currency.
 
 For more information, as well as an immediately useable, binary version of
-the Bitweb Core software, **[see Release](https://github.com/LightBitProject/LightBit/releases)**.
+the Bitweb Core software, **[see Release](https://github.com/SACSaveCoin/BTE/releases)**.
 
 Specifications
 ------
