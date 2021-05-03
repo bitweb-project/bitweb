@@ -1,7 +1,7 @@
 Bitweb Core
 =====================================
 
-**[Website](https://github.com/SACSaveCoin/BTE/) | [Explorer](https://blocks.bitweb.tech) | [Official Ann](https://bitcointalk.org/index.php?topic=5174488.0) | [Wallet](https://github.com/SACSaveCoin/BTE/releases)**
+**[Website](https://github.com/SACSaveCoin/BTE/) | [Explorer](https://blocks.bitweb.tech)  | [Wallet](https://github.com/SACSaveCoin/BTE/releases)**
 
 
 What is Bitweb?
