@@ -1,7 +1,7 @@
 Bitweb Core
 =====================================
 
-**[Website](http://118.193.69.172:3003/) | [Explorer](http://118.193.69.172:3002/)  | [Wallet](https://github.com/SACSaveCoin/BTE/releases) | [mining pool-1](http://118.193.69.172:8080/) | [mining pool-2](https://pool.rplant.xyz/)**
+**[Website](http://www.bitwebcore.info/) | [Explorer](http://118.193.69.172:3002/)  | [Wallet](https://github.com/SACSaveCoin/BTE/releases) | [mining pool-1](http://118.193.69.172:8080/) | [mining pool-2](https://pool.rplant.xyz/)**
 
 
 What is Bitweb?
