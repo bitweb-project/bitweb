@@ -7,6 +7,8 @@ web:www.bitwebcore.info
 
 mobile wallet:in development
 
+Development talk See [Dev.md](talk)
+
 What is Bitweb?
 ------------------
 
