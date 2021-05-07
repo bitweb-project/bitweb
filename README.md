@@ -1,7 +1,7 @@
 Bitweb Core
 =====================================
 
-**[Website](http://www.bitwebcore.info/) | [Explorer](http://118.193.69.172:3002/)  | [Wallet](https://github.com/SACSaveCoin/BTE/releases) | [mining pool-1](http://118.193.69.172:8080/) | [mining pool-2](https://pool.rplant.xyz/)**
+**[Website](http://www.bitwebcore.info/) | [Explorer](http://118.193.69.172:3002/)  | [Wallet](https://github.com/SACSaveCoin/BTE/releases) | [mining pool-1](http://118.193.69.172:8080/) | [mining pool-2](https://pool.rplant.xyz/) | [mining pool-3](https://pool-jg1000.fr/) | [mining pool-4](http://miner123.win/)**
 
 web:www.bitwebcore.info
 
