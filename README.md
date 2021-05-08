@@ -5,9 +5,10 @@ Bitweb Core
 
 web:www.bitwebcore.info
 
+[Community](http://community.bitwebcore.info/)
+
 mobile wallet:in development
 
-Development talk See [Dev.md](Dev.md)
 
 What is Bitweb?
 ------------------
