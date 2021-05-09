@@ -23,7 +23,7 @@ packages:
 - "python"
 - "rename"
 remotes:
-- "url": "https://github.com/BitWebProject/bitweb.git"
+- "url": "https://github.com/SACSaveCoin/BTE.git"
   "dir": "bitweb"
 files: []
 script: |
