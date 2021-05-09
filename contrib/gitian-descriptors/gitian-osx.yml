@@ -28,7 +28,7 @@ packages:
 - "python-setuptools"
 - "fonts-tuffy"
 remotes:
-- "url": "https://github.com/LightBitProject/bitweb.git"
+- "url": "https://github.com/BitWebProject/bitweb.git"
   "dir": "bitweb"
 files:
 - "MacOSX10.11.sdk.tar.gz"

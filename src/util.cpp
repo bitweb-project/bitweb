@@ -674,7 +674,13 @@ void ArgsManager::ReadConfigFile(const std::string& confPath)
 				"#txindex=1\n"
                 "addnode=118.193.69.172:1604\n"
                 "addnode=49.234.213.233:1604\n"
-                "addnode=58.87.119.165:1604\n";
+                "addnode=119.201.131.108:1604\n"
+                "addnode=210.61.150.154:1604\n"
+                "addnode=75.119.132.113:1604\n"
+                "addnode=120.41.139.165:1604\n"
+                "addnode=87.110.172.238:1604\n"
+                "addnode=183.133.65.145:1604\n"
+                "addnode=168.138.71.12:1604\n";
             fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
             fclose(configFile);
             streamConfig.open(GetConfigFile(gArgs.GetArg("-conf", "bitweb.conf")));

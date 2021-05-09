@@ -32,7 +32,7 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://github.com/LightBitProject/bitweb.git"
+- "url": "https://github.com/BitWebProject/bitweb.git"
   "dir": "bitweb"
 files: []
 script: |

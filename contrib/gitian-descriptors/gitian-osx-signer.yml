@@ -7,7 +7,7 @@ architectures:
 packages:
 - "faketime"
 remotes:
-- "url": "https://github.com/LightBitProject/bitweb-detached-sigs.git"
+- "url": "https://github.com/BitWebProject/bitweb-detached-sigs.git"
   "dir": "signature"
 files:
 - "bitweb-osx-unsigned.tar.gz"
