@@ -7,6 +7,9 @@ web:www.bitwebcore.info
 
 [Community](http://community.bitwebcore.info/)
 
+offer a reward
+[Mining pool plan](http://community.bitwebcore.info/d/1-mine-pool-construction-plan)
+
 mobile wallet:in development
 
 
