@@ -32,7 +32,7 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://github.com/BitWebProject/bitweb.git"
+- "url": "https://github.com/SACSaveCoin/BTE.git"
   "dir": "bitweb"
 files: []
 script: |

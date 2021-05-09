@@ -23,13 +23,13 @@ def setup():
         programs += ['lxc', 'debootstrap']
     subprocess.check_call(['sudo', 'apt-get', 'install', '-qq'] + programs)
     if not os.path.isdir('gitian.sigs'):
-        subprocess.check_call(['git', 'clone', 'https://github.com/BitWebProject/gitian.sigs.git'])
+        subprocess.check_call(['git', 'clone', 'https://github.com/SACSaveCoin/BTE/gitian.sigs.git'])
     if not os.path.isdir('bitweb-detached-sigs'):
-        subprocess.check_call(['git', 'clone', 'https://github.com/BitWebProject/bitweb-detached-sigs.git'])
+        subprocess.check_call(['git', 'clone', 'https://github.com/SACSaveCoin/BTE/bitweb-detached-sigs.git'])
     if not os.path.isdir('gitian-builder'):
         subprocess.check_call(['git', 'clone', 'https://github.com/devrandom/gitian-builder.git'])
     if not os.path.isdir('bitweb'):
-        subprocess.check_call(['git', 'clone', 'https://github.com/BitWebProject/BitWeb.git'])
+        subprocess.check_call(['git', 'clone', 'https://github.com/SACSaveCoin/BTE.git'])
     os.chdir('gitian-builder')
     make_image_prog = ['bin/make-base-vm', '--suite', 'bionic', '--arch', 'amd64']
     if args.docker:
