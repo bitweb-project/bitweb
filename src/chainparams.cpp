@@ -125,7 +125,6 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("0x04363330f08f5ec5601c7883855986a75707a05c1d3dee5ebb8b21bf44c3aae0"));
         vSeeds.emplace_back("118.193.69.172:1604","118.193.69.172:1604");
         vSeeds.emplace_back("49.234.213.233:1604","49.234.213.233:1604");
-        vSeeds.emplace_back("58.87.119.165:1604","58.87.119.165:1604");
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,33);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,30);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,128);
@@ -144,15 +143,16 @@ public:
             {
                 {       0, uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3")},
                 {       662, uint256S("0x00021b08ddf59cd9d9e396ef46c6d57644b3aac7977d271c966f66b63df45dd1")},
+				{       9074, uint256S("0x0000007e1d70d529752b87fe47f979ae5f8f27bbc987dd0c8b21c9c5a6f3099b")},
             }
         };
 
         chainTxData = ChainTxData{
             // Data as of block height 1000000 from 'getchaintxstats' command
-            1620049887, // * UNIX timestamp of last known number of transactions
-               663, // * total number of transactions between genesis and that timestamp
+            1620562259, // * UNIX timestamp of last known number of transactions
+               10275, // * total number of transactions between genesis and that timestamp
                         //   (the tx=... number in the SetBestChain debug.log lines)
-            0.009586517962031008  // * estimated number of transactions per second after that timestamp
+            0.0176737656492739  // * estimated number of transactions per second after that timestamp
         };
     }
 };
