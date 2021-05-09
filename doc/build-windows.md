@@ -85,8 +85,8 @@ This means you cannot use a directory that located directly on the host Windows 
 The next three steps are an example of how to acquire the source in an appropriate way.
 
     cd /usr/src
-    sudo git clone https://github.com/bitweb/bitweb.git
-    sudo chmod -R a+rw bitweb
+    sudo git clone https:/https://github.com/SACSaveCoin/BTE.git
+    sudo chmod -R a+rw BTE
 
 Once the source code is ready the build steps are below.
 
