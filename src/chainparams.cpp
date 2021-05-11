@@ -94,8 +94,8 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1622356007; // Sunday, 30 May 2021
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
-        consensus.nMinimumChainWork = uint256S("0x00");
-        consensus.defaultAssumeValid = uint256S("0x00"); // 654683
+        consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000000000015e19c1ad1");
+        consensus.defaultAssumeValid = uint256S("0x0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903"); // 12167
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -121,9 +121,11 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("118.193.69.172"); // Pieter Wuille, only supports x1, x5, x9, and xd
-        vSeeds.emplace_back("49.234.213.233"); // Matt Corallo, only supports x9
-		
+        vSeeds.emplace_back("118.193.69.172");
+        vSeeds.emplace_back("49.234.213.233");
+        vSeeds.emplace_back("seed.bitwebcore.info");
+        vSeeds.emplace_back("seed1.bitwebcore.info");
+
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,33);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,30);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,128);
@@ -144,14 +146,15 @@ public:
                 {0, uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3")},
                 {662, uint256S("0x00021b08ddf59cd9d9e396ef46c6d57644b3aac7977d271c966f66b63df45dd1")},
 				{9074, uint256S("0x0000007e1d70d529752b87fe47f979ae5f8f27bbc987dd0c8b21c9c5a6f3099b")},
+				{12167, uint256S("0x0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903")},
             }
         };
 
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 0000000000000000000b9d2ec5a352ecba0592946514a92f14319dc2b367fc72
-            /* nTime    */ 0,
-            /* nTxCount */ 0,
-            /* dTxRate  */ 0,
+            // Data from RPC: getchaintxstats 4096 0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903
+            /* nTime    */ 1620749329,
+            /* nTxCount */ 13696,
+            /* dTxRate  */ 0.01823030126994885,
         };
     }
 };
