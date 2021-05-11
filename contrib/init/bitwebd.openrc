@@ -1,0 +1,92 @@
+#!/sbin/openrc-run
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/bitweb/.bitweb" ]; then
+	BITWEBD_DEFAULT_DATADIR="/var/lib/bitweb/.bitweb"
+else
+	BITWEBD_DEFAULT_DATADIR="/var/lib/bitwebd"
+fi
+
+BITWEBD_CONFIGFILE=${BITWEBD_CONFIGFILE:-/etc/bitweb/bitweb.conf}
+BITWEBD_PIDDIR=${BITWEBD_PIDDIR:-/var/run/bitwebd}
+BITWEBD_PIDFILE=${BITWEBD_PIDFILE:-${BITWEBD_PIDDIR}/bitwebd.pid}
+BITWEBD_DATADIR=${BITWEBD_DATADIR:-${BITWEBD_DEFAULT_DATADIR}}
+BITWEBD_USER=${BITWEBD_USER:-${BITWEB_USER:-bitweb}}
+BITWEBD_GROUP=${BITWEBD_GROUP:-bitweb}
+BITWEBD_BIN=${BITWEBD_BIN:-/usr/bin/bitwebd}
+BITWEBD_NICE=${BITWEBD_NICE:-${NICELEVEL:-0}}
+BITWEBD_OPTS="${BITWEBD_OPTS:-${BITWEB_OPTS}}"
+
+name="Bitweb Core Daemon"
+description="Bitweb cryptocurrency P2P network daemon"
+
+command="/usr/bin/bitwebd"
+command_args="-pid=\"${BITWEBD_PIDFILE}\" \
+		-conf=\"${BITWEBD_CONFIGFILE}\" \
+		-datadir=\"${BITWEBD_DATADIR}\" \
+		-daemon \
+		${BITWEBD_OPTS}"
+
+required_files="${BITWEBD_CONFIGFILE}"
+start_stop_daemon_args="-u ${BITWEBD_USER} \
+			-N ${BITWEBD_NICE} -w 2000"
+pidfile="${BITWEBD_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${BITWEBD_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${BITWEBD_USER}:${BITWEBD_GROUP}" \
+	"${BITWEBD_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${BITWEBD_USER}:${BITWEBD_GROUP}" \
+	"${BITWEBD_PIDDIR}"
+
+	checkpath -f \
+	-o ${BITWEBD_USER}:${BITWEBD_GROUP} \
+	-m 0660 \
+	${BITWEBD_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${BITWEBD_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run bitwebd."
+		eerror "The setting must appear in ${BITWEBD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Bitweb Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

@@ -93,7 +93,7 @@ src/qt/bitcoin-qt.includes
 Makefile
 !depends/Makefile
 src/qt/bitcoin-qt
-Bitcoin-Qt.app
+Bitweb-Qt.app
 background.tiff*
 
 # Qt Creator
