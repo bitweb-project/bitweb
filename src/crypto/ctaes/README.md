@@ -7,12 +7,12 @@ Features:
 * Simple, pure C code without any dependencies.
 * No tables or data-dependent branches whatsoever, but using bit sliced approach from https://eprint.iacr.org/2009/129.pdf.
 * Very small object code: slightly over 4k of executable code when compiled with -Os.
-* Slower than implementations based on precomputed tables or specialized instructions, but can do ~15 MB/s on modern BTEs.
+* Slower than implementations based on precomputed tables or specialized instructions, but can do ~15 MB/s on modern CPUs.
 
 Performance
 -----------
 
-Compiled with GCC 5.3.1 with -O3, on an Intel(R) Core(TM) i7-4800MQ BTE, numbers in BTE cycles:
+Compiled with GCC 5.3.1 with -O3, on an Intel(R) Core(TM) i7-4800MQ CPU, numbers in CPU cycles:
 
 | Algorithm | Key schedule | Encryption per byte | Decryption per byte |
 | --------- | ------------:| -------------------:| -------------------:|

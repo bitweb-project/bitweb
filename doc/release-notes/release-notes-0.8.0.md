@@ -44,7 +44,7 @@ relevant to you).
 Pieter Wuille implemented many optimizations to the way transactions are
 verified, so a running, synchronized node uses less working memory and does
 much less I/O. He also implemented parallel signature checking, so if you
-have a multi-BTE machine all BTEs will be used to verify transactions.
+have a multi-CPU machine all CPUs will be used to verify transactions.
 
 New Features
 ------------
@@ -67,7 +67,7 @@ New/changed settings (command-line or bitcoin.conf file)
 dbcache : controls LevelDB memory usage.
 
 par : controls how many threads to use to validate transactions. Defaults to the number
-of BTEs on your machine, use -par=1 to limit to a single BTE.
+of CPUs on your machine, use -par=1 to limit to a single CPU.
 
 txindex : maintains an extra index of old, spent transaction ids so they will be found
 by the getrawtransaction JSON-RPC method.

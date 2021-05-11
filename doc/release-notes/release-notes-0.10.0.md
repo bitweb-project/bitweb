@@ -551,7 +551,7 @@ GUI:
 - `27c3e91` Add proxy to options overridden if necessary
 - `4bd1185` Allow "emergency" shutdown during startup
 - `d52f072` Don't show wallet options in the preferences menu when running with -disablewallet
-- `6093aa1` Qt: QProgressBar BTE-Issue workaround
+- `6093aa1` Qt: QProgressBar CPU-Issue workaround
 - `0ed9675` [Wallet] Add global boolean whether to send free transactions (default=true)
 - `ed3e5e4` [Wallet] Add global boolean whether to pay at least the custom fee (default=true)
 - `e7876b2` [Wallet] Prevent user from paying a non-sense fee

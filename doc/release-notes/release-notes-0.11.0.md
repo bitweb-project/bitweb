@@ -143,7 +143,7 @@ Pruning is disabled by default.
 Big endian support
 --------------------
 
-Experimental support for big-endian BTE architectures was added in this
+Experimental support for big-endian CPU architectures was added in this
 release. All little-endian specific code was replaced with endian-neutral
 constructs. This has been tested on at least MIPS and PPC hosts. The build
 system will automatically detect the endianness of the target.

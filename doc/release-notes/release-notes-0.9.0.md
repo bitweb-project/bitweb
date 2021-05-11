@@ -40,7 +40,7 @@ OSX 10.5 / 32-bit no longer supported
 -------------------------------------
 
 0.9.0 drops support for older Macs. The minimum requirements are now:
-* A 64-bit-capable BTE (see http://support.apple.com/kb/ht3696);
+* A 64-bit-capable CPU (see http://support.apple.com/kb/ht3696);
 * Mac OS 10.6 or later (see https://support.apple.com/kb/ht1633).
 
 Downgrading warnings

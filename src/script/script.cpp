@@ -1,14 +1,15 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2009-2019 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <script/script.h>
 
-#include <tinyformat.h>
-#include <utilstrencodings.h>
+#include <util/strencodings.h>
 
-const char* GetOpName(opcodetype opcode)
+#include <string>
+
+std::string GetOpName(opcodetype opcode)
 {
     switch (opcode)
     {
@@ -139,12 +140,10 @@ const char* GetOpName(opcodetype opcode)
     case OP_NOP9                   : return "OP_NOP9";
     case OP_NOP10                  : return "OP_NOP10";
 
-    case OP_INVALIDOPCODE          : return "OP_INVALIDOPCODE";
+    // Opcode added by BIP 342 (Tapscript)
+    case OP_CHECKSIGADD            : return "OP_CHECKSIGADD";
 
-    // Note:
-    //  The template matching params OP_SMALLINTEGER/etc are defined in opcodetype enum
-    //  as kind of implementation hack, they are *NOT* real opcodes.  If found in real
-    //  Script, just let the default: case deal with them.
+    case OP_INVALIDOPCODE          : return "OP_INVALIDOPCODE";
 
     default:
         return "OP_UNKNOWN";
@@ -281,36 +280,62 @@ bool CScript::HasValidOps() const
     return true;
 }
 
-#ifdef ENABLE_BITCORE_RPC
-bool CScript::IsPayToPubkey() const
+bool GetScriptOp(CScriptBase::const_iterator& pc, CScriptBase::const_iterator end, opcodetype& opcodeRet, std::vector<unsigned char>* pvchRet)
 {
-    if (this->size() == 35 && (*this)[0] == 33 && (*this)[34] == OP_CHECKSIG
-                            && ((*this)[1] == 0x02 || (*this)[1] == 0x03)) {
-        return true;
-     }
-     if (this->size() == 67 && (*this)[0] == 65 && (*this)[66] == OP_CHECKSIG
-                            && (*this)[1] == 0x04) {
-        return true;
-     }
-     return false;
+    opcodeRet = OP_INVALIDOPCODE;
+    if (pvchRet)
+        pvchRet->clear();
+    if (pc >= end)
+        return false;
+
+    // Read instruction
+    if (end - pc < 1)
+        return false;
+    unsigned int opcode = *pc++;
+
+    // Immediate operand
+    if (opcode <= OP_PUSHDATA4)
+    {
+        unsigned int nSize = 0;
+        if (opcode < OP_PUSHDATA1)
+        {
+            nSize = opcode;
+        }
+        else if (opcode == OP_PUSHDATA1)
+        {
+            if (end - pc < 1)
+                return false;
+            nSize = *pc++;
+        }
+        else if (opcode == OP_PUSHDATA2)
+        {
+            if (end - pc < 2)
+                return false;
+            nSize = ReadLE16(&pc[0]);
+            pc += 2;
+        }
+        else if (opcode == OP_PUSHDATA4)
+        {
+            if (end - pc < 4)
+                return false;
+            nSize = ReadLE32(&pc[0]);
+            pc += 4;
+        }
+        if (end - pc < 0 || (unsigned int)(end - pc) < nSize)
+            return false;
+        if (pvchRet)
+            pvchRet->assign(pc, pc + nSize);
+        pc += nSize;
+    }
+
+    opcodeRet = static_cast<opcodetype>(opcode);
+    return true;
 }
 
-bool CScript::IsPayToPubkeyHash() const
+bool IsOpSuccess(const opcodetype& opcode)
 {
-    // Extra-fast test for pay-to-pubkeyhash CScripts:
-    return (this->size() == 25 &&
-            (*this)[0] == OP_DUP &&
-            (*this)[1] == OP_HASH160 &&
-            (*this)[2] == 0x14 &&
-            (*this)[23] == OP_EQUALVERIFY &&
-            (*this)[24] == OP_CHECKSIG);
+    return opcode == 80 || opcode == 98 || (opcode >= 126 && opcode <= 129) ||
+           (opcode >= 131 && opcode <= 134) || (opcode >= 137 && opcode <= 138) ||
+           (opcode >= 141 && opcode <= 142) || (opcode >= 149 && opcode <= 153) ||
+           (opcode >= 187 && opcode <= 254);
 }
-
-bool CScript::IsPayToWitnessPubkeyHash() const
-{
-    // Extra-fast test for pay-to-witness-pubkey-hash CScripts:
-    return (this->size() == 22 &&
-            (*this)[0] == OP_0 &&
-            (*this)[1] == 0x14);
-}
-#endif

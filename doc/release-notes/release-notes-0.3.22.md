@@ -6,7 +6,7 @@ Notable changes:
 * Client will accept and relay TX's with 0.0005 BTC fee schedule (users still pay 0.01 BTC per kb, until next version)
 * Non-standard transactions accepted on testnet
 * Source code tree reorganized (prep for autotools build)
-* Remove "Generate Coins" option from GUI, and remove 4way SSE miner.  Internal reference BTE miner remains available, but users are directed to external miners for best hash production.
+* Remove "Generate Coins" option from GUI, and remove 4way SSE miner.  Internal reference CPU miner remains available, but users are directed to external miners for best hash production.
 * IRC is overflowing.  Client now bootstraps to channels #bitcoin00 - #bitcoin99
 * DNS names now may be used with -addnode, -connect (requires -dns to enable)
 

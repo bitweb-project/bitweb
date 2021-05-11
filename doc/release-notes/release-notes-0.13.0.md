@@ -246,7 +246,7 @@ useful for benchmarks.
 Removal of internal miner
 --------------------------
 
-As BTE mining has been useless for a long time, the internal miner has been
+As CPU mining has been useless for a long time, the internal miner has been
 removed in this release, and replaced with a simpler implementation for the
 test framework.
 

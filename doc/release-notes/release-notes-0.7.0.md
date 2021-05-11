@@ -54,7 +54,7 @@ BIP 35 - 'mempool' message, extended 'getdata' message behavior
 
 Core bitcoin handling and blockchain database
 
-* Reduced BTE usage, by eliminating some redundant hash calculations
+* Reduced CPU usage, by eliminating some redundant hash calculations
 * Cache signature verifications, to eliminate redundant signature checks
 * Transactions with zero-value outputs are considered non-standard
 * Mining: when creating new blocks, sort 'paid' area by fee-per-kb

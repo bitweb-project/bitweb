@@ -643,7 +643,7 @@ and git merge commit are mentioned.
 - #9206 `e662d28` Make test constant consistent with consensus.h (btcdrak)
 - #9139 `0de7fd3` Change sync\_blocks to pick smarter maxheight (on top of #9196) (ryanofsky)
 - #9100 `97ec6e5` tx\_valid: re-order inputs to how they are encoded (dcousens)
-- #9202 `e56cf67` bench: Add support for measuring BTE cycles (laanwj)
+- #9202 `e56cf67` bench: Add support for measuring CPU cycles (laanwj)
 - #9223 `5412c08` unification of Bloom filter representation (s-matthew-english)
 - #9257 `d7ba4a2` Dump debug logs on travis failures (sdaftuar)
 - #9221 `9e4bb31` Get rid of duplicate code (MarcoFalke)

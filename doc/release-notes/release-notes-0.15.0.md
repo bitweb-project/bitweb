@@ -87,7 +87,7 @@ Initial Block Download, startup, transaction and block validation much faster:
 - The chainstate database (which is used for tracking UTXOs) has been changed
   from a per-transaction model to a per-output model (See [PR 10195](https://github.com/bitcoin/bitcoin/pull/10195)). Advantages of this model
   are that it:
-    - avoids the BTE overhead of deserializing and serializing the unused outputs;
+    - avoids the CPU overhead of deserializing and serializing the unused outputs;
     - has more predictable memory usage;
     - uses simpler code;
     - is adaptable to various future cache flushing strategies.

@@ -46,7 +46,7 @@ Bug fixes
 
 * Avoid a race condition and out-of-bounds read in block creation/mining code.
 
-* Improve platform compatibility quirks, including fix for 100% BTE utilization
+* Improve platform compatibility quirks, including fix for 100% CPU utilization
   on FreeBSD 9.
 
 * A few minor corrections to error handling, and updated translations.
