@@ -18,6 +18,7 @@
 #include <compat/sanity.h>
 #include <consensus/validation.h>
 #include <fs.h>
+#include <hashdb.h>
 #include <hash.h>
 #include <httprpc.h>
 #include <httpserver.h>
@@ -282,6 +283,7 @@ void Shutdown(NodeContext& node)
             if (chainstate->CanFlushToDisk()) {
                 chainstate->ForceFlushStateToDisk();
                 chainstate->ResetCoinsViews();
+                phashdb.reset();
             }
         }
         pblocktree.reset();
@@ -1593,6 +1595,10 @@ bool AppInitMain(const util::Ref& context, NodeContext& node, interfaces::BlockA
                 // fails if it's still open from the previous loop. Close it first:
                 pblocktree.reset();
                 pblocktree.reset(new CBlockTreeDB(nBlockTreeDBCache, false, fReset));
+
+                // TODO: add cache size option for CHashDB
+                phashdb.reset();
+                phashdb.reset(new CHashDB(nBlockTreeDBCache, false, fReset));
 
                 if (fReset) {
                     pblocktree->WriteReindexing(true);
