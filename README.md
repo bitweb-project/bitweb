@@ -5,7 +5,7 @@ Bitweb Core
 
 [Community](http://community.bitwebcore.info/)
 
-[Discord](https://discord.gg/yszUtMbH)
+[Discord](https://discord.gg/wBTp5mtcnu)
 
 offer a reward
 [Mining pool plan](http://community.bitwebcore.info/d/1-mine-pool-construction-plan)
