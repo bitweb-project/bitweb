@@ -7,7 +7,7 @@ Bitweb Core
 
 [Discord](https://discord.gg/wBTp5mtcnu)
 
-offer a reward
+The official mining pool has been closed
 [Mining pool plan](http://community.bitwebcore.info/d/1-mine-pool-construction-plan)
 
 mobile wallet:in development
