@@ -1,9 +1,9 @@
 Bitweb Core
 =====================================
 
-**[Website](http://www.bitwebcore.info/) | [Explorer](http://118.193.69.172:3002/)  | [Wallet](https://github.com/SACSaveCoin/bitweb/releases) | [RU/EU/US/Asia Mining Pool](https://pool.rplant.xyz/) | [France Mining Pool](https://pool-jg1000.fr/) | [Germany Mining Pool](http://miner123.win/) | [Poland Mining Pool](https://pool.coinsdev.pl/) | [Germany Mining Pool-1](https://murkapool.it/) | [China Mining Pool](http://multi.walemo.com/) | [Indonesia Mining Pool](https://idnpool.xyz/)**
+**[Website](https://www.bitwebcore.org/) | [Explorer](https://explorer.bitwebcore.org/)  | [Wallet](https://github.com/SACSaveCoin/bitweb/releases) | [RU/EU/US/Asia Mining Pool](https://pool.rplant.xyz/) | [France Mining Pool](https://pool-jg1000.fr/) | [Germany Mining Pool](http://miner123.win/) | [Poland Mining Pool](https://pool.coinsdev.pl/) | [Germany Mining Pool-1](https://murkapool.it/) | [China Mining Pool](http://multi.walemo.com/) | [Indonesia Mining Pool](https://idnpool.xyz/)**
 
-[Community](http://community.bitwebcore.info/)
+[Community](https://community.bitwebcore.org/)
 
 [Discord](https://discord.gg/wBTp5mtcnu)
 
