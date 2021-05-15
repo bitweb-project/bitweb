@@ -39,8 +39,9 @@ Specifications
 | Address letter prefix  | E (33)           |
 | Segwit Address prefix  | D (30)           |
 | Bech32 Address prefix  | web           |
-| Deffault rpc port      | 1604          |
-| Deffault p2p port      | 1605           |
+| Deffault p2p port      | 1604          |
+| Deffault rpc port      | 1605           |
+
 License
 -------
 
