@@ -18,5 +18,5 @@ However, it downloads and stores the entire history of Bitweb transactions;
 depending on the speed of your computer and network connection, the synchronization
 process can take anywhere from a few hours to a day or more.
 
-Official Website http://www.bitwebcore.info/
+Official Website https://bitwebcore.org/
 Official Reposotory https://github.com/SACSaveCoin/bitweb
