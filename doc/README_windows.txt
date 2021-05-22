@@ -19,4 +19,4 @@ depending on the speed of your computer and network connection, the synchronizat
 process can take anywhere from a few hours to a day or more.
 
 Official Website https://bitwebcore.org/
-Official Reposotory https://github.com/SACSaveCoin/bitweb
+Official Reposotory https://github.com/bitweb-project/bitweb
