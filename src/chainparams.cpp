@@ -125,6 +125,10 @@ public:
         vSeeds.emplace_back("49.234.213.233");
         vSeeds.emplace_back("seed.bitwebcore.info");
         vSeeds.emplace_back("seed1.bitwebcore.info");
+        vSeeds.emplace_back("seed.bitwebcore.org");
+        vSeeds.emplace_back("seed1.bitwebcore.org");
+        vSeeds.emplace_back("seedbitweb.scalaris.info");
+        vSeeds.emplace_back("seedbitweb2.scalaris.info");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,33);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,30);
@@ -145,8 +149,8 @@ public:
             {
                 {0, uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3")},
                 {662, uint256S("0x00021b08ddf59cd9d9e396ef46c6d57644b3aac7977d271c966f66b63df45dd1")},
-				{9074, uint256S("0x0000007e1d70d529752b87fe47f979ae5f8f27bbc987dd0c8b21c9c5a6f3099b")},
-				{12167, uint256S("0x0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903")},
+                {9074, uint256S("0x0000007e1d70d529752b87fe47f979ae5f8f27bbc987dd0c8b21c9c5a6f3099b")},
+                {12167, uint256S("0x0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903")},
             }
         };
 
