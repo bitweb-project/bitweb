@@ -10,7 +10,7 @@ Bitweb Core
 [Discord](https://discord.gg/wBTp5mtcnu)
 -------------
 
-mobile wallet:in development
+mobile wallet （only Android）:https://bitwebcore.org/
 
 
 What is Bitweb?
