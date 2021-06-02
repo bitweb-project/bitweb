@@ -68,8 +68,8 @@ public:
         consensus.signet_challenge.clear();
         consensus.nSubsidyHalvingInterval = 840000;
         consensus.BIP16Exception = uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3");
-        consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x000000000000024b89b42a942fe0d9fea3bb44ab7bd1b19115dd6a759c0808b8");
+        consensus.BIP34Height = 17;
+        consensus.BIP34Hash = uint256S("0x001ea0da3586f06aa32de50b9764eec2eaba2274191771ad536092d4f9f90fa9");
         consensus.BIP65Height = 0; // 000000000000000004c2b624ed5d7756c508d90fd0da2c7c679febfa6c4735f0
         consensus.BIP66Height = 0; // 00000000000000000379eaa19dce8c9b722d46ae6a57c2f1a988119488b50931
         consensus.CSVHeight = 0; // 000000000000000004a1b34462cb8aeebd5799177f7a29cf28f2d1961716b5b5
@@ -175,7 +175,7 @@ public:
         consensus.nSubsidyHalvingInterval = 840000;
         consensus.BIP16Exception = uint256S("0x00002a542f15e4f95e6256e5fc37532ad965e5874b4f5c4aaab75c792f184f63");
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S("0x0000000023b3a96d3484e5abb3755c413e7d41500f8e2a5c3f0dd01299cd8ef8");
+        consensus.BIP34Hash = uint256S();
         consensus.BIP65Height = 0; // 00000000007f6655f22f98e72ed80d8b06dc761d5da09df0fa1dc4be4f861eb6
         consensus.BIP66Height = 0; // 000000002104c8c45e99a8853285a3b592602a3ccde2b832481da85e9e4ba182
         consensus.CSVHeight = 0; // 00000000025e930139bac5c6c31a403776da130831ab85be56578f3fa75369bb
