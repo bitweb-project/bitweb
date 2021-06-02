@@ -73,10 +73,10 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 1050000;
+        consensus.nSubsidyHalvingInterval = 840000;
         consensus.BIP16Height = 0;
         consensus.BIP34Height = 17;
-        consensus.BIP34Hash = uint256();
+        consensus.BIP34Hash = uint256S("0x001ea0da3586f06aa32de50b9764eec2eaba2274191771ad536092d4f9f90fa9");
         consensus.BIP65Height = 0;
         consensus.BIP66Height = 0;
         consensus.powLimit = uint256S("0x001fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
@@ -85,8 +85,8 @@ public:
         consensus.nZawyLwmaAveragingWindow = 90;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
-        consensus.nRuleChangeActivationThreshold = 57; // 95% of 60
-        consensus.nMinerConfirmationWindow = 60; // nPowTargetTimespan / nPowTargetSpacing
+        consensus.nRuleChangeActivationThreshold = 1916; // 95% of 2016
+        consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
@@ -102,10 +102,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
+        consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000000000015e19c1ad1");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
+        consensus.defaultAssumeValid = uint256S("0x0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903");
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -123,8 +123,16 @@ public:
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3"));
         assert(genesis.hashMerkleRoot == uint256S("0x04363330f08f5ec5601c7883855986a75707a05c1d3dee5ebb8b21bf44c3aae0"));
-        vSeeds.emplace_back("118.193.69.172:1604","118.193.69.172:1604");
-        vSeeds.emplace_back("49.234.213.233:1604","49.234.213.233:1604");
+
+        vSeeds.emplace_back("118.193.69.172");
+        vSeeds.emplace_back("49.234.213.233");
+        vSeeds.emplace_back("seed.bitwebcore.info");
+        vSeeds.emplace_back("seed1.bitwebcore.info");
+        vSeeds.emplace_back("seed.bitwebcore.org");
+        vSeeds.emplace_back("seed1.bitwebcore.org");
+        vSeeds.emplace_back("seedbitweb.scalaris.info");
+        vSeeds.emplace_back("seedbitweb2.scalaris.info");
+
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,33);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,30);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,128);
@@ -141,18 +149,19 @@ public:
 
         checkpointData = {
             {
-                {       0, uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3")},
-                {       662, uint256S("0x00021b08ddf59cd9d9e396ef46c6d57644b3aac7977d271c966f66b63df45dd1")},
-				{       9074, uint256S("0x0000007e1d70d529752b87fe47f979ae5f8f27bbc987dd0c8b21c9c5a6f3099b")},
+                {0, uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3")},
+                {662, uint256S("0x00021b08ddf59cd9d9e396ef46c6d57644b3aac7977d271c966f66b63df45dd1")},
+                {9074, uint256S("0x0000007e1d70d529752b87fe47f979ae5f8f27bbc987dd0c8b21c9c5a6f3099b")},
+                {12167, uint256S("0x0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903")},
             }
         };
 
         chainTxData = ChainTxData{
             // Data as of block height 1000000 from 'getchaintxstats' command
-            1620562259, // * UNIX timestamp of last known number of transactions
-               10275, // * total number of transactions between genesis and that timestamp
+            1620749329, // * UNIX timestamp of last known number of transactions
+               13696, // * total number of transactions between genesis and that timestamp
                         //   (the tx=... number in the SetBestChain debug.log lines)
-            0.0176737656492739  // * estimated number of transactions per second after that timestamp
+            0.01823030126994885  // * estimated number of transactions per second after that timestamp
         };
     }
 };
@@ -164,9 +173,9 @@ class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        consensus.nSubsidyHalvingInterval = 1050000;
+        consensus.nSubsidyHalvingInterval = 840000;
         consensus.BIP16Height = 0;
-        consensus.BIP34Height = 17;
+        consensus.BIP34Height = 0;
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 0;
         consensus.BIP66Height = 0;
@@ -213,7 +222,8 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("118.193.69.172:1604","118.193.69.172:1604");
+        vSeeds.emplace_back("118.193.69.172");
+		
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,66);  // legacy: starting with T (upper)
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
@@ -236,8 +246,8 @@ public:
         };
 
         chainTxData = ChainTxData{
-            1619971765,
-            1,
+            0,
+            0,
             0
         };
 
@@ -307,8 +317,8 @@ public:
         };
 
         chainTxData = ChainTxData{
-            1619971818,
-            1,
+            0,
+            0,
             0
         };
 

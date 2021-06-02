@@ -1,7 +1,7 @@
 Bitweb Core
 =====================================
 
-**[Website](http://www.bitwebcore.info/) | [Explorer](http://118.193.69.172:3002/)  | [Wallet](https://github.com/SACSaveCoin/BTE/releases) | [mining pool](http://118.193.69.172:8080/) | [RU/EU/US/Asia Mining Pool](https://pool.rplant.xyz/) | [France Mining Pool](https://pool-jg1000.fr/) | [Germany Mining Pool](http://miner123.win/) | [Poland Mining Pool](https://pool.coinsdev.pl/) | [Germany Mining Pool-1](https://murkapool.it/)**
+**[Website](https://bitwebcore.org/) | [Explorer](http://118.193.69.172:3002/)  | [Wallet](https://github.com/bitweb-project/bitweb/releases) | [mining pool](http://118.193.69.172:8080/) | [RU/EU/US/Asia Mining Pool](https://pool.rplant.xyz/) | [France Mining Pool](https://pool-jg1000.fr/) | [Germany Mining Pool](http://miner123.win/) | [Poland Mining Pool](https://pool.coinsdev.pl/) | [Germany Mining Pool-1](https://murkapool.it/)**
 
 web:www.bitwebcore.info
 
@@ -23,7 +23,7 @@ out collectively by the network. Bitweb Core is the name of open source
 software which enables the use of this currency.
 
 For more information, as well as an immediately useable, binary version of
-the Bitweb Core software, **[see Release](https://github.com/SACSaveCoin/BTE/releases)**.
+the Bitweb Core software, **[see Release](https://github.com/bitweb-project/bitweb/releases)**.
 
 Specifications
 ------

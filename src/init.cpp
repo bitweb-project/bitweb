@@ -532,8 +532,8 @@ std::string HelpMessage(HelpMessageMode mode)
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/SACSaveCoin/BTE>";
-    const std::string URL_WEBSITE = "<http://www.bitwebcore.info/>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/bitweb-project/bitweb>";
+    const std::string URL_WEBSITE = "<https://bitwebcore.org/>";
 
     std::string blcCopyright = strprintf(_("Copyright (C) %i"), COPYRIGHT_YEAR) + " " + strprintf(_(COPYRIGHT_HOLDERS), _(COPYRIGHT_HOLDERS_SUBSTITUTION));
     std::string btcCopyright = strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR) + " The Bitcoin Core developers";
