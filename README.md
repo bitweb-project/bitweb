@@ -10,6 +10,8 @@ Bitweb Core
 [Discord](https://discord.gg/wBTp5mtcnu)
 -------------
 
+[Twitter](https://twitter.com/BitwebBTE)
+-------------
 mobile wallet （only Android）:https://bitwebcore.org/
 
 
