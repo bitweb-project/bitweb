@@ -175,7 +175,7 @@ public:
         consensus.nSubsidyHalvingInterval = 840000;
         consensus.BIP16Exception = uint256S("0x00002a542f15e4f95e6256e5fc37532ad965e5874b4f5c4aaab75c792f184f63");
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256S(0x00002a542f15e4f95e6256e5fc37532ad965e5874b4f5c4aaab75c792f184f63);
+        consensus.BIP34Hash = uint256S("0x00002a542f15e4f95e6256e5fc37532ad965e5874b4f5c4aaab75c792f184f63");
         consensus.BIP65Height = 0; // 00000000007f6655f22f98e72ed80d8b06dc761d5da09df0fa1dc4be4f861eb6
         consensus.BIP66Height = 0; // 000000002104c8c45e99a8853285a3b592602a3ccde2b832481da85e9e4ba182
         consensus.CSVHeight = 0; // 00000000025e930139bac5c6c31a403776da130831ab85be56578f3fa75369bb
