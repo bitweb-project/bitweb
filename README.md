@@ -2,6 +2,7 @@ Bitweb Core
 =====================================
 
 [Website](https://bitwebcore.org/) | [Explorer](https://explorer.bitwebcore.org/)  | [Wallet](https://bitwebcore.org/wallet) | [Mining Pools](https://miningpoolstats.stream/bitweb) 
+
 -------------|-------------|-------------|-------------|-------------
 
 [Community](https://community.bitwebcore.org/)
