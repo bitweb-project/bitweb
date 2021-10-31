@@ -11,7 +11,7 @@ Bitweb Core
 
 [Twitter](https://twitter.com/BitwebBTE)
 -------------
-mobile wallet （only Android）:https://bitwebcore.org/
+mobile wallet （only Android）:https://bitwebcore.org
 
 
 What is Bitweb?
