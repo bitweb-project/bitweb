@@ -12,8 +12,6 @@ Bitweb Core
 [Twitter](https://twitter.com/BitwebBTE)
 -------------
 mobile wallet （only Android）:https://bitwebcore.org
-
--------------
 ios wallet: development
 
 
