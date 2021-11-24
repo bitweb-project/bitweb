@@ -106,9 +106,6 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("0x04363330f08f5ec5601c7883855986a75707a05c1d3dee5ebb8b21bf44c3aae0"));
 
         vSeeds.emplace_back("118.193.69.172");
-        vSeeds.emplace_back("49.234.213.233");
-        vSeeds.emplace_back("seed.bitwebcore.info");
-        vSeeds.emplace_back("seed1.bitwebcore.info");
         vSeeds.emplace_back("seed.bitwebcore.org");
         vSeeds.emplace_back("seed1.bitwebcore.org");
         vSeeds.emplace_back("seedbitweb.scalaris.info");
