@@ -1,9 +1,9 @@
 Bitweb Core
 =====================================
 
-[Website](https://bitwebcore.org/) | [Explorer](https://explorer.bitwebcore.org/)  | [Wallet](https://bitwebcore.org/wallet) | [Mining Pools](https://miningpoolstats.stream/bitweb) 
+[Website](https://bitwebcore.net/) | [Explorer](https://explorer.bitwebcore.net/)  | [Wallet](https://bitwebcore.net/wallet) | [Mining Pools](https://miningpoolstats.stream/bitweb) 
 
-[Community](https://community.bitwebcore.org/)
+[Community](https://community.bitwebcore.net/)
 -------------
 
 [Discord](https://discord.gg/wBTp5mtcnu)
@@ -11,7 +11,7 @@ Bitweb Core
 
 [Twitter](https://twitter.com/BitwebBTE)
 -------------
-mobile wallet （only Android）:https://bitwebcore.org
+mobile wallet （only Android）:https://bitwebcore.net
 
 ios wallet: development
 
