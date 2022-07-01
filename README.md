@@ -39,7 +39,7 @@ Specifications
 | Algo                   | Yespower           |
 | Premine                | 2580000               |
 | Block time             | 60 seconds             |
-| Block size             | 100 Megabytes             |
+| Block size             | 100 Megabytes (segwit)             |
 | Max Supply             | 84,000,000 (84 Million) minable , Absolute 86.579,950|
 | Maturity time          | 100 Block's           |
 | Proof Type             | PoW          |
