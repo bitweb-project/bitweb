@@ -40,19 +40,7 @@ when macOS "dark mode" is activated.
 
 Notable changes
 ===============
-- #3d29ce4 fix qt.mk download link
-- #8a65c05 Rename Examples.cpp to examples.cpp
-- #27b6465 Update README.md
-- #8d3193e Fix incorect block consensus rule.
-- #61d9296 Update dns seeds
-- #df59448 Correct assumed blockchain size.
-- #b207bb5 fix MAX_BLOCK_SIGOPS_COST
-- #660afd4 Update domain at sources.
-- #b7799d6 Correct twitter.
-- #91097be move btc release notes , and add old bitweb release notes.
-- #11f506f Pump version
-- #0a72ce0 Update release-notes.md
-- #8c1fa66 Update old domain to new.
-- #53cedd3 fix "
-- #304396b Update checkpoints.
-- #2ac5058 Merge branch 'master' of https://github.com/bitweb-project/bitweb
+- #d9eed02 Fix incorrect consesus block size rule and tx sigops cost. 
+- #844ba8f Add old bitweb release note and move bitcoin release notes. 
+- #f775a5f Update domain , twitter link and add info about block size, and pump version.
+- #d9eed02 Fix incorrect consesus block size rule and tx sigops cost.
