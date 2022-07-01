@@ -84,7 +84,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
         consensus.nMinimumChainWork = uint256S("0x00000000000000000000000000000000000000000000000000000015e19c1ad1");
-        consensus.defaultAssumeValid = uint256S("0x0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903"); // 12167
+        consensus.defaultAssumeValid = uint256S("0x0000000d7c7c25d0e2a8a8ff4013ae7154ba2d0c0217dc71b942f41af7be990a"); // 606942
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -97,7 +97,7 @@ public:
         pchMessageStart[3] = 0xfe;
         nDefaultPort = 1604;
         nPruneAfterHeight = 1000;
-        m_assumed_blockchain_size = 350;
+        m_assumed_blockchain_size = 10;
         m_assumed_chain_state_size = 6;
 
         genesis = CreateGenesisBlock(1619971700, 651, 0x1f1fffff, 1, 50 * COIN);
@@ -105,9 +105,9 @@ public:
         assert(consensus.hashGenesisBlock == uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3"));
         assert(genesis.hashMerkleRoot == uint256S("0x04363330f08f5ec5601c7883855986a75707a05c1d3dee5ebb8b21bf44c3aae0"));
 
-        vSeeds.emplace_back("118.193.69.172");
-        vSeeds.emplace_back("seed.bitwebcore.org");
-        vSeeds.emplace_back("seed1.bitwebcore.org");
+        vSeeds.emplace_back("seed.bitwebcore.net");
+        vSeeds.emplace_back("seed1.bitwebcore.net");
+        vSeeds.emplace_back("seed2.bitwebcore.net");
         vSeeds.emplace_back("seedbitweb.scalaris.info");
         vSeeds.emplace_back("seedbitweb2.scalaris.info");
 
@@ -132,14 +132,15 @@ public:
                 {662, uint256S("0x00021b08ddf59cd9d9e396ef46c6d57644b3aac7977d271c966f66b63df45dd1")},
                 {9074, uint256S("0x0000007e1d70d529752b87fe47f979ae5f8f27bbc987dd0c8b21c9c5a6f3099b")},
                 {12167, uint256S("0x0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903")},
+                {606942, uint256S("0x0000000d7c7c25d0e2a8a8ff4013ae7154ba2d0c0217dc71b942f41af7be990a")},
             }
         };
 
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903
-            /* nTime    */ 1620749329,
-            /* nTxCount */ 13696,
-            /* dTxRate  */ 0.01823030126994885,
+            // Data from RPC: getchaintxstats 4096 0000000d7c7c25d0e2a8a8ff4013ae7154ba2d0c0217dc71b942f41af7be990a
+            /* nTime    */ 1656653649,
+            /* nTxCount */ 655420,
+            /* dTxRate  */ 0.01807233830764586,
         };
     }
 };
@@ -190,7 +191,7 @@ public:
         pchMessageStart[3] = 0xfe;
         nDefaultPort = 29706;
         nPruneAfterHeight = 1000;
-        m_assumed_blockchain_size = 40;
+        m_assumed_blockchain_size = 10;
         m_assumed_chain_state_size = 2;
 
         genesis = CreateGenesisBlock(1619971765, 18156, 0x1e3fffff, 1, 50 * COIN);
@@ -201,7 +202,7 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("118.193.69.172");
+        vSeeds.emplace_back("seed1.bitwebcore.net");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,66);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -244,9 +245,9 @@ public:
 
         if (!args.IsArgSet("-signetchallenge")) {
             bin = ParseHex("512103ad5e0edad18cb1f0fc0d28a3d4f1f3e445640337489abb10404f2d1e086be430210359ef5021964fe22d6f8e05b2463c9540ce96883fe3b278760f048f5189f2e6c452ae");
-            vSeeds.emplace_back("178.128.221.177");
-            vSeeds.emplace_back("2a01:7c8:d005:390::5");
-            vSeeds.emplace_back("v7ajjeirttkbnt32wpy3c6w3emwnfr3fkla7hpxcfokr3ysd3kqtzmqd.onion:38333");
+            vSeeds.emplace_back("seed.bitwebcore.net");
+            vSeeds.emplace_back("seed2.bitwebcore.net");
+            vSeeds.emplace_back("seed3.bitwebcore.net");
 
             consensus.nMinimumChainWork = uint256S("0x00");
             consensus.defaultAssumeValid = uint256S("0x00");
