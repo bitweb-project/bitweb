@@ -259,7 +259,7 @@
 #define PACKAGE_TARNAME "bitweb"
 
 /* Define to the home page for this package. */
-#define PACKAGE_URL "https://bitwebcore.org/"
+#define PACKAGE_URL "https://bitwebcore.net/"
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "0.21.1"

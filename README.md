@@ -9,7 +9,7 @@ Bitweb Core
 [Discord](https://discord.gg/wBTp5mtcnu)
 -------------
 
-[Twitter](https://twitter.com/BitwebBTE)
+[Twitter](https://twitter.com/bitweb_project)
 -------------
 mobile wallet （only Android）:https://bitwebcore.net
 
@@ -39,6 +39,7 @@ Specifications
 | Algo                   | Yespower           |
 | Premine                | 2580000               |
 | Block time             | 60 seconds             |
+| Block size             | 100 Megabytes             |
 | Max Supply             | 84,000,000 (84 Million) minable , Absolute 86.579,950|
 | Maturity time          | 100 Block's           |
 | Proof Type             | PoW          |

@@ -43,7 +43,7 @@ static const int TOOLTIP_WRAP_THRESHOLD = 80;
 #define SPINNER_FRAMES 36
 
 #define QAPP_ORG_NAME "Bitweb"
-#define QAPP_ORG_DOMAIN "bitwebcore.info"
+#define QAPP_ORG_DOMAIN "bitwebcore.net"
 #define QAPP_APP_NAME_DEFAULT "Bitweb-Qt"
 #define QAPP_APP_NAME_TESTNET "Bitweb-Qt-testnet"
 #define QAPP_APP_NAME_SIGNET "Bitweb-Qt-signet"
