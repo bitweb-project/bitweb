@@ -38,9 +38,10 @@ Specifications
 | Block Reward           | 50  BTE           |
 | Algo                   | Yespower           |
 | Premine                | 2580000               |
+| Postmine               | 9420150               |
 | Block time             | 60 seconds             |
-| Block size             | 100 Megabytes (segwit)             |
-| Max Supply             | 84,000,000 (84 Million) minable , Absolute 86.579,950|
+| Block size             | 4 Megabytes (segwit) Corrected to Bitcoin            |
+| Max Supply             | 84,000,000 (84 Million) minable , Absolute 96.000,000|
 | Maturity time          | 100 Block's           |
 | Proof Type             | PoW          |
 | Address letter prefix  | E (33)           |
