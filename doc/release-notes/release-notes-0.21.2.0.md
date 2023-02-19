@@ -1,7 +1,7 @@
-0.21.3 Release Notes
+0.21.2 Release Notes
 ====================
 
-Bitweb Core version 0.21.3 is now available from:
+Bitweb Core version 0.21.2 is now available from:
 
   <https://bitwebcore.net/wallet>
 
@@ -40,4 +40,7 @@ when macOS "dark mode" is activated.
 
 Notable changes
 ===============
-- #085c0e7 Enable GPU algo update,  Fix block size, add coins, correct max supply, fix -reindex, add checkpoints, pump version. 
+- #d9eed02 Fix incorrect consesus block size rule and tx sigops cost. 
+- #844ba8f Add old bitweb release note and move bitcoin release notes. 
+- #f775a5f Update domain , twitter link and add info about block size, and pump version.
+- #d9eed02 Fix incorrect consesus block size rule and tx sigops cost.
