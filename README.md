@@ -37,8 +37,7 @@ Specifications
 | Tinker                 | BTE           |
 | Block Reward           | 50  BTE           |
 | Algo                   | Yespower           |
-| Premine                | 2580000               |
-| Postmine               | 9420150               |
+| Premine                | 12,000,000              |
 | Block time             | 60 seconds             |
 | Block size             | 4 Megabytes (segwit) Corrected to Bitcoin            |
 | Max Supply             | 84,000,000 (84 Million) minable , Absolute 96.000,000|
