@@ -36,7 +36,7 @@ static constexpr int64_t TIMESTAMP_WINDOW = MAX_FUTURE_BLOCK_TIME;
  *
  * Ref: https://github.com/bitcoin/bitcoin/pull/1026
  */
-static constexpr int64_t MAX_BLOCK_TIME_GAP = 50 * 3; // = MAX_FUTURE_BLOCK_TIME / 2
+static constexpr int64_t MAX_BLOCK_TIME_GAP = 60 * 12; // Block time * 12
 
 class CBlockFileInfo
 {
