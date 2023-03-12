@@ -69,7 +69,7 @@ RPC interface will be abused.
     need to expose the RPC port to the host system.  The default way to
     do this in Docker also exposes the port to the public Internet.
     Instead, expose it only on the host system's localhost, for example:
-    `-p 127.0.0.1:1605:1605`
+    `-p 127.0.0.1:8332:8332`
 
 - **Secure authentication:** By default, Bitcoin Core generates unique
   login credentials each time it restarts and puts them into a file
@@ -88,13 +88,14 @@ RPC interface will be abused.
 - **Secure string handling:** The RPC interface does not guarantee any
   escaping of data beyond what's necessary to encode it as JSON,
   although it does usually provide serialized data using a hex
-  representation of the bytes.  If you use RPC data in your programs or
-  provide its data to other programs, you must ensure any problem
-  strings are properly escaped.  For example, multiple websites have
-  been manipulated because they displayed decoded hex strings that
-  included HTML `<script>` tags.  For this reason, and other
-  non-security reasons, it is recommended to display all serialized data
-  in hex form only.
+  representation of the bytes. If you use RPC data in your programs or
+  provide its data to other programs, you must ensure any problem strings
+  are properly escaped. For example, the `createwallet` RPC accepts
+  arguments such as `wallet_name` which is a string and could be used
+  for a path traversal attack without application level checks. Multiple
+  websites have been manipulated because they displayed decoded hex strings
+  that included HTML `<script>` tags. For this reason, and others, it is
+  recommended to display all serialized data in hex form only.
 
 ## RPC consistency guarantees
 

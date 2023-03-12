@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2012-2019 The Bitcoin Core developers
+# Copyright (c) 2012-2021 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
@@ -58,7 +58,7 @@ if not XGETTEXT:
     print('Cannot extract strings: xgettext utility is not installed or not configured.',file=sys.stderr)
     print('Please install package "gettext" and re-run \'./configure\'.',file=sys.stderr)
     sys.exit(1)
-child = Popen([XGETTEXT,'--output=-','-n','--keyword=_'] + files, stdout=PIPE)
+child = Popen([XGETTEXT,'--output=-','--from-code=utf-8','-n','--keyword=_'] + files, stdout=PIPE)
 (out, err) = child.communicate()
 
 messages = parse_po(out.decode('utf-8'))
@@ -76,10 +76,10 @@ f.write("""
 #endif
 """)
 f.write('static const char UNUSED *bitcoin_strings[] = {\n')
-f.write('QT_TRANSLATE_NOOP("bitweb-core", "%s"),\n' % (os.getenv('COPYRIGHT_HOLDERS'),))
+f.write('QT_TRANSLATE_NOOP("bitcoin-core", "%s"),\n' % (os.getenv('COPYRIGHT_HOLDERS'),))
 messages.sort(key=operator.itemgetter(0))
 for (msgid, msgstr) in messages:
     if msgid != EMPTY:
-        f.write('QT_TRANSLATE_NOOP("bitweb-core", %s),\n' % ('\n'.join(msgid)))
+        f.write('QT_TRANSLATE_NOOP("bitcoin-core", %s),\n' % ('\n'.join(msgid)))
 f.write('};\n')
 f.close()

@@ -26,13 +26,13 @@ struct DumbCheck {
         return result;
     }
 
-    void swap(DumbCheck& x)
+    void swap(DumbCheck& x) noexcept
     {
     }
 };
 } // namespace
 
-void test_one_input(const std::vector<uint8_t>& buffer)
+FUZZ_TARGET(checkqueue)
 {
     FuzzedDataProvider fuzzed_data_provider(buffer.data(), buffer.size());
 

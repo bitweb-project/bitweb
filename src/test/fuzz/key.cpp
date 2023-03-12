@@ -1,4 +1,4 @@
-// Copyright (c) 2020 The Bitcoin Core developers
+// Copyright (c) 2020-2021 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -17,7 +17,6 @@
 #include <script/standard.h>
 #include <streams.h>
 #include <test/fuzz/fuzz.h>
-#include <util/memory.h>
 #include <util/strencodings.h>
 
 #include <cassert>
@@ -26,14 +25,14 @@
 #include <string>
 #include <vector>
 
-void initialize()
+void initialize_key()
 {
     static const ECCVerifyHandle ecc_verify_handle;
     ECC_Start();
     SelectParams(CBaseChainParams::REGTEST);
 }
 
-void test_one_input(const std::vector<uint8_t>& buffer)
+FUZZ_TARGET_INIT(key, initialize_key)
 {
     const CKey key = [&] {
         CKey k;
@@ -139,8 +138,6 @@ void test_one_input(const std::vector<uint8_t>& buffer)
         assert(tx_multisig_script.size() == 37);
 
         FillableSigningProvider fillable_signing_provider;
-        assert(IsSolvable(fillable_signing_provider, tx_pubkey_script));
-        assert(IsSolvable(fillable_signing_provider, tx_multisig_script));
         assert(!IsSegWitOutput(fillable_signing_provider, tx_pubkey_script));
         assert(!IsSegWitOutput(fillable_signing_provider, tx_multisig_script));
         assert(fillable_signing_provider.GetKeys().size() == 0);
@@ -158,12 +155,12 @@ void test_one_input(const std::vector<uint8_t>& buffer)
         assert(fillable_signing_provider_pub.HaveKey(pubkey.GetID()));
 
         TxoutType which_type_tx_pubkey;
-        const bool is_standard_tx_pubkey = IsStandard(tx_pubkey_script, which_type_tx_pubkey);
+        const bool is_standard_tx_pubkey = IsStandard(tx_pubkey_script, std::nullopt, which_type_tx_pubkey);
         assert(is_standard_tx_pubkey);
         assert(which_type_tx_pubkey == TxoutType::PUBKEY);
 
         TxoutType which_type_tx_multisig;
-        const bool is_standard_tx_multisig = IsStandard(tx_multisig_script, which_type_tx_multisig);
+        const bool is_standard_tx_multisig = IsStandard(tx_multisig_script, std::nullopt, which_type_tx_multisig);
         assert(is_standard_tx_multisig);
         assert(which_type_tx_multisig == TxoutType::MULTISIG);
 

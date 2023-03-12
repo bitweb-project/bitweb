@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2020 The Bitcoin Core developers
+// Copyright (c) 2009-2021 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -15,7 +15,7 @@
 #include <support/cleanse.h>
 #include <util/time.h> // for GetTime()
 #ifdef WIN32
-#include <compat.h> // for Windows API
+#include <compat/compat.h>
 #endif
 
 #include <algorithm>
@@ -53,12 +53,11 @@
 #include <sys/vmmeter.h>
 #endif
 #endif
-#ifdef __linux__
+#if defined(HAVE_STRONG_GETAUXVAL)
 #include <sys/auxv.h>
 #endif
 
-//! Necessary on some platforms
-extern char** environ;
+extern char** environ; // NOLINT(readability-redundant-declaration): Necessary on some platforms
 
 namespace {
 
@@ -69,7 +68,7 @@ void RandAddSeedPerfmon(CSHA512& hasher)
 
     // This can take up to 2 seconds, so only do it every 10 minutes.
     // Initialize last_perfmon to 0 seconds, we don't skip the first call.
-    static std::atomic<std::chrono::seconds> last_perfmon{std::chrono::seconds{0}};
+    static std::atomic<std::chrono::seconds> last_perfmon{0s};
     auto last_time = last_perfmon.load();
     auto current_time = GetTime<std::chrono::seconds>();
     if (current_time < last_time + std::chrono::minutes{10}) return;
@@ -326,7 +325,7 @@ void RandAddStaticEnv(CSHA512& hasher)
     // Bitcoin client version
     hasher << CLIENT_VERSION;
 
-#ifdef __linux__
+#if defined(HAVE_STRONG_GETAUXVAL)
     // Information available through getauxval()
 #  ifdef AT_HWCAP
     hasher << getauxval(AT_HWCAP);
@@ -346,7 +345,7 @@ void RandAddStaticEnv(CSHA512& hasher)
     const char* exec_str = (const char*)getauxval(AT_EXECFN);
     if (exec_str) hasher.Write((const unsigned char*)exec_str, strlen(exec_str) + 1);
 #  endif
-#endif // __linux__
+#endif // HAVE_STRONG_GETAUXVAL
 
 #ifdef HAVE_GETCPUID
     AddAllCPUID(hasher);
@@ -363,10 +362,10 @@ void RandAddStaticEnv(CSHA512& hasher)
 
 #if HAVE_DECL_GETIFADDRS && HAVE_DECL_FREEIFADDRS
     // Network interfaces
-    struct ifaddrs *ifad = NULL;
+    struct ifaddrs *ifad = nullptr;
     getifaddrs(&ifad);
     struct ifaddrs *ifit = ifad;
-    while (ifit != NULL) {
+    while (ifit != nullptr) {
         hasher.Write((const unsigned char*)&ifit, sizeof(ifit));
         hasher.Write((const unsigned char*)ifit->ifa_name, strlen(ifit->ifa_name) + 1);
         hasher.Write((const unsigned char*)&ifit->ifa_flags, sizeof(ifit->ifa_flags));
