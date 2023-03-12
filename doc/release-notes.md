@@ -40,5 +40,8 @@ when macOS "dark mode" is activated.
 
 Notable changes
 ===============
-- #0f1509c fix time settings and allow connect to node old protocol version nodes ( this need for support  software like bitcore , etc. )
-- #663e8d1 Correct time settings.
+- #0580b54 remove not used files ,  move releases to bitcoin releses and add bitweb releases.
+- #30077bb Add Bitweb blockchain settings , algo, site, more renames stage 2.
+- #17a4985 Add Bitweb blockchain settings , algo, site, some renames stage 1.
+- #22c0d9d Upload source code from BTC 0.24
+
