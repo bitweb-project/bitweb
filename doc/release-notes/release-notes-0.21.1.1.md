@@ -1,7 +1,7 @@
-0.21.4 Release Notes
+0.21.1.1 Release Notes
 ====================
 
-Bitweb Core version 0.21.4 is now available from:
+Bitweb Core version 0.21.1.1 is now available from:
 
   <https://bitwebcore.net/wallet>
 
@@ -40,5 +40,8 @@ when macOS "dark mode" is activated.
 
 Notable changes
 ===============
-- #0f1509c fix time settings and allow connect to node old protocol version nodes ( this need for support  software like bitcore , etc. )
-- #663e8d1 Correct time settings.
+ 
+- #e6835db Update network spec info to correct .
+- #8ea47be Fix auto resize overviewpage at long tx and update webseite URL
+- #254605d Merge branch 'master' of https://github.com/SACSaveCoin/bitweb
+- #3d95e10 Update Version

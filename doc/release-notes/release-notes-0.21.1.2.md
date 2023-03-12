@@ -1,7 +1,7 @@
-0.21.4 Release Notes
+0.21.1.2 Release Notes
 ====================
 
-Bitweb Core version 0.21.4 is now available from:
+Bitweb Core version 0.21.1.2 is now available from:
 
   <https://bitwebcore.net/wallet>
 
@@ -40,5 +40,16 @@ when macOS "dark mode" is activated.
 
 Notable changes
 ===============
-- #0f1509c fix time settings and allow connect to node old protocol version nodes ( this need for support  software like bitcore , etc. )
-- #663e8d1 Correct time settings.
+- #44941a6 build,boost: update download url. 
+- #436489a Turn bitweb github to organization - rename repo link.
+- #418d5b9 Fix typo
+- #5e66186 Fix another typo
+- #9b5b96d Re-style
+- #d47e322 add new seed and fix typos
+- #9a549c6 fix bip34hash at chainparams.
+- #406d6fc Pump version
+- #705c30b return fallback fee , for prevent 0 tx fee issue.
+- #c9994d9 increase fallback fee.
+- #8b49051 fix build issue
+- #29986c3 add ""
+- #6a449fe drop testnet bin34height to genesis
