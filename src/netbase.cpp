@@ -29,6 +29,8 @@
 #include <poll.h>
 #endif
 
+#include <validation.h>
+
 // Settings
 static GlobalMutex g_proxyinfo_mutex;
 static Proxy proxyInfo[NET_MAX] GUARDED_BY(g_proxyinfo_mutex);

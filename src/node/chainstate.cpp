@@ -58,6 +58,9 @@ ChainstateLoadResult LoadChainstate(ChainstateManager& chainman, const CacheSize
     pblocktree.reset();
     pblocktree.reset(new CBlockTreeDB(cache_sizes.block_tree_db, options.block_tree_db_in_memory, options.reindex));
 
+    phashdb.reset();
+    phashdb.reset(new CHashDB(cache_sizes.block_tree_db, options.block_tree_db_in_memory, options.reindex));
+
     if (options.reindex) {
         pblocktree->WriteReindexing(true);
         //If we're reindexing in prune mode, wipe away unusable block files and all undo data files

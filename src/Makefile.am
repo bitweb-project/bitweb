@@ -151,6 +151,7 @@ BITCOIN_CORE_H = \
   external_signer.h \
   flatfile.h \
   fs.h \
+  hashdb.h \
   headerssync.h \
   httprpc.h \
   httpserver.h \
@@ -359,6 +360,7 @@ libbitcoin_node_a_SOURCES = \
   blockfilter.cpp \
   chain.cpp \
   consensus/tx_verify.cpp \
+  hashdb.cpp \
   dbwrapper.cpp \
   deploymentstatus.cpp \
   flatfile.cpp \
@@ -536,7 +538,10 @@ crypto_libbitcoin_crypto_base_la_SOURCES = \
   crypto/sha512.cpp \
   crypto/sha512.h \
   crypto/siphash.cpp \
-  crypto/siphash.h
+  crypto/siphash.h \
+  crypto/yespower/sha256.c \
+  crypto/yespower/yespower-opt.c \
+  crypto/yespower/yespower.c
 
 if USE_ASM
 crypto_libbitcoin_crypto_base_la_SOURCES += crypto/sha256_sse4.cpp

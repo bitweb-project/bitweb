@@ -21,6 +21,7 @@
 #include <consensus/amount.h>
 #include <deploymentstatus.h>
 #include <fs.h>
+#include <hashdb.h>
 #include <hash.h>
 #include <httprpc.h>
 #include <httpserver.h>
@@ -298,6 +299,7 @@ void Shutdown(NodeContext& node)
             if (chainstate->CanFlushToDisk()) {
                 chainstate->ForceFlushStateToDisk();
                 chainstate->ResetCoinsViews();
+                phashdb.reset();
             }
         }
     }

@@ -224,6 +224,40 @@ public:
     }
 };
 
+extern "C" void yespower_hash(const char* input, char* output);
+
+class CHashWriterYespower : public CHashWriter {
+private:
+    std::vector<std::byte> buf;
+
+public:
+    CHashWriterYespower(int nTypeIn, int nVersionIn) : CHashWriter(nTypeIn, nVersionIn) {}
+
+    void write(Span<const std::byte> src) {
+        buf.insert(buf.end(), src.begin(), src.end());
+    }
+
+    uint256 GetHash() {
+        uint256 result;
+        yespower_hash(reinterpret_cast<const char*>(buf.data()), reinterpret_cast<char*>(&result));
+        return result;
+    }
+
+    template <typename T>
+    CHashWriterYespower& operator<<(const T& obj) {
+        ::Serialize(*this, obj);
+        return *this;
+    }
+};
+
+template<typename T>
+uint256 SerializeHashYespower(const T& obj, int nType=SER_GETHASH, int nVersion=PROTOCOL_VERSION)
+{
+    CHashWriterYespower ss(nType, nVersion);
+    ss << obj;
+    return ss.GetHash();
+}
+
 /** Compute the 256-bit hash of an object's serialization. */
 template<typename T>
 uint256 SerializeHash(const T& obj, int nType=SER_GETHASH, int nVersion=PROTOCOL_VERSION)
