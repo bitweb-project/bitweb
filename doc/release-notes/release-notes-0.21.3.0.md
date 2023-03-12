@@ -1,7 +1,7 @@
-0.21.4 Release Notes
+0.21.3 Release Notes
 ====================
 
-Bitweb Core version 0.21.4 is now available from:
+Bitweb Core version 0.21.3 is now available from:
 
   <https://bitwebcore.net/wallet>
 
@@ -40,5 +40,4 @@ when macOS "dark mode" is activated.
 
 Notable changes
 ===============
-- #0f1509c fix time settings and allow connect to node old protocol version nodes ( this need for support  software like bitcore , etc. )
-- #663e8d1 Correct time settings.
+- #085c0e7 Enable GPU algo update,  Fix block size, add coins, correct max supply, fix -reindex, add checkpoints, pump version. 
