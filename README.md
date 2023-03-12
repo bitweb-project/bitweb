@@ -49,6 +49,11 @@ Specifications
 | Deffault p2p port      | 1604          |
 | Deffault rpc port      | 1605           |
 
+
+How build self ? 
+Read doc's.
+https://github.com/bitweb-project/bitweb/blob/master/depends/README.md
+
 License
 -------
 
