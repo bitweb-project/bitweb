@@ -6,7 +6,7 @@ The `macdeployqtplus` script should not be run manually. Instead, after building
 make deploy
 ```
 
-When complete, it will have produced `Bitcoin-Core.dmg`.
+When complete, it will have produced `Bitweb-Core.dmg`.
 
 ## SDK Extraction
 
@@ -33,7 +33,7 @@ approach (tested on Debian Buster) is outlined below:
 ```bash
 # Install/clone tools needed for extracting Xcode.app
 apt install cpio
-git clone https://github.com/bitcoin-core/apple-sdk-tools.git
+git clone https://github.com/bitweb-project/apple-sdk-tools.git
 
 # Unpack Xcode_12.2.xip and place the resulting Xcode.app in your current
 # working directory

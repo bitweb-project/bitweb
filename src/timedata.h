@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <vector>
 
-static const int64_t DEFAULT_MAX_TIME_ADJUSTMENT = 50 * 5; // MAX_FUTURE_BLOCK_TIME / 2
+static const int64_t DEFAULT_MAX_TIME_ADJUSTMENT = 3 * 50; // MAX_FUTURE_BLOCK_TIME /2
 
 class CNetAddr;
 

@@ -1,10 +1,10 @@
 Bitcoin Core integration/staging tree
 =====================================
 
-https://bitcoincore.org
+https://bitwebcore.net
 
 For an immediately usable, binary version of the Bitcoin Core software, see
-https://bitcoincore.org/en/download/.
+https://bitwebcore.net/wallet.
 
 What is Bitcoin Core?
 ---------------------
@@ -25,7 +25,7 @@ Development Process
 -------------------
 
 The `master` branch is regularly built (see `doc/build-*.md` for instructions) and tested, but it is not guaranteed to be
-completely stable. [Tags](https://github.com/bitcoin/bitcoin/tags) are created
+completely stable. [Tags](https://github.com/bitweb-project/bitweb/tags) are created
 regularly from release branches to indicate new official, stable release versions of Bitcoin Core.
 
 The https://github.com/bitcoin-core/gui repository is used exclusively for the

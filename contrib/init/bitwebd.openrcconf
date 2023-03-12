@@ -1,0 +1,33 @@
+# /etc/conf.d/bitwebd: config file for /etc/init.d/bitwebd
+
+# Config file location
+#BITWEBD_CONFIGFILE="/etc/bitweb/bitweb.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITWEBD_USER)
+#BITWEBD_PIDDIR="/var/run/bitwebd"
+
+# What filename to give the pidfile
+#BITWEBD_PIDFILE="${BITWEBD_PIDDIR}/bitweb.pid"
+
+# Where to write bitwebd data (be mindful that the blockchain is large)
+#BITWEBD_DATADIR="/var/lib/bitwebd"
+
+# User and group to own bitwebd process
+#BITWEBD_USER="bitweb"
+#BITWEBD_GROUP="bitweb"
+
+# Path to bitwebd executable
+#BITWEBD_BIN="/usr/bin/bitwebd"
+
+# Nice value to run bitwebd under
+#BITWEBD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#BITWEBD_OPTS=""
+
+# The timeout in seconds OpenRC will wait for bitwebd to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+BITWEBD_SIGTERM_TIMEOUT=600

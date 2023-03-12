@@ -11,10 +11,10 @@
 using namespace std::chrono_literals;
 
 /* A delay between model updates */
-static constexpr auto MODEL_UPDATE_DELAY{250ms};
+static constexpr auto MODEL_UPDATE_DELAY{350ms};
 
 /* A delay between shutdown pollings */
-static constexpr auto SHUTDOWN_POLLING_DELAY{200ms};
+static constexpr auto SHUTDOWN_POLLING_DELAY{300ms};
 
 /* AskPassphraseDialog -- Maximum passphrase length */
 static const int MAX_PASSPHRASE_SIZE = 1024;
@@ -46,12 +46,12 @@ static const int TOOLTIP_WRAP_THRESHOLD = 80;
 /* Number of frames in spinner animation */
 #define SPINNER_FRAMES 36
 
-#define QAPP_ORG_NAME "Bitcoin"
-#define QAPP_ORG_DOMAIN "bitcoin.org"
-#define QAPP_APP_NAME_DEFAULT "Bitcoin-Qt"
-#define QAPP_APP_NAME_TESTNET "Bitcoin-Qt-testnet"
-#define QAPP_APP_NAME_SIGNET "Bitcoin-Qt-signet"
-#define QAPP_APP_NAME_REGTEST "Bitcoin-Qt-regtest"
+#define QAPP_ORG_NAME "Bitweb"
+#define QAPP_ORG_DOMAIN "bitwebcore.net"
+#define QAPP_APP_NAME_DEFAULT "Bitweb-Qt"
+#define QAPP_APP_NAME_TESTNET "Bitweb-Qt-testnet"
+#define QAPP_APP_NAME_SIGNET "Bitweb-Qt-signet"
+#define QAPP_APP_NAME_REGTEST "Bitweb-Qt-regtest"
 
 /* One gigabyte (GB) in bytes */
 static constexpr uint64_t GB_BYTES{1000000000};
