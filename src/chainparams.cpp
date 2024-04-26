@@ -63,7 +63,7 @@ public:
         strNetworkID = CBaseChainParams::MAIN;
         consensus.signet_blocks = false;
         consensus.signet_challenge.clear();
-        consensus.nSubsidyHalvingInterval = 840000;
+        consensus.nSubsidyHalvingInterval = 5250000;
         consensus.script_flag_exceptions.emplace( // BIP16 exception
             uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3"), SCRIPT_VERIFY_NONE);
         consensus.script_flag_exceptions.emplace( // Taproot exception
@@ -94,8 +94,8 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1622356007; // Sunday, 30 May 2021
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 26208;
 
-        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000468939a4a704");
-        consensus.defaultAssumeValid = uint256S("0x0000040a3e7b559aea417d3f886c0e8fe69f1f0530800424b9ea739b1f2c8498"); // 939796
+        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000559c9377eb0c");
+        consensus.defaultAssumeValid = uint256S("0x000036dce9e46bf2c2ffda3c527ee251e319be1b69b732a5f98951dfc10c1719"); // 939796
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -160,6 +160,7 @@ public:
                 {12167, uint256S("0x0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903")},
                 {606942, uint256S("0x0000000d7c7c25d0e2a8a8ff4013ae7154ba2d0c0217dc71b942f41af7be990a")},
                 {939796, uint256S("0x0000040a3e7b559aea417d3f886c0e8fe69f1f0530800424b9ea739b1f2c8498")},
+                {1547452, uint256S("0x000036dce9e46bf2c2ffda3c527ee251e319be1b69b732a5f98951dfc10c1719")},
             }
         };
 
@@ -169,9 +170,9 @@ public:
 
         chainTxData = ChainTxData{
             // Data from RPC: getchaintxstats 4096 0000040a3e7b559aea417d3f886c0e8fe69f1f0530800424b9ea739b1f2c8498
-            .nTime    = 1676764796,
-            .nTxCount = 1026099,
-            .dTxRate  = 0.01743655840760691,
+            .nTime    = 1714159120,
+            .nTxCount = 1679518,
+            .dTxRate  = 0.01695384966499845,
         };
     }
 };
@@ -185,7 +186,7 @@ public:
         strNetworkID = CBaseChainParams::TESTNET;
         consensus.signet_blocks = false;
         consensus.signet_challenge.clear();
-        consensus.nSubsidyHalvingInterval = 840000;
+        consensus.nSubsidyHalvingInterval = 5250000;
         consensus.script_flag_exceptions.emplace( // BIP16 exception
             uint256S("0x00002a542f15e4f95e6256e5fc37532ad965e5874b4f5c4aaab75c792f184f63"), SCRIPT_VERIFY_NONE);
         consensus.BIP34Height = 17;
@@ -324,7 +325,7 @@ public:
         strNetworkID = CBaseChainParams::SIGNET;
         consensus.signet_blocks = true;
         consensus.signet_challenge.assign(bin.begin(), bin.end());
-        consensus.nSubsidyHalvingInterval = 840000;
+        consensus.nSubsidyHalvingInterval = 5250000;
         consensus.BIP34Height = 1;
         consensus.BIP34Hash = uint256{};
         consensus.BIP65Height = 1;

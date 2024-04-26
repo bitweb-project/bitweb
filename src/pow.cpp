@@ -99,12 +99,17 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
 
 unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexLast, const Consensus::Params& params)
 {
+    const arith_uint256 powLimit = UintToArith256(params.powLimit);
+    const int64_t L = 1547351;
+    const int64_t S = 1547450;
     const int64_t T = params.nPowTargetSpacing;
     // N=45 for T=600.  N=60 for T=150.  N=90 for T=60.
+    
     const int64_t N = params.nZawyLwmaAveragingWindow;
     const int64_t k = N*(N+1)*T/2; // BTG's code has a missing N here. They inserted it in the loop
     const int height = pindexLast->nHeight;
     assert(height > N);
+    if ((height >= L) && (height <= S)) { return powLimit.GetCompact(); }
 
     arith_uint256 sum_target;
     int64_t t = 0, j = 0, solvetime;
