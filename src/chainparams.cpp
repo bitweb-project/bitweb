@@ -64,10 +64,12 @@ public:
         consensus.signet_blocks = false;
         consensus.signet_challenge.clear();
         consensus.nSubsidyHalvingInterval = 840000;
+        /*
         consensus.script_flag_exceptions.emplace( // BIP16 exception
             uint256S("0x00043e9c6bc54d9bd266c3767a83a7b9da435dd7f84e485a2bf2a869be62f1f3"), SCRIPT_VERIFY_NONE);
         consensus.script_flag_exceptions.emplace( // Taproot exception
             uint256S("0x000000ac506880be01ab906fe31ececc21a477fb86dd55392a0164c7e2b4d7b6"), SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_WITNESS);
+        */
         consensus.BIP34Height = 17;
         consensus.BIP34Hash = uint256S("0x001ea0da3586f06aa32de50b9764eec2eaba2274191771ad536092d4f9f90fa9");
         consensus.BIP65Height = 1;
@@ -186,8 +188,10 @@ public:
         consensus.signet_blocks = false;
         consensus.signet_challenge.clear();
         consensus.nSubsidyHalvingInterval = 840000;
+        /*
         consensus.script_flag_exceptions.emplace( // BIP16 exception
             uint256S("0x00002a542f15e4f95e6256e5fc37532ad965e5874b4f5c4aaab75c792f184f63"), SCRIPT_VERIFY_NONE);
+        */
         consensus.BIP34Height = 17;
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1;
