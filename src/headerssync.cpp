@@ -7,7 +7,6 @@
 #include <pow.h>
 #include <timedata.h>
 #include <util/check.h>
-#include <hashdb.h>
 // The two constants below are computed using the simulation script on
 // https://gist.github.com/sipa/016ae445c132cdf65a2791534dfb7ae1
 
@@ -204,11 +203,6 @@ bool HeadersSyncState::ValidateAndProcessSingleHeader(const CBlockHeader& curren
             return false;
         }
     }
-
-    // Populate hash cache during PRESYNC so REDOWNLOAD gets cache hits
-    // instead of recomputing yespower for every header.
-    // This moves yespower computation to PRESYNC, making REDOWNLOAD fast.
-    phashdb->GetHash(current);
 
     m_current_chain_work += GetBlockProof(CBlockIndex(current));
     m_last_header_received = current;
