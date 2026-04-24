@@ -1,7 +1,7 @@
 package=qrencode
 $(package)_version=3.4.4
-$(package)_download_path=https://github.com/fukuchi/libqrencode/archive/refs/tags/
-$(package)_file_name=v$($(package)_version).tar.gz
+$(package)_download_path=https://bitcoincore.org/depends-sources
+$(package)_file_name=$(package)-$($(package)_version).tar.bz2
 $(package)_sha256_hash=efe5188b1ddbcbf98763b819b146be6a90481aac30cfc8d858ab78a19cde1fa5
 
 define $(package)_set_vars
