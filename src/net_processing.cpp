@@ -73,11 +73,11 @@ static constexpr int32_t MAX_OUTBOUND_PEERS_TO_PROTECT_FROM_DISCONNECT = 4;
 /** Timeout for (unprotected) outbound peers to sync to our chainwork */
 static constexpr auto CHAIN_SYNC_TIMEOUT{20min};
 /** How frequently to check for stale tips */
-static constexpr auto STALE_CHECK_INTERVAL{60s};
+static constexpr auto STALE_CHECK_INTERVAL{10min};
 /** How frequently to check for extra outbound peers and disconnect */
-static constexpr auto EXTRA_PEER_CHECK_INTERVAL{25s};
+static constexpr auto EXTRA_PEER_CHECK_INTERVAL{45s};
 /** Minimum time an outbound-peer-eviction candidate must be connected for, in order to evict */
-static constexpr auto MINIMUM_CONNECT_TIME{15s};
+static constexpr auto MINIMUM_CONNECT_TIME{30s};
 /** SHA256("main address relay")[0:8] */
 static constexpr uint64_t RANDOMIZER_ID_ADDRESS_RELAY = 0x3cac0035b5866b90ULL;
 /// Age after which a stale block will no longer be served if requested as
@@ -87,7 +87,7 @@ static constexpr int STALE_RELAY_AGE_LIMIT = 30 * 24 * 60 * 60;
 /// limiting block relay. Set to one week, denominated in seconds.
 static constexpr int HISTORICAL_BLOCK_AGE = 7 * 24 * 60 * 60;
 /** Time between pings automatically sent out for latency probing and keepalive */
-static constexpr auto PING_INTERVAL{1min};
+static constexpr auto PING_INTERVAL{2min};
 /** The maximum number of entries in a locator */
 static const unsigned int MAX_LOCATOR_SZ = 101;
 /** The maximum number of entries in an 'inv' protocol message */
@@ -111,7 +111,7 @@ static constexpr auto GETDATA_TX_INTERVAL{60s};
 /** Limit to avoid sending big packets. Not used in processing incoming GETDATA for compatibility */
 static const unsigned int MAX_GETDATA_SZ = 1000;
 /** Number of blocks that can be requested at any given time from a single peer. */
-static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 160;
+static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 16;
 /** Time during which a peer must stall block download progress before being disconnected. */
 static constexpr auto BLOCK_STALLING_TIMEOUT{2s};
 /** Number of headers sent in one getheaders result. We rely on the assumption that if a peer sends
@@ -2800,11 +2800,21 @@ void PeerManagerImpl::ProcessHeadersMessage(CNode& pfrom, Peer& peer,
         //   during the REDOWNLOAD phase of a low-work headers sync.
         // So just check whether we still have headers that we need to process,
         // or not.
-        if (headers.empty()) {
-            return;
-        }
-
         have_headers_sync = !!peer.m_headers_sync;
+    }
+
+    // headers is a local variable and safe to read after the lock is released.
+    // If PRESYNC consumed the batch, extend the sync timeout and return.
+    // Without this, the one-shot timeout set at sync start expires long before
+    // PRESYNC + REDOWNLOAD complete on a chain with many headers.
+    if (headers.empty()) {
+        LOCK(cs_main);
+        CNodeState* nodestate = State(pfrom.GetId());
+        if (nodestate && nodestate->fSyncStarted &&
+                nodestate->m_headers_sync_timeout != std::chrono::microseconds::max()) {
+            nodestate->m_headers_sync_timeout = GetTime<std::chrono::microseconds>() + HEADERS_RESPONSE_TIME;
+        }
+        return;
     }
 
     // Do these headers connect to something in our block index?
@@ -2870,6 +2880,17 @@ void PeerManagerImpl::ProcessHeadersMessage(CNode& pfrom, Peer& peer,
         }
     }
     Assume(pindexLast);
+
+    // Extend the sync timeout on each successfully validated batch (covers
+    // REDOWNLOAD phase and normal IBD where m_best_header is still far behind).
+    {
+        LOCK(cs_main);
+        CNodeState* nodestate = State(pfrom.GetId());
+        if (nodestate && nodestate->fSyncStarted &&
+                nodestate->m_headers_sync_timeout != std::chrono::microseconds::max()) {
+            nodestate->m_headers_sync_timeout = GetTime<std::chrono::microseconds>() + HEADERS_RESPONSE_TIME;
+        }
+    }
 
     // Consider fetching more headers if we are not using our headers-sync mechanism.
     if (nCount == MAX_HEADERS_RESULTS && !have_headers_sync) {
