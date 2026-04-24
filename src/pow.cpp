@@ -83,7 +83,6 @@ unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nF
     return bnNew.GetCompact();
 }
 
-
 // LWMA for BTC clones
 // Copyright (c) 2017-2018 The Bitcoin Gold developers
 // Copyright (c) 2018 Zawy (M.I.T license continued)
@@ -183,7 +182,8 @@ bool PermittedDifficultyTransition(const Consensus::Params& params, int64_t heig
         if (minimum_new_target > observed_new_target) return false;
     } else if (old_nbits != new_nbits) {
         return false;
-    } */
+    }
+*/
     return true;
 }
 
