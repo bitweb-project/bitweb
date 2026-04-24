@@ -7,16 +7,16 @@
 #include <pow.h>
 #include <timedata.h>
 #include <util/check.h>
-
+#include <hashdb.h>
 // The two constants below are computed using the simulation script on
 // https://gist.github.com/sipa/016ae445c132cdf65a2791534dfb7ae1
 
-//! Store a commitment to a header every HEADER_COMMITMENT_PERIOD blocks.
-constexpr size_t HEADER_COMMITMENT_PERIOD{5840};
+//! Store one header commitment per HEADER_COMMITMENT_PERIOD blocks.
+constexpr size_t HEADER_COMMITMENT_PERIOD{604};
 
 //! Only feed headers to validation once this many headers on top have been
 //! received and validated against commitments.
-constexpr size_t REDOWNLOAD_BUFFER_SIZE{139590}; // 13959/584 = ~23.9 commitments
+constexpr size_t REDOWNLOAD_BUFFER_SIZE{6449}; // 6449/604 = ~10.7 commitments
 
 // Our memory analysis assumes 48 bytes for a CompressedHeader (so we should
 // re-calculate parameters if we compress further)
@@ -204,6 +204,11 @@ bool HeadersSyncState::ValidateAndProcessSingleHeader(const CBlockHeader& curren
             return false;
         }
     }
+
+    // Populate hash cache during PRESYNC so REDOWNLOAD gets cache hits
+    // instead of recomputing yespower for every header.
+    // This moves yespower computation to PRESYNC, making REDOWNLOAD fast.
+    phashdb->GetHash(current);
 
     m_current_chain_work += GetBlockProof(CBlockIndex(current));
     m_last_header_received = current;
