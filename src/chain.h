@@ -29,7 +29,7 @@ static constexpr int64_t MAX_FUTURE_BLOCK_TIME = 60 * 5; // ~Block time * N para
  * to block timestamps. This should be set at least as high as
  * MAX_FUTURE_BLOCK_TIME.
  */
-static constexpr int64_t TIMESTAMP_WINDOW = MAX_FUTURE_BLOCK_TIME;
+static constexpr int64_t TIMESTAMP_WINDOW = 2 * 60 * 60; // 2 hours - original was MAX_FUTURE_BLOCK_TIME but it changed to prevent time stamp manipulations.
 
 /**
  * Maximum gap between node time and block time used
@@ -37,7 +37,7 @@ static constexpr int64_t TIMESTAMP_WINDOW = MAX_FUTURE_BLOCK_TIME;
  *
  * Ref: https://github.com/bitcoin/bitcoin/pull/1026
  */
-static constexpr int64_t MAX_BLOCK_TIME_GAP = 60 * 12; // Block time * 12
+static constexpr int64_t MAX_BLOCK_TIME_GAP = 60 * 36; // Block time * 36
 
 extern RecursiveMutex cs_main;
 
