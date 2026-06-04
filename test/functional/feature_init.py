@@ -221,7 +221,7 @@ class InitTest(BitcoinTestFramework):
                 shutil.move(node.chain_path / f"{dir}_bak", node.chain_path / dir)
 
     def init_pid_test(self):
-        BITCOIN_PID_FILENAME_CUSTOM = "my_fancy_bitcoin_pid_file.foobar"
+        BITCOIN_PID_FILENAME_CUSTOM = "my_fancy_bitweb_pid_file.foobar"
 
         self.log.info("Test specifying custom pid file via -pid command line option")
         custom_pidfile_relative = BITCOIN_PID_FILENAME_CUSTOM

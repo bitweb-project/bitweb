@@ -106,10 +106,12 @@ BASE_SCRIPTS = [
     'mempool_updatefromblock.py',
     'mempool_persist.py',
     # vv Tests less than 60s vv
+    'rpc_argon2id_blockhash.py',
     'rpc_psbt.py',
     'wallet_fundrawtransaction.py',
     'wallet_bumpfee.py',
     'wallet_v3_txs.py',
+    'mempool_64byte_reject.py',
     'wallet_backup.py',
     'feature_segwit.py --v2transport',
     'feature_segwit.py --v1transport',
@@ -244,7 +246,7 @@ BASE_SCRIPTS = [
     'wallet_multisig_descriptor_psbt.py',
     'wallet_miniscript_decaying_multisig_descriptor_psbt.py',
     'wallet_txn_doublespend.py',
-    'wallet_backwards_compatibility.py',
+    # 'wallet_backwards_compatibility.py', doesn't make sense we start from 0.30.2.
     'wallet_txn_clone.py --mineblock',
     'feature_notifications.py',
     'rpc_getblockfilter.py',
@@ -280,7 +282,7 @@ BASE_SCRIPTS = [
     'wallet_importdescriptors.py',
     'wallet_crosschain.py',
     'mining_basic.py',
-    'mining_mainnet.py',
+    # 'mining_mainnet.py', test need rework for lwma algo, but really does not make any sense due handle other test.
     'feature_signet.py',
     'p2p_mutated_blocks.py',
     'rpc_named_arguments.py',
@@ -316,6 +318,7 @@ BASE_SCRIPTS = [
     'feature_filelock.py',
     'feature_loadblock.py',
     'wallet_assumeutxo.py',
+    'p2p_dos_header_tree.py', #// Checkpoints restored
     'p2p_add_connections.py',
     'feature_bind_port_discover.py',
     'p2p_unrequested_blocks.py',
@@ -326,7 +329,7 @@ BASE_SCRIPTS = [
     'feature_fastprune.py',
     'feature_framework_miniwallet.py',
     'mempool_unbroadcast.py',
-    'mempool_compatibility.py',
+    # 'mempool_compatibility.py', doesn't make sense we start from 0.30.2, but will make sense at migration from 0.30.2 to 0.31.x
     'mempool_accept_wtxid.py',
     'mempool_dust.py',
     'mempool_sigoplimit.py',
@@ -339,13 +342,12 @@ BASE_SCRIPTS = [
     'tool_bitcoin.py',
     'p2p_sendtxrcncl.py',
     'rpc_scantxoutset.py',
-    'feature_unsupported_utxo_db.py',
     'feature_logging.py',
     'interface_ipc.py',
     'feature_anchors.py',
     'mempool_datacarrier.py',
     'feature_coinstatsindex.py',
-    'feature_coinstatsindex_compatibility.py',
+    # 'feature_coinstatsindex_compatibility.py', doesn't make sense we start from 0.30.2.
     'wallet_orphanedreward.py',
     'wallet_timelock.py',
     'p2p_permissions.py',
@@ -366,7 +368,7 @@ BASE_SCRIPTS = [
     'feature_help.py',
     'feature_framework_startup_failures.py',
     'feature_shutdown.py',
-    'wallet_migration.py',
+    'wallet_migration024.py',
     'p2p_ibd_txrelay.py',
     'p2p_seednode.py',
     # Don't append tests at the end to avoid merge conflicts
@@ -405,7 +407,7 @@ def main():
     parser.add_argument('--failfast', '-F', action='store_true', help='stop execution after the first test failure')
     parser.add_argument('--filter', help='filter scripts to run by regular expression')
     parser.add_argument("--nocleanup", dest="nocleanup", default=False, action="store_true",
-                        help="Leave bitcoinds and test.* datadir on exit or error")
+                        help="Leave bitwebds and test.* datadir on exit or error")
     parser.add_argument('--resultsfile', '-r', help='store test results (as CSV) to the provided file')
 
     args, unknown_args = parser.parse_known_args()
@@ -555,11 +557,11 @@ def run_tests(*, test_list, build_dir, tmpdir, jobs=1, enable_coverage=False, ar
     # functional tests so every child process inherits PYTHON_GIL=1.
     os.environ["PYTHON_GIL"] = "1"
 
-    # Warn if bitcoind is already running
+    # Warn if bitwebd is already running
     try:
         # pgrep exits with code zero when one or more matching processes found
-        if subprocess.run(["pgrep", "-x", "bitcoind"], stdout=subprocess.DEVNULL).returncode == 0:
-            print("%sWARNING!%s There is already a bitcoind process running on this system. Tests may fail unexpectedly due to resource contention!" % (BOLD[1], BOLD[0]))
+        if subprocess.run(["pgrep", "-x", "bitwebd"], stdout=subprocess.DEVNULL).returncode == 0:
+            print("%sWARNING!%s There is already a bitwebd process running on this system. Tests may fail unexpectedly due to resource contention!" % (BOLD[1], BOLD[0]))
     except OSError:
         # pgrep not supported
         pass
@@ -572,7 +574,7 @@ def run_tests(*, test_list, build_dir, tmpdir, jobs=1, enable_coverage=False, ar
     # Warn if there is not enough space on the testing dir
     min_space = MIN_FREE_SPACE + (jobs - 1) * ADDITIONAL_SPACE_PER_JOB
     if shutil.disk_usage(tmpdir).free < min_space:
-        print(f"{BOLD[1]}WARNING!{BOLD[0]} There may be insufficient free space in {tmpdir} to run the Bitcoin functional test suite. "
+        print(f"{BOLD[1]}WARNING!{BOLD[0]} There may be insufficient free space in {tmpdir} to run the Bitweb functional test suite. "
               f"Running the test suite with fewer than {min_space // (1024 * 1024)} MB of free space might cause tests to fail.")
 
     tests_dir = f"{build_dir}/test/functional/"
@@ -852,7 +854,7 @@ class RPCCoverage():
     Coverage calculation works by having each test script subprocess write
     coverage files into a particular directory. These files contain the RPC
     commands invoked during testing, as well as a complete listing of RPC
-    commands per `bitcoin-cli help` (`rpc_interface.txt`).
+    commands per `bitweb-cli help` (`rpc_interface.txt`).
 
     After all tests complete, the commands run are combined and diff'd against
     the complete list to calculate uncovered RPC commands.

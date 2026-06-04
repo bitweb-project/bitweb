@@ -13,8 +13,8 @@
 
 #include <boost/test/unit_test.hpp>
 
-/* Define a virtual block time, one block per 10 minutes after Nov 14 2014, 0:55:36am */
-static int32_t TestTime(int nHeight) { return 1415926536 + 600 * nHeight; }
+/* Define a virtual block time, one block per 5 minutes Tue Dec 16 2025 12:41:28 GMT+0000 */
+static int32_t TestTime(int nHeight) { return 1765888888 + 300 * nHeight; }
 
 class TestConditionChecker final : public VersionBitsConditionChecker
 {

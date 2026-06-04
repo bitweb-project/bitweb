@@ -16,15 +16,21 @@ transactions:
               output can be spent
     102:      a block containing a transaction spending the coinbase
               transaction output. The transaction has an invalid signature.
-    103-2202: bury the bad block with just over two weeks' worth of blocks
-              (2100 blocks)
+    103-4302: bury the bad block with just over two weeks' worth of blocks
+              (4200 blocks at 300s/block = 14.58 days > 14-day threshold)
+
+NOTE: Bitweb uses 300-second block times (vs Bitcoin's 600-second).
+GetBlockProofEquivalentTime = burial_count * nPowTargetSpacing.
+For assumevalid to skip scripts, this must EXCEED 14 days (1,209,600s):
+  2100 * 300 =   630,000s =  7.3 days  <- insufficient, test fails!
+  4200 * 300 = 1,260,000s = 14.6 days  <- sufficient, assumevalid works
 
 Start three nodes:
 
-    - node0 has no -assumevalid parameter. Try to sync to block 2202. It will
+    - node0 has no -assumevalid parameter. Try to sync to block 4302. It will
       reject block 102 and only sync as far as block 101
     - node1 has -assumevalid set to the hash of block 102. Try to sync to
-      block 2202. node1 will sync all the way to block 2202.
+      block 4302. node1 will sync all the way to block 4302.
     - node2 has -assumevalid set to the hash of block 102. Try to sync to
       block 200. node2 will reject block 102 since it's assumed valid, but it
       isn't buried by at least two weeks' work.
@@ -52,6 +58,13 @@ from test_framework.script import (
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import assert_equal
 from test_framework.wallet_util import generate_keypair
+
+# Bitweb Params
+# Bitweb: 300s block time. For assumevalid's 2-week equivalence check:
+#   burial_count * nPowTargetSpacing > 14 * 24 * 3600 = 1,209,600
+#   4200 * 300 = 1,260,000 > 1,209,600  ✓
+BURIAL_BLOCKS = 4200
+TOTAL_BLOCKS = 1 + COINBASE_MATURITY + 1 + BURIAL_BLOCKS  # = 4302
 
 
 class BaseNode(P2PInterface):
@@ -84,6 +97,11 @@ class AssumeValidTest(BitcoinTestFramework):
             except IOError:
                 assert not p2p_conn.is_connected
                 break
+
+    def send_headers_in_chunks(self, p2p_conn, blocks, chunk_size=2000):
+        """Send block headers in chunks of at most chunk_size (MAX_HEADERS_RESULTS)."""
+        for start in range(0, len(blocks), chunk_size):
+            p2p_conn.send_header_for_blocks(blocks[start:start + chunk_size])
 
     def run_test(self):
         # Build the blockchain
@@ -128,8 +146,11 @@ class AssumeValidTest(BitcoinTestFramework):
         self.block_time += 1
         height += 1
 
-        # Bury the assumed valid block 2100 deep
-        for _ in range(2100):
+        # Bury the assumed valid block with enough blocks so that
+        # GetBlockProofEquivalentTime > 2 weeks (1,209,600s).
+        # With nPowTargetSpacing=300: need burial_count * 300 > 1,209,600
+        # i.e. burial_count > 4032.  We use BURIAL_BLOCKS = 4200.
+        for _ in range(BURIAL_BLOCKS):
             block = create_block(self.tip, create_coinbase(height), self.block_time)
             block.solve()
             self.blocks.append(block)
@@ -137,13 +158,15 @@ class AssumeValidTest(BitcoinTestFramework):
             self.block_time += 1
             height += 1
 
+        assert len(self.blocks) == TOTAL_BLOCKS
+
         # Start node1 and node2 with assumevalid so they accept a block with a bad signature.
+        # hash_hex is SHA256d (GetHash()) - the block index key in the C++ node.
         self.start_node(1, extra_args=["-assumevalid=" + block102.hash_hex])
         self.start_node(2, extra_args=["-assumevalid=" + block102.hash_hex])
 
         p2p0 = self.nodes[0].add_p2p_connection(BaseNode())
-        p2p0.send_header_for_blocks(self.blocks[0:2000])
-        p2p0.send_header_for_blocks(self.blocks[2000:])
+        self.send_headers_in_chunks(p2p0, self.blocks)
 
         # Send blocks to node0. Block 102 will be rejected.
         self.send_blocks_until_disconnected(p2p0)
@@ -151,15 +174,15 @@ class AssumeValidTest(BitcoinTestFramework):
         assert_equal(self.nodes[0].getblockcount(), COINBASE_MATURITY + 1)
 
         p2p1 = self.nodes[1].add_p2p_connection(BaseNode())
-        p2p1.send_header_for_blocks(self.blocks[0:2000])
-        p2p1.send_header_for_blocks(self.blocks[2000:])
+        self.send_headers_in_chunks(p2p1, self.blocks)
+
         with self.nodes[1].assert_debug_log(expected_msgs=['Disabling signature validations at block #1', 'Enabling signature validations at block #103']):
             # Send all blocks to node1. All blocks will be accepted.
-            for i in range(2202):
+            for i in range(TOTAL_BLOCKS):
                 p2p1.send_without_ping(msg_block(self.blocks[i]))
-            # Syncing 2200 blocks can take a while on slow systems. Give it plenty of time to sync.
+            # Syncing many blocks can take a while on slow systems.
             p2p1.sync_with_ping(timeout=960)
-        assert_equal(self.nodes[1].getblock(self.nodes[1].getbestblockhash())['height'], 2202)
+        assert_equal(self.nodes[1].getblock(self.nodes[1].getbestblockhash())['height'], TOTAL_BLOCKS)
 
         p2p2 = self.nodes[2].add_p2p_connection(BaseNode())
         p2p2.send_header_for_blocks(self.blocks[0:200])

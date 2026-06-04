@@ -37,6 +37,7 @@ add_executable(fuzz
   crypto_diff_fuzz_chacha20.cpp
   crypto_hkdf_hmac_sha256_l32.cpp
   crypto_poly1305.cpp
+  crypto_argon2id.cpp
   cuckoocache.cpp
   decode_tx.cpp
   descriptor_parse.cpp
@@ -88,6 +89,8 @@ add_executable(fuzz
   policy_estimator_io.cpp
   poolresource.cpp
   pow.cpp
+  permitted_difficulty.cpp # Bitweb Params: fuzz permitted difficulty
+  pow_argon2id.cpp # Bitweb Params: fuzz Argon2id PoW hash
   prevector.cpp
   primitives_transaction.cpp
   process_message.cpp
@@ -148,6 +151,23 @@ target_link_libraries(fuzz
   Boost::headers
   libevent::extra
 )
+
+# Argon2id ISA availability – forward the same macros to fuzz target
+if(HAVE_ARGON2_SSE2)
+  target_compile_definitions(fuzz PRIVATE ENABLE_ARGON2_SSE2)
+endif()
+if(HAVE_ARGON2_SSSE3)
+  target_compile_definitions(fuzz PRIVATE ENABLE_ARGON2_SSSE3)
+endif()
+if(HAVE_ARGON2_AVX2)
+  target_compile_definitions(fuzz PRIVATE ENABLE_ARGON2_AVX2)
+endif()
+if(HAVE_ARGON2_AVX512)
+  target_compile_definitions(fuzz PRIVATE ENABLE_ARGON2_AVX512)
+endif()
+if(HAVE_ARGON2_NEON)
+  target_compile_definitions(fuzz PRIVATE ENABLE_ARGON2_NEON)
+endif()
 
 if(ENABLE_WALLET)
   add_subdirectory(${PROJECT_SOURCE_DIR}/src/wallet/test/fuzz wallet)

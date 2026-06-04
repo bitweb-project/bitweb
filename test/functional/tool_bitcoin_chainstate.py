@@ -38,8 +38,8 @@ class BitcoinChainstateTest(BitcoinTestFramework):
         datadir = node.cli.datadir
         node.stop_node()
 
-        self.log.info(f"Testing bitcoin-chainstate {self.get_binaries().chainstate_argv()} with datadir: {datadir}")
-        block_one = "010000006fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000982051fd1e4ba744bbbe680e1fee14677ba1a3c3540bf7b1cdb606e857233e0e61bc6649ffff001d01e362990101000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0704ffff001d0104ffffffff0100f2052a0100000043410496b538e853519c726a2c91e61ec11600ae1390813a627c66fb8be7947be63c52da7589379515d4e0a604f8141781e62294721166bf621e73a82cbf2342c858eeac00000000"
+        self.log.info(f"Testing bitweb-chainstate {self.get_binaries().chainstate_argv()} with datadir: {datadir}")
+        block_one = "00000020e609f211cafe9263f91ab64a9789750ffad424f9d774ab07c490b3b9c1921611b76a633805518423d80d6a3aa9caa5d2a23891f9ffe68f43bb9006442f59d180818fde69ffff0f1f431c00000102000000010000000000000000000000000000000000000000000000000000000000000000ffffffff025100feffffff0200f2052a010000001976a91465b7a87b5d7d72b3a336559bed02b50209efb7ba88ac0000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf900000000"
         self.add_block(datadir, block_one, "Block has not yet been rejected")
         self.add_block(datadir, block_one, "duplicate")
         self.add_block(datadir, "00", "Block decode failed")

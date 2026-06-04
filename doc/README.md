@@ -33,7 +33,7 @@ Drag Bitweb Core to your applications folder, and then run Bitweb Core.
 
 * See the documentation at the [Bitcoin Wiki](https://en.bitcoin.it/wiki/Main_Page)
 for help and more information.
-* Ask for help on [Bitweb discord](https://discord.gg/jQdttwgsJa).
+* Ask for help on [Bitweb discord](https://discord.gg/uC6wEVu6FR).
 * Ask for help on [Bitweb telegram](https://t.me/bitweb_en).
 * Ask for help on the [Bitweb BitcoinTalk Announce Thread](https://bitcointalk.org/index.php?topic=5400649.msg60250609#msg60250609).
 
@@ -68,7 +68,7 @@ The Bitweb repo's [root README](/README.md) contains relevant information on the
 
 ### Resources
 * Discuss on the [Bitweb BitcoinTalk Announce Thread](https://bitcointalk.org/index.php?topic=5400649.msg60250609#msg60250609).
-* Discuss project-specific development on [Bitweb discord](https://discord.gg/jQdttwgsJa).
+* Discuss project-specific development on [Bitweb discord](https://discord.gg/uC6wEVu6FR).
 
 ### Miscellaneous
 - [Assets Attribution](assets-attribution.md)

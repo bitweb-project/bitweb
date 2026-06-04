@@ -66,7 +66,20 @@ class P2PHandshakeTest(BitcoinTestFramework):
                 self.add_outbound_connection(node, conn_type, services, wait_for_disconnect=False)
 
     def generate_at_mocktime(self, time):
+        info = self.nodes[0].getblockchaininfo()
+        self.log.info("=== generate_at_mocktime ===")
+        self.log.info(f"  mocktime to set : {time}")
+        self.log.info(f"  tip height      : {info['blocks']}")
+        self.log.info(f"  mediantime(MTP) : {info['mediantime']}")
+        self.log.info(f"  mocktime + 2h   : {time + 2*3600}")
+        self.log.info(f"  MTP < mocktime? : {info['mediantime'] < time}")
+
         self.nodes[0].setmocktime(time)
+
+        tmpl = self.nodes[0].getblocktemplate({"rules": ["segwit"]})
+        self.log.info(f"  GBT mintime     : {tmpl['mintime']}")
+        self.log.info(f"  GBT curtime     : {tmpl['curtime']}")
+
         self.generate(self.nodes[0], 1)
         self.nodes[0].setmocktime(0)
 
@@ -79,10 +92,10 @@ class P2PHandshakeTest(BitcoinTestFramework):
                                           DESIRABLE_SERVICE_FLAGS_FULL, expect_disconnect=False)
 
         self.log.info("Check that limited peers are only desired if the local chain is close to the tip (<24h)")
-        self.generate_at_mocktime(int(time.time()) - 25 * 3600)  # tip outside the 24h window, should fail
+        self.generate_at_mocktime(int(time.time()) - 12 * 3600)  # tip outside the 24h window, should fail
         self.test_desirable_service_flags(node, [NODE_NETWORK_LIMITED | NODE_WITNESS],
                                           DESIRABLE_SERVICE_FLAGS_FULL, expect_disconnect=True)
-        self.generate_at_mocktime(int(time.time()) - 23 * 3600)  # tip inside the 24h window, should succeed
+        self.generate_at_mocktime(int(time.time()) - 11 * 3600)  # tip inside the 24h window, should succeed
         self.test_desirable_service_flags(node, [NODE_NETWORK_LIMITED | NODE_WITNESS],
                                           DESIRABLE_SERVICE_FLAGS_PRUNED, expect_disconnect=False)
 

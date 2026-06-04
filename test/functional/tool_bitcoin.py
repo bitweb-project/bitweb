@@ -2,7 +2,7 @@
 # Copyright (c) The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-"""Test the bitcoin wrapper tool."""
+"""Test the bitweb wrapper tool."""
 from test_framework.test_framework import (
     BitcoinTestFramework,
     SkipTest,
@@ -38,8 +38,8 @@ class ToolBitcoinTest(BitcoinTestFramework):
         assert all(node.args[:len(node_argv)] == node_argv for node in self.nodes)
 
     def set_cmd_args(self, node, args):
-        """Set up node so it will be started through bitcoin wrapper command with specified arguments."""
-        # Manually construct the `bitcoin node` command, similar to Binaries::node_argv()
+        """Set up node so it will be started through bitweb wrapper command with specified arguments."""
+        # Manually construct the `bitweb node` command, similar to Binaries::node_argv()
         bitcoin_cmd = node.binaries.valgrind_cmd + [node.binaries.paths.bitcoin_bin]
         node.args = bitcoin_cmd + args + ["node"] + self.node_options[node.index]
 
@@ -62,28 +62,28 @@ class ToolBitcoinTest(BitcoinTestFramework):
     def run_test(self):
         node = self.nodes[0]
 
-        self.log.info("Ensure bitcoin node command invokes bitcoind by default")
-        self.test_args([], [], expect_exe="bitcoind")
+        self.log.info("Ensure bitweb node command invokes bitwebd by default")
+        self.test_args([], [], expect_exe="bitwebd")
 
-        self.log.info("Ensure bitcoin -M invokes bitcoind")
-        self.test_args(["-M"], [], expect_exe="bitcoind")
+        self.log.info("Ensure bitweb -M invokes bitwebd")
+        self.test_args(["-M"], [], expect_exe="bitwebd")
 
-        self.log.info("Ensure bitcoin -M does not accept -ipcbind")
+        self.log.info("Ensure bitweb -M does not accept -ipcbind")
         self.test_args(["-M"], ["-ipcbind=unix"], expect_error='Error: Error parsing command line arguments: Invalid parameter -ipcbind=unix')
 
         if self.is_ipc_compiled():
-            self.log.info("Ensure bitcoin -m invokes bitcoin-node")
-            self.test_args(["-m"], [], expect_exe="bitcoin-node")
+            self.log.info("Ensure bitweb -m invokes bitweb-node")
+            self.test_args(["-m"], [], expect_exe="bitweb-node")
 
-            self.log.info("Ensure bitcoin -m does accept -ipcbind")
-            self.test_args(["-m"], ["-ipcbind=unix"], expect_exe="bitcoin-node")
+            self.log.info("Ensure bitweb -m does accept -ipcbind")
+            self.test_args(["-m"], ["-ipcbind=unix"], expect_exe="bitweb-node")
 
-            self.log.info("Ensure bitcoin accepts -ipcbind by default")
-            self.test_args([], ["-ipcbind=unix"], expect_exe="bitcoin-node")
+            self.log.info("Ensure bitweb accepts -ipcbind by default")
+            self.test_args([], ["-ipcbind=unix"], expect_exe="bitweb-node")
 
-            self.log.info("Ensure bitcoin recognizes -ipcbind in config file")
+            self.log.info("Ensure bitweb recognizes -ipcbind in config file")
             append_config(node.datadir_path, ["ipcbind=unix"])
-            self.test_args([], [], expect_exe="bitcoin-node")
+            self.test_args([], [], expect_exe="bitweb-node")
 
 
 def get_node_output(node):

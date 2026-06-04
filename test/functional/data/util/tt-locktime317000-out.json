@@ -203,9 +203,9 @@
             "n": 0,
             "scriptPubKey": {
                 "asm": "OP_DUP OP_HASH160 8fd139bb39ced713f231c58a4d07bf6954d1c201 OP_EQUALVERIFY OP_CHECKSIG",
-                "desc": "addr(1E7SGgAZFCHDnVZLuRViX3gUmxpMfdvd2o)#xvg87vgr",
+                "desc": "addr(EWGLmG14g9a8moACiGVEXBfSYcKV4C6EcG)#ar2tj9ux",
                 "hex": "76a9148fd139bb39ced713f231c58a4d07bf6954d1c20188ac",
-                "address": "1E7SGgAZFCHDnVZLuRViX3gUmxpMfdvd2o",
+                "address": "EWGLmG14g9a8moACiGVEXBfSYcKV4C6EcG",
                 "type": "pubkeyhash"
             }
         },
@@ -214,9 +214,9 @@
             "n": 1,
             "scriptPubKey": {
                 "asm": "OP_DUP OP_HASH160 6c772e9cf96371bba3da8cb733da70a2fcf20078 OP_EQUALVERIFY OP_CHECKSIG",
-                "desc": "addr(1AtWkdmfmYkErU16d3KYykJUbEp9MAj9Sb)#tsyprkms",
+                "desc": "addr(ET3RFDcBCW39qmbxRtK4ytHSMtKGq2BdVP)#hvryc44n",
                 "hex": "76a9146c772e9cf96371bba3da8cb733da70a2fcf2007888ac",
-                "address": "1AtWkdmfmYkErU16d3KYykJUbEp9MAj9Sb",
+                "address": "ET3RFDcBCW39qmbxRtK4ytHSMtKGq2BdVP",
                 "type": "pubkeyhash"
             }
         }

@@ -7,7 +7,7 @@ To run linters locally with the same versions as the CI environment, use the inc
 Dockerfile:
 
 ```sh
-DOCKER_BUILDKIT=1 docker build -t bitcoin-linter --file "./ci/lint_imagefile" ./ && docker run --rm -v $(pwd):/bitcoin -it bitcoin-linter
+DOCKER_BUILDKIT=1 docker build -t bitweb-linter --file "./ci/lint_imagefile" ./ && docker run --rm -v $(pwd):/bitweb -it bitweb-linter
 ```
 
 Building the container can be done every time, because it is fast when the

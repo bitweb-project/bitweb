@@ -222,6 +222,8 @@ fn get_pathspecs_default_excludes() -> Vec<String> {
         .iter()
         .chain(&[
             "doc/release-notes/release-notes-*", // archived notes
+			"doc/bitcoin-release-notes/release-notes-*",
+
         ])
         .map(|s| format!(":(exclude){}", s))
         .collect()
@@ -478,7 +480,7 @@ fn get_pathspecs_exclude_whitespace() -> Vec<String> {
             "contrib/windeploy/win-codesign.cert",
             "doc/README_windows.txt",
             // Temporary excludes, or existing violations
-            "contrib/init/bitcoind.openrc",
+            "contrib/init/bitwebd.openrc",
             "contrib/macdeploy/macdeployqtplus",
             "src/crypto/sha256_sse4.cpp",
             "src/qt/res/src/*.svg",

@@ -167,7 +167,7 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
     3. The `SHA256SUMS.asc` combined signature file you just created.
 
 - After uploading release candidate binaries, notify the
-  [Bitweb Discord](https://discord.gg/jQdttwgsJa) and
+  [Bitweb Discord](https://discord.gg/uC6wEVu6FR) and
   [Bitweb Telegram](https://t.me/bitweb_en) that a release candidate is available for testing.
   Include a link to the release notes draft.
 
