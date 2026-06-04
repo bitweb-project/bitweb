@@ -148,7 +148,15 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("seed10.bitwebcore.net.");
+        vSeeds.emplace_back("seed.bitwebcore.net.");
+        vSeeds.emplace_back("seed1.bitwebcore.net.");
+        vSeeds.emplace_back("seed2.bitwebcore.net.");
+        vSeeds.emplace_back("seed3.bitwebcore.net.");
+        vSeeds.emplace_back("seed4.bitwebcore.net.");
+        vSeeds.emplace_back("seed5.bitwebcore.net.");
+        vSeeds.emplace_back("seed6.bitwebcore.net.");
+        vSeeds.emplace_back("bitwebseed.dpowcore.org.");
+        vSeeds.emplace_back("bitwebseed1.dpowcore.org.");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,33); // E
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,30); // D
@@ -254,7 +262,16 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("testnetseed.bitwebcore.net.");
+        vSeeds.emplace_back("testnet3seed.bitwebcore.net.");
+        vSeeds.emplace_back("testnet3seed1.bitwebcore.net.");
+        vSeeds.emplace_back("testnet3seed2.bitwebcore.net.");
+        vSeeds.emplace_back("testnet3seed3.bitwebcore.net.");
+        vSeeds.emplace_back("testnet3seed4.bitwebcore.net.");
+        vSeeds.emplace_back("testnet3seed5.bitwebcore.net.");
+        vSeeds.emplace_back("testnet3seed6.bitwebcore.net.");
+        vSeeds.emplace_back("bitwebtest3seed.dpowcore.org.");
+        vSeeds.emplace_back("bitwebtest3seed1.dpowcore.org.");
+
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -357,6 +374,15 @@ public:
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
         vSeeds.emplace_back("testnet4seed.bitwebcore.net.");
+        vSeeds.emplace_back("testnet4seed1.bitwebcore.net.");
+        vSeeds.emplace_back("testnet4seed2.bitwebcore.net.");
+        vSeeds.emplace_back("testnet4seed3.bitwebcore.net.");
+        vSeeds.emplace_back("testnet4seed4.bitwebcore.net.");
+        vSeeds.emplace_back("testnet4seed5.bitwebcore.net.");
+        vSeeds.emplace_back("testnet4seed6.bitwebcore.net.");
+        vSeeds.emplace_back("bitwebtest4seed.dpowcore.org.");
+        vSeeds.emplace_back("bitwebtest4seed1.dpowcore.org.");
+
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -405,6 +431,15 @@ public:
             bin = "51210289344323689631739c2da6c9c1a31c442289e8dc0b00fd60d7bc041c967522b351ae"_hex_v_u8;
             vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_signet), std::end(chainparams_seed_signet));
             vSeeds.emplace_back("signetseed.bitwebcore.net.");
+            vSeeds.emplace_back("signetseed.bitwebcore.net.");
+            vSeeds.emplace_back("signetseed1.bitwebcore.net.");
+            vSeeds.emplace_back("signetseed2.bitwebcore.net.");
+            vSeeds.emplace_back("signetseed3.bitwebcore.net.");
+            vSeeds.emplace_back("signetseed4.bitwebcore.net.");
+            vSeeds.emplace_back("signetseed5.bitwebcore.net.");
+            vSeeds.emplace_back("signetseed6.bitwebcore.net.");
+            vSeeds.emplace_back("bitwebsignetseed.dpowcore.org.");
+            vSeeds.emplace_back("bitwebsignetseed1.dpowcore.org.");
 
             consensus.nMinimumChainWork = uint256{};
             consensus.defaultAssumeValid = uint256{};

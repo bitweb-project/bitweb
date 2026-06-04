@@ -250,7 +250,7 @@ FUZZ_TARGET(p2p_headers_presync, .init = initialize)
     //   2. Set consensus.nMinimumChainWork = uint256{"<value>"} in chainparams.cpp
     //   3. Uncomment the assertion below.
 
-    //    assert(total_work < chainman.MinimumChainWork());
+    assert(total_work < chainman.MinimumChainWork());
 
     // The headers/blocks sent in this test should never be stored, as the chains don't have the work required
     // to meet the anti-DoS work threshold. So, if at any point the block index grew in size, then there's a bug
