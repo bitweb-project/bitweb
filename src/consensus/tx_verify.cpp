@@ -175,11 +175,34 @@ bool Consensus::CheckTxInputs(const CTransaction& tx, TxValidationState& state, 
         const Coin& coin = inputs.AccessCoin(prevout);
         assert(!coin.IsSpent());
 
+        /*
         // If prev is coinbase, check that it's matured
         if (coin.IsCoinBase() && nSpendHeight - coin.nHeight < COINBASE_MATURITY) {
             return state.Invalid(TxValidationResult::TX_PREMATURE_SPEND, "bad-txns-premature-spend-of-coinbase",
                 strprintf("tried to spend coinbase at depth %d", nSpendHeight - coin.nHeight));
         }
+        */
+
+        /* Bitweb Params */
+        if (coin.IsCoinBase()) {
+            static constexpr int EXT_MATURITY_START = 60000;
+            static constexpr int EXT_MATURITY_END = EXT_MATURITY_START + EXT_COINBASE_MATURITY;
+
+            if (coin.nHeight >= EXT_MATURITY_START && coin.nHeight < EXT_MATURITY_END) {
+                // Extended maturity for coinbase outputs mined during the extended period.
+                // Required depth = (EXT_MATURITY_END - coin.nHeight) + COINBASE_MATURITY,
+                // which is always >= COINBASE_MATURITY + 1, so the standard check below is unreachable.
+                if (nSpendHeight - coin.nHeight < (EXT_MATURITY_END - coin.nHeight) + COINBASE_MATURITY) {
+                    return state.Invalid(TxValidationResult::TX_PREMATURE_SPEND, "bad-txns-premature-spend-of-coinbase",
+                        strprintf("tried to spend coinbase at depth %d", nSpendHeight - coin.nHeight));
+                }
+            } else if (nSpendHeight - coin.nHeight < COINBASE_MATURITY) {
+                // Standard maturity for all coinbase outputs outside the extended period.
+                return state.Invalid(TxValidationResult::TX_PREMATURE_SPEND, "bad-txns-premature-spend-of-coinbase",
+                    strprintf("tried to spend coinbase at depth %d", nSpendHeight - coin.nHeight));
+            }
+        }
+        /* Bitweb Params */
 
         // Check for negative or overflow input values
         nValueIn += coin.out.nValue;

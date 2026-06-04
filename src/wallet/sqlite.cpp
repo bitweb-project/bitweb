@@ -20,11 +20,24 @@
 
 #include <cstdint>
 #include <optional>
+#include <set> // Bitweb Params
 #include <utility>
 #include <vector>
 
 namespace wallet {
 static constexpr int32_t WALLET_SCHEMA_VERSION = 0;
+
+// Bitweb Params special migration code from old chain.
+// Known legacy Bitweb network magic values (ReadBE32(pchMessageStart)).
+// Wallets with these application_ids are auto-migrated to the current chain
+// magic on load. This is safe: application_id lives in bytes 68-71 of the
+// SQLite file header and is entirely separate from table data and descriptors.
+// Wallets from unrecognized chains (BTC, LTC, ...) are still rejected as before.
+// Add new entries here whenever a Bitweb release changes pchMessageStart.
+static const std::set<uint32_t> BITWEB_LEGACY_MAGICS = {
+    0xcaaed9feU, // Bitweb 0.24 mainnet  (ca ae d9 fe)
+};
+// Bitweb Params
 
 static std::span<const std::byte> SpanFromBlob(sqlite3_stmt* stmt, int col)
 {
@@ -197,8 +210,24 @@ bool SQLiteDatabase::Verify(bilingual_str& error)
     uint32_t app_id = static_cast<uint32_t>(read_result.value());
     uint32_t net_magic = ReadBE32(Params().MessageStart().data());
     if (app_id != net_magic) {
+        /*
         error = strprintf(_("SQLiteDatabase: Unexpected application id. Expected %u, got %u"), net_magic, app_id);
         return false;
+        */
+    	// Biweb Params special migration code from old chain.
+        // Update known legacy Bitweb magics to the current chain magic.
+        // Safe: application_id lives in bytes 68-71 of the SQLite file header,
+        // table data and descriptors are not affected.
+        if (BITWEB_LEGACY_MAGICS.count(app_id)) {
+            LogPrintf("SQLiteDatabase: wallet '%s' has legacy Bitweb application_id %u, "
+                      "updating to current chain magic %u\n", m_file_path, app_id, net_magic);
+            SetPragma(m_db, "application_id", strprintf("%d", static_cast<int32_t>(net_magic)),
+                      "Unable to update application_id");
+        } else {
+            error = strprintf(_("SQLiteDatabase: Unexpected application id. Expected %u, got %u"), net_magic, app_id);
+            return false;
+        }
+        // Biweb Params
     }
 
     // Check our schema version

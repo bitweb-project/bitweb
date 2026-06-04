@@ -283,7 +283,7 @@ QString TransactionDesc::toHTML(interfaces::Node& node, interfaces::Wallet& wall
     strHTML += "<b>" + tr("Transaction virtual size") + ":</b> " + QString::number(GetVirtualTransactionSize(*wtx.tx)) + " bytes<br>";
     strHTML += "<b>" + tr("Output index") + ":</b> " + QString::number(rec->getOutputIndex()) + "<br>";
 
-    // Message from normal bitcoin:URI (bitcoin:123...?message=example)
+    // Message from normal bitweb:URI (bitweb:123...?message=example)
     for (const std::pair<std::string, std::string>& r : orderForm) {
         if (r.first == "Message")
             strHTML += "<br><b>" + tr("Message") + ":</b><br>" + GUIUtil::HtmlEscape(r.second, true) + "<br>";
@@ -305,11 +305,32 @@ QString TransactionDesc::toHTML(interfaces::Node& node, interfaces::Wallet& wall
         }
     }
 
+    /*
     if (wtx.is_coinbase)
     {
-        quint32 numBlocksToMaturity = COINBASE_MATURITY +  1;
+        quint32 numBlocksToMaturity = COINBASE_MATURITY + 1;
         strHTML += "<br>" + tr("Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to \"not accepted\" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.").arg(QString::number(numBlocksToMaturity)) + "<br>";
     }
+    */
+
+    /* Bitweb Params */
+    if (wtx.is_coinbase)
+    {
+        static constexpr int EXT_MATURITY_START = 60000;
+        static constexpr int EXT_MATURITY_END   = EXT_MATURITY_START + EXT_COINBASE_MATURITY;
+
+        quint32 numBlocksToMaturity;
+        if (status.block_height >= EXT_MATURITY_START && status.block_height < EXT_MATURITY_END) {
+            // Extended maturity period: +1 matches GetTxBlocksToMaturity() convention
+            // and is consistent with the standard branch below.
+            numBlocksToMaturity = (EXT_MATURITY_END - status.block_height) + COINBASE_MATURITY + 1;
+        } else {
+            // Standard maturity for all coinbase outputs outside the extended period.
+            numBlocksToMaturity = COINBASE_MATURITY + 1;
+        }
+        strHTML += "<br>" + tr("Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to \"not accepted\" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.").arg(QString::number(numBlocksToMaturity)) + "<br>";
+    }
+    /* Bitweb Params */
 
     //
     // Debug view
