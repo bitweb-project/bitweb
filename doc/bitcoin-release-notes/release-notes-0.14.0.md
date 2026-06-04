@@ -149,7 +149,7 @@ Some examples:
 
     src/bitcoin-cli -named help command="help"
     src/bitcoin-cli -named getblockhash height=0
-    src/bitcoin-cli -named getblock blockhash=000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
+    src/bitcoin-cli -named getblock blockhash=b1a28d2ec50d89a66d12c593a38c4a8e902fc75bf4ba52fc40d8b37425efbbc0
     src/bitcoin-cli -named sendtoaddress address="(snip)" amount="1.0" subtractfeefromamount=true
 
 The order of arguments doesn't matter in this case. Named arguments are also

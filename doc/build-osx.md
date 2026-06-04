@@ -2,7 +2,7 @@
 
 **Updated for MacOS [26](https://www.apple.com/os/macos/)**
 
-This guide describes how to build bitcoind, command-line utilities, and GUI on macOS.
+This guide describes how to build bitwebd, command-line utilities, and GUI on macOS.
 
 ## Preparation
 
@@ -16,7 +16,7 @@ macOS comes with a built-in Terminal located in:
 ### 1. Xcode Command Line Tools
 
 The Xcode Command Line Tools are a collection of build tools for macOS.
-These tools must be installed in order to build Bitcoin Core from source.
+These tools must be installed in order to build Bitweb Core from source.
 
 To install, run the following command from your terminal:
 
@@ -64,14 +64,14 @@ install anything.
 If you do not need IPC functionality (see [multiprocess.md](multiprocess.md))
 you can omit `capnp` and use `-DENABLE_IPC=OFF` in the `cmake -B` step below.
 
-### 4. Clone Bitcoin repository
+### 4. Clone Bitweb repository
 
 `git` should already be installed by default on your system.
-Now that all the required dependencies are installed, let's clone the Bitcoin Core repository to a directory.
+Now that all the required dependencies are installed, let's clone the Bitweb Core repository to a directory.
 All build scripts and commands will run from this directory.
 
 ``` bash
-git clone https://github.com/bitcoin/bitcoin.git
+git clone https://github.com/bitweb-project/bitweb.git
 ```
 
 ### 5. Install Optional Dependencies
@@ -80,7 +80,7 @@ git clone https://github.com/bitcoin/bitcoin.git
 
 ###### Qt
 
-Bitcoin Core includes a GUI built with the cross-platform Qt Framework. To compile the GUI, we need to install
+Bitweb Core includes a GUI built with the cross-platform Qt Framework. To compile the GUI, we need to install
 Qt, libqrencode and pass `-DBUILD_GUI=ON`. Skip if you don't intend to use the GUI.
 
 ``` bash
@@ -130,14 +130,14 @@ brew install python
 
 #### Deploy Dependencies
 
-You can [deploy](#3-deploy-optional) a `.zip` containing the Bitcoin Core application.
+You can [deploy](#3-deploy-optional) a `.zip` containing the Bitweb Core application.
 It is required that you have `python` and `zip` installed.
 
-## Building Bitcoin Core
+## Building Bitweb Core
 
 ### 1. Configuration
 
-There are many ways to configure Bitcoin Core, here are a few common examples:
+There are many ways to configure Bitweb Core, here are a few common examples:
 
 ##### Wallet (only SQlite) and GUI Support:
 
@@ -166,7 +166,7 @@ cmake -B build -LH
 ### 2. Compile
 
 After configuration, you are ready to compile.
-Run the following in your terminal to compile Bitcoin Core:
+Run the following in your terminal to compile Bitweb Core:
 
 ``` bash
 cmake --build build     # Append "-j N" here for N parallel jobs.
@@ -181,45 +181,45 @@ You can also create a  `.zip` containing the `.app` bundle by running the follow
 cmake --build build --target deploy
 ```
 
-## Running Bitcoin Core
+## Running Bitweb Core
 
-Bitcoin Core should now be available at `./build/bin/bitcoind`.
-If you compiled support for the GUI, it should be available at `./build/bin/bitcoin-qt`.
+Bitweb Core should now be available at `./build/bin/bitwebd`.
+If you compiled support for the GUI, it should be available at `./build/bin/bitweb-qt`.
 
-There is also a multifunction command line interface at `./build/bin/bitcoin`
-supporting subcommands like `bitcoin node`, `bitcoin gui`, `bitcoin rpc`, and
-others that can be listed with `bitcoin help`.
+There is also a multifunction command line interface at `./build/bin/bitweb`
+supporting subcommands like `bitweb node`, `bitweb gui`, `bitweb rpc`, and
+others that can be listed with `bitweb help`.
 
-The first time you run `bitcoind` or `bitcoin-qt`, it will start downloading the blockchain.
+The first time you run `bitwebd` or `bitweb-qt`, it will start downloading the blockchain.
 This process could take many hours, or even days on slower than average systems.
 
 By default, blockchain and wallet data files will be stored in:
 
 ``` bash
-/Users/${USER}/Library/Application Support/Bitcoin/
+/Users/${USER}/Library/Application Support/Bitweb/
 ```
 
 Before running, you may create an empty configuration file:
 
 ```shell
-mkdir -p "/Users/${USER}/Library/Application Support/Bitcoin"
+mkdir -p "/Users/${USER}/Library/Application Support/Bitweb"
 
-touch "/Users/${USER}/Library/Application Support/Bitcoin/bitcoin.conf"
+touch "/Users/${USER}/Library/Application Support/Bitweb/bitweb.conf"
 
-chmod 600 "/Users/${USER}/Library/Application Support/Bitcoin/bitcoin.conf"
+chmod 600 "/Users/${USER}/Library/Application Support/Bitweb/bitweb.conf"
 ```
 
 You can monitor the download process by looking at the debug.log file:
 
 ```shell
-tail -f $HOME/Library/Application\ Support/Bitcoin/debug.log
+tail -f $HOME/Library/Application\ Support/Bitweb/debug.log
 ```
 
 ## Other commands:
 
 ```shell
-./build/bin/bitcoind -daemon      # Starts the bitcoin daemon.
-./build/bin/bitcoin-cli --help    # Outputs a list of command-line options.
-./build/bin/bitcoin-cli help      # Outputs a list of RPC commands when the daemon is running.
-./build/bin/bitcoin-qt -server # Starts the bitcoin-qt server mode, allows bitcoin-cli control
+./build/bin/bitwebd -daemon      # Starts the bitweb daemon.
+./build/bin/bitweb-cli --help    # Outputs a list of command-line options.
+./build/bin/bitweb-cli help      # Outputs a list of RPC commands when the daemon is running.
+./build/bin/bitweb-qt -server # Starts the bitweb-qt server mode, allows bitweb-cli control
 ```
