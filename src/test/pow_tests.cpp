@@ -483,7 +483,7 @@ BOOST_AUTO_TEST_CASE(lwma3_duplicate_timestamps)
 // ---------------------------------------------------------------------------
 // Test 12: Live-propagation stabilization - 2000 blocks after bootstrap.
 //
-//   Existing tests (2–3) freeze all nBits at genesisBits and only vary
+//   Existing tests (2-3) freeze all nBits at genesisBits and only vary
 //   timestamps. This test simulates the real chain: each block's nBits is
 //   set to the value returned by GetNextWorkRequired for the previous block,
 //   exactly as a full node does.

@@ -152,7 +152,7 @@ target_link_libraries(fuzz
   libevent::extra
 )
 
-# Argon2id ISA availability – forward the same macros to fuzz target
+# Argon2id ISA availability - forward the same macros to fuzz target
 if(HAVE_ARGON2_SSE2)
   target_compile_definitions(fuzz PRIVATE ENABLE_ARGON2_SSE2)
 endif()

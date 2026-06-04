@@ -17,9 +17,12 @@ concurrency:
   group: ${{ github.event_name != 'pull_request' && github.run_id || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 env:
   CI_FAILFAST_TEST_LEAVE_DANGLING: 1  # GHA does not care about dangling processes and setting this variable avoids killing the CI script itself on error
-  REPO_USE_WARP_RUNNERS: 'bitcoin/bitcoin' # Use warp runners for this repo, instead of falling back to the slow GHA runners
+  REPO_USE_WARP_RUNNERS: 'disabled' # Use warp runners for this repo, instead of falling back to the slow GHA runners
 
 defaults:
   run:
@@ -47,7 +50,7 @@ jobs:
   test-each-commit:
     name: 'test each commit'
     needs: runners
-    runs-on: ${{ needs.runners.outputs.provider == 'warp' && 'warp-ubuntu-latest-x64-8x' || 'ubuntu-latest' }}
+    runs-on: ${{ needs.runners.outputs.provider == 'warp' && 'warp-ubuntu-latest-x64-8x' || 'ubuntu-24.04' }}
     if: github.event_name == 'pull_request' && github.event.pull_request.commits != 1
     timeout-minutes: 360  # Use maximum time, see https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idtimeout-minutes. Assuming a worst case time of 1 hour per commit, this leads to a --max-count=6 below.
     env:
@@ -94,7 +97,7 @@ jobs:
           git config user.name "CI"
       - run: |
           sudo apt-get update
-          sudo apt-get install clang mold ccache build-essential cmake ninja-build pkgconf python3-zmq libevent-dev libboost-dev libsqlite3-dev systemtap-sdt-dev libzmq3-dev qt6-base-dev qt6-tools-dev qt6-l10n-tools libqrencode-dev capnproto libcapnp-dev -y
+          sudo apt-get install clang mold ccache build-essential cmake ninja-build pkgconf python3-zmq libevent-dev libboost-dev libsqlite3-dev systemtap-sdt-dev libzmq3-dev qt6-base-dev qt6-tools-dev qt6-l10n-tools libqrencode-dev capnproto libcapnp-dev python3-argon2 -y
           sudo pip3 install --break-system-packages pycapnp
       - name: Compile and run tests
         run: |
@@ -114,7 +117,7 @@ jobs:
     # in Github repository settings.
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
 
-    timeout-minutes: 120
+    timeout-minutes: 240
 
     strategy:
       fail-fast: false
@@ -161,6 +164,7 @@ jobs:
         run: |
           git clone -b v2.1.0 https://github.com/capnproto/pycapnp
           pip3 install ./pycapnp -C force-bundled-libcapnp=True --break-system-packages
+          pip3 install --break-system-packages argon2-cffi
 
       - name: Set Ccache directory
         run: echo "CCACHE_DIR=${RUNNER_TEMP}/ccache_dir" >> "$GITHUB_ENV"
@@ -233,6 +237,9 @@ jobs:
           Write-Host "PowerShell version $($PSVersionTable.PSVersion.ToString())"
           bash --version
 
+      - name: Install Python packages
+        run: py -3 -m pip install argon2-cffi
+
       - name: Using vcpkg with MSBuild
         run: |
           echo "set(VCPKG_BUILD_TYPE release)" >> "${VCPKG_INSTALLATION_ROOT}/triplets/x64-windows.cmake"
@@ -273,14 +280,14 @@ jobs:
         working-directory: build
         shell: pwsh -Command "$PSVersionTable; $PSNativeCommandUseErrorActionPreference = $true; $ErrorActionPreference = 'Stop'; & '{0}'"
         run: |
-          mt.exe -nologo -inputresource:bin\Release\bitcoind.exe -out:bitcoind.manifest
-          Get-Content bitcoind.manifest
+          mt.exe -nologo -inputresource:bin\Release\bitwebd.exe -out:bitwebd.manifest
+          Get-Content bitwebd.manifest
 
           Get-ChildItem -Filter "bin\Release\*.exe" | ForEach-Object {
             $exeName = $_.Name
 
             # Skip as they currently do not have manifests
-            if ($exeName -eq "fuzz.exe" -or $exeName -eq "bench_bitcoin.exe" -or $exeName -eq "test_bitcoin-qt.exe") {
+            if ($exeName -eq "fuzz.exe" -or $exeName -eq "bench_bitweb.exe" -or $exeName -eq "test_bitweb-qt.exe") {
               Write-Host "Skipping $exeName (no manifest present)"
               return
             }
@@ -301,19 +308,19 @@ jobs:
         if: matrix.job-type == 'standard'
         working-directory: build
         env:
-          BITCOIN_BIN: '${{ github.workspace }}\build\bin\Release\bitcoin.exe'
-          BITCOIND: '${{ github.workspace }}\build\bin\Release\bitcoind.exe'
-          BITCOINCLI: '${{ github.workspace }}\build\bin\Release\bitcoin-cli.exe'
-          BITCOINTX: '${{ github.workspace }}\build\bin\Release\bitcoin-tx.exe'
-          BITCOINUTIL: '${{ github.workspace }}\build\bin\Release\bitcoin-util.exe'
-          BITCOINWALLET: '${{ github.workspace }}\build\bin\Release\bitcoin-wallet.exe'
+          BITCOIN_BIN: '${{ github.workspace }}\build\bin\Release\bitweb.exe'
+          BITCOIND: '${{ github.workspace }}\build\bin\Release\bitwebd.exe'
+          BITCOINCLI: '${{ github.workspace }}\build\bin\Release\bitweb-cli.exe'
+          BITCOINTX: '${{ github.workspace }}\build\bin\Release\bitweb-tx.exe'
+          BITCOINUTIL: '${{ github.workspace }}\build\bin\Release\bitweb-util.exe'
+          BITCOINWALLET: '${{ github.workspace }}\build\bin\Release\bitweb-wallet.exe'
           TEST_RUNNER_EXTRA: ${{ github.event_name != 'pull_request' && '--extended' || '' }}
         run: py -3 test/functional/test_runner.py --jobs $NUMBER_OF_PROCESSORS --ci --quiet --tmpdirprefix="${RUNNER_TEMP}" --combinedlogslen=99999999 --timeout-factor=${TEST_RUNNER_TIMEOUT_FACTOR} ${TEST_RUNNER_EXTRA}
 
       - name: Clone corpora
         if: matrix.job-type == 'fuzz'
         run: |
-          git clone --depth=1 https://github.com/bitcoin-core/qa-assets "${RUNNER_TEMP}/qa-assets"
+          git clone --depth=1 https://github.com/bitweb-project/qa-assets "${RUNNER_TEMP}/qa-assets"
           cd "${RUNNER_TEMP}/qa-assets"
           echo "Using qa-assets repo from commit ..."
           git log -1
@@ -322,14 +329,14 @@ jobs:
         if: matrix.job-type == 'fuzz'
         working-directory: build
         env:
-          BITCOINFUZZ: '${{ github.workspace }}\build\bin\Release\fuzz.exe'
+          BITWEBFUZZ: '${{ github.workspace }}\build\bin\Release\fuzz.exe'
         run: |
           py -3 test/fuzz/test_runner.py --par $NUMBER_OF_PROCESSORS --loglevel DEBUG "${RUNNER_TEMP}/qa-assets/fuzz_corpora"
 
   windows-cross:
     name: 'Linux->Windows cross, no tests'
     needs: runners
-    runs-on: ${{ needs.runners.outputs.provider == 'warp' && 'warp-ubuntu-latest-x64-4x' || 'ubuntu-latest' }}
+    runs-on: ${{ needs.runners.outputs.provider == 'warp' && 'warp-ubuntu-latest-x64-4x' || 'ubuntu-24.04' }}
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
 
     env:
@@ -384,22 +391,25 @@ jobs:
         with:
           name: x86_64-w64-mingw32-executables-${{ github.run_id }}
 
-      - name: Run bitcoind.exe
-        run: ./bin/bitcoind.exe -version
+      - name: Install Python packages
+        run: py -3 -m pip install argon2-cffi
+
+      - name: Run bitwebd.exe
+        run: ./bin/bitwebd.exe -version
 
       - *SET_UP_VS
 
       - name: Check executable manifests
         shell: pwsh -Command "$PSVersionTable; $PSNativeCommandUseErrorActionPreference = $true; $ErrorActionPreference = 'Stop'; & '{0}'"
         run: |
-          mt.exe -nologo -inputresource:bin\bitcoind.exe -out:bitcoind.manifest
-          Get-Content bitcoind.manifest
+          mt.exe -nologo -inputresource:bin\bitwebd.exe -out:bitwebd.manifest
+          Get-Content bitwebd.manifest
 
           Get-ChildItem -Filter "bin\*.exe" | ForEach-Object {
             $exeName = $_.Name
 
             # Skip as they currently do not have manifests
-            if ($exeName -eq "fuzz.exe" -or $exeName -eq "bench_bitcoin.exe") {
+            if ($exeName -eq "fuzz.exe" -or $exeName -eq "bench_bitweb.exe") {
               Write-Host "Skipping $exeName (no manifest present)"
               return
             }
@@ -411,7 +421,7 @@ jobs:
       - name: Run unit tests
         # Can't use ctest here like other jobs as we don't have a CMake build tree.
         run: |
-          ./bin/test_bitcoin.exe -l test_suite  # Intentionally run sequentially here, to catch test case failures caused by dirty global state from prior test cases.
+          ./bin/test_bitweb.exe -l test_suite  # Intentionally run sequentially here, to catch test case failures caused by dirty global state from prior test cases.
           ./src/secp256k1/bin/exhaustive_tests.exe
           ./src/secp256k1/bin/noverify_tests.exe
           ./src/secp256k1/bin/tests.exe
@@ -419,7 +429,7 @@ jobs:
           ./src/univalue/unitester.exe
 
       - name: Run benchmarks
-        run: ./bin/bench_bitcoin.exe -sanity-check
+        run: ./bin/bench_bitweb.exe -sanity-check
 
       - name: Adjust paths in test/config.ini
         shell: pwsh
@@ -438,8 +448,7 @@ jobs:
       - name: Run functional tests
         env:
           # TODO: Fix the excluded test and re-enable it.
-          # feature_unsupported_utxo_db.py fails on windows because of emojis in the test data directory
-          EXCLUDE: '--exclude wallet_multiwallet.py,feature_unsupported_utxo_db.py'
+          EXCLUDE: '--exclude wallet_multiwallet.py'
           TEST_RUNNER_EXTRA: ${{ github.event_name != 'pull_request' && '--extended' || '' }}
         run: py -3 test/functional/test_runner.py --jobs $NUMBER_OF_PROCESSORS --ci --quiet --tmpdirprefix="$RUNNER_TEMP" --combinedlogslen=99999999 --timeout-factor=$TEST_RUNNER_TIMEOUT_FACTOR $EXCLUDE $TEST_RUNNER_EXTRA
 
@@ -461,68 +470,68 @@ jobs:
           - name: '32 bit ARM, unit tests, no functional tests'
             warp-runner: 'ubuntu-24.04-arm' # Warp's Arm runners don't support 32-bit mode currently
             fallback-runner: 'ubuntu-24.04-arm'
-            timeout-minutes: 120
+            timeout-minutes: 240
             file-env: './ci/test/00_setup_env_arm.sh'
             provider: 'gha'
 
           - name: 'ASan + LSan + UBSan + integer, no depends, USDT'
             warp-runner: 'warp-ubuntu-2404-x64-8x' # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 120
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_native_asan.sh'
 
           - name: 'macOS-cross, gui, no tests'
             warp-runner: 'warp-ubuntu-latest-x64-4x'
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 120
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 240
             file-env: './ci/test/00_setup_env_mac_cross.sh'
 
           - name: 'No wallet, libbitcoinkernel'
             warp-runner: 'warp-ubuntu-latest-x64-4x'
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 120
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 240
             file-env: './ci/test/00_setup_env_native_nowallet_libbitcoinkernel.sh'
 
           - name: 'no IPC, i686, DEBUG'
             warp-runner: 'warp-ubuntu-latest-x64-8x'
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 120
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 240
             file-env: './ci/test/00_setup_env_i686_no_ipc.sh'
 
           - name: 'fuzzer,address,undefined,integer, no depends'
             warp-runner: 'warp-ubuntu-latest-x64-16x'
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 240
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_native_fuzz.sh'
 
           - name: 'previous releases, depends DEBUG'
             warp-runner: 'warp-ubuntu-latest-x64-16x'
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 120
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 240
             file-env: './ci/test/00_setup_env_native_previous_releases.sh'
 
           - name: 'CentOS, depends, gui'
             warp-runner: 'warp-ubuntu-latest-x64-16x'
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 120
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 240
             file-env: './ci/test/00_setup_env_native_centos.sh'
 
           - name: 'tidy'
             warp-runner: 'warp-ubuntu-latest-x64-8x'
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 120
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 240
             file-env: './ci/test/00_setup_env_native_tidy.sh'
 
           - name: 'TSan, depends, no gui'
             warp-runner: 'warp-ubuntu-latest-x64-8x'
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 120
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 240
             file-env: './ci/test/00_setup_env_native_tsan.sh'
 
           - name: 'MSan, depends'
             warp-runner: 'warp-ubuntu-latest-x64-16x'
-            fallback-runner: 'ubuntu-latest'
-            timeout-minutes: 120
+            fallback-runner: 'ubuntu-24.04'
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_native_msan.sh'
 
     steps:
@@ -560,11 +569,11 @@ jobs:
   lint:
     name: 'lint'
     needs: runners
-    runs-on: ${{ needs.runners.outputs.provider == 'warp' && 'warp-ubuntu-latest-x64-2x' || 'ubuntu-latest' }}
+    runs-on: ${{ needs.runners.outputs.provider == 'warp' && 'warp-ubuntu-latest-x64-2x' || 'ubuntu-24.04' }}
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
-    timeout-minutes: 20
+    timeout-minutes: 40
     env:
-      CONTAINER_NAME: "bitcoin-linter"
+      CONTAINER_NAME: "bitweb-linter"
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -585,4 +594,4 @@ jobs:
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             CIRRUS_PR_FLAG="-e CIRRUS_PR=1"
           fi
-          docker run --rm $CIRRUS_PR_FLAG -v "$(pwd)":/bitcoin "$CONTAINER_NAME"
+          docker run --rm $CIRRUS_PR_FLAG -v "$(pwd)":/bitweb "$CONTAINER_NAME"

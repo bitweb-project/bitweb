@@ -225,7 +225,7 @@ endfunction()
 
 add_all_test_targets()
 
-# Argon2id ISA availability – forward the same macros to test_bitweb
+# Argon2id ISA availability - forward the same macros to test_bitweb
 if(HAVE_ARGON2_SSE2)
   target_compile_definitions(test_bitweb PRIVATE ENABLE_ARGON2_SSE2)
 endif()
