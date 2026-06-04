@@ -30,7 +30,8 @@ const std::string UA_NAME("Satoshi");
 //   - "#define BUILD_GIT_COMMIT ...", if the top commit is not tagged
 //   - "// No build information available", if proper git information is not available
 
-//! git will put "#define GIT_COMMIT_ID ..." on the next line inside archives. $Format:%n#define GIT_COMMIT_ID "%H"$
+//! git will put "#define GIT_COMMIT_ID ..." on the next line inside archives. 
+#define GIT_COMMIT_ID "1d97fda8a1475f0c9c10c5db0a06e1cad5484195"
 
 #ifdef BUILD_GIT_TAG
     #define BUILD_DESC BUILD_GIT_TAG

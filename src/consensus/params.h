@@ -54,13 +54,14 @@ struct BIP9Deployment {
      */
     int min_activation_height{0};
     /** Period of blocks to check signalling in (usually retarget period, ie params.DifficultyAdjustmentInterval()) */
-    uint32_t period{2016};
+    uint32_t period{4032}; /* Bitweb Params */
     /**
      * Minimum blocks including miner confirmation of the total of 2016 blocks in a retargeting period,
      * which is also used for BIP9 deployments.
      * Examples: 1916 for 95%, 1512 for testchains.
+     * Bitweb use 1 Month period in 5 Minute blocks
      */
-    uint32_t threshold{1916};
+    uint32_t threshold{3628}; /* Bitweb Params */
 
     /** Constant for nTimeout very far in the future. */
     static constexpr int64_t NO_TIMEOUT = std::numeric_limits<int64_t>::max();
@@ -109,20 +110,22 @@ struct Params {
     std::array<BIP9Deployment,MAX_VERSION_BITS_DEPLOYMENTS> vDeployments;
     /** Proof of work parameters */
     uint256 powLimit;
-    bool fPowAllowMinDifficultyBlocks;
+    // bool fPowAllowMinDifficultyBlocks; // Bitweb Params
     /**
       * Enforce BIP94 timewarp attack mitigation. On testnet4 this also enforces
       * the block storm mitigation.
       */
-    bool enforce_BIP94;
+    // bool enforce_BIP94; // Bitweb Params
     bool fPowNoRetargeting;
     int64_t nPowTargetSpacing;
-    int64_t nPowTargetTimespan;
+    // int64_t nPowTargetTimespan; // Bitweb Params
+    /**LWMA3 diff algo Bitweb Params */
+    int64_t lwmaAveragingWindow{576}; // Bitweb Params
     std::chrono::seconds PowTargetSpacing() const
     {
         return std::chrono::seconds{nPowTargetSpacing};
     }
-    int64_t DifficultyAdjustmentInterval() const { return nPowTargetTimespan / nPowTargetSpacing; }
+    // int64_t DifficultyAdjustmentInterval() const { return nPowTargetTimespan / nPowTargetSpacing; } // Bitweb Params
     /** The best chain should have at least this much work */
     uint256 nMinimumChainWork;
     /** By default assume that the signatures in ancestors of this block are valid */

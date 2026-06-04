@@ -51,3 +51,11 @@ struct BlockCheckOptions $Proxy.wrap("node::BlockCheckOptions") {
     checkMerkleRoot @0 :Bool $Proxy.name("check_merkle_root");
     checkPow @1 :Bool $Proxy.name("check_pow");
 }
+
+# // Checkpoints restored
+struct BlockValidationState {
+    mode         @0 :Int32;
+    result       @1 :Int32;
+    rejectReason @2 :Text;
+    debugMessage @3 :Text;
+}

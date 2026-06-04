@@ -143,9 +143,9 @@ static_assert(MAX_BLOCKTXN_DEPTH <= MIN_BLOCKS_TO_KEEP, "MAX_BLOCKTXN_DEPTH too 
  *  want to make this a per-peer adaptive value at some point. */
 static const unsigned int BLOCK_DOWNLOAD_WINDOW = 1024;
 /** Block download timeout base, expressed in multiples of the block interval (i.e. 10 min) */
-static constexpr double BLOCK_DOWNLOAD_TIMEOUT_BASE = 1;
+static constexpr double BLOCK_DOWNLOAD_TIMEOUT_BASE = 2; /* Bitweb Params */
 /** Additional block download timeout per parallel downloading peer (i.e. 5 min) */
-static constexpr double BLOCK_DOWNLOAD_TIMEOUT_PER_PEER = 0.5;
+static constexpr double BLOCK_DOWNLOAD_TIMEOUT_PER_PEER = 1; /* Bitweb Params */
 /** Maximum number of headers to announce when relaying blocks with headers message.*/
 static const unsigned int MAX_BLOCKS_TO_ANNOUNCE = 8;
 /** Minimum blocks required to signal NODE_NETWORK_LIMITED */
@@ -649,7 +649,7 @@ private:
     arith_uint256 GetAntiDoSWorkThreshold();
     /** Deal with state tracking and headers sync for peers that send
      * non-connecting headers (this can happen due to BIP 130 headers
-     * announcements for blocks interacting with the 2hr (MAX_FUTURE_BLOCK_TIME) rule). */
+     * announcements for blocks interacting with the 10m (MAX_FUTURE_BLOCK_TIME) rule). */
     void HandleUnconnectingHeaders(CNode& pfrom, Peer& peer, const std::vector<CBlockHeader>& headers) EXCLUSIVE_LOCKS_REQUIRED(g_msgproc_mutex);
     /** Return true if the headers connect to each other, false otherwise */
     bool CheckHeadersAreContinuous(const std::vector<CBlockHeader>& headers) const;
@@ -1815,6 +1815,7 @@ void PeerManagerImpl::MaybePunishNodeForBlock(NodeId nodeid, const BlockValidati
             break;
         }
     case BlockValidationResult::BLOCK_INVALID_HEADER:
+    case BlockValidationResult::BLOCK_CHECKPOINT: // Checkpoints restored
     case BlockValidationResult::BLOCK_INVALID_PREV:
         if (peer) Misbehaving(*peer, message);
         return;
@@ -2882,6 +2883,31 @@ void PeerManagerImpl::ProcessHeadersMessage(CNode& pfrom, Peer& peer,
         // So just check whether we still have headers that we need to process,
         // or not.
         if (headers.empty()) {
+            // Bitweb Params
+            // Bitweb uses Argon2id as the PoW algorithm. Unlike SHA-256,
+            // Argon2id validation is CPU and memory intensive 7980xe (~700 hashes per core/sec),
+            // which means headers verification takes significantly longer per batch.
+            // As the chain grows, the PRESYNC phase spans more and more batches,
+            // and the original one-shot timeout (set once at sync start) becomes
+            // inadequate - it expires long before PRESYNC+REDOWNLOAD can complete
+            // on an honest peer.
+            //
+            // Tuning the global timeout is not a solution: a value large enough
+            // for today's chain length will be too small tomorrow as more blocks
+            // are mined, requiring constant manual adjustment.
+            //
+            // The correct fix is a sliding window: reset the timeout after each
+            // successfully received batch. If a peer stops responding for more
+            // than HEADERS_RESPONSE_TIME (4 min), it gets disconnected. A peer
+            // that keeps sending valid batches will never be disconnected
+            // prematurely, regardless of chain length.
+            //
+            // This path is only active during initial sync (IBD). After sync
+            // completes, m_headers_sync_timeout is set to max() and this entire
+            // mechanism is disabled.
+            if (peer.m_headers_sync_timeout != std::chrono::microseconds::max()) {
+                peer.m_headers_sync_timeout = GetTime<std::chrono::microseconds>() + HEADERS_RESPONSE_TIME;
+            }
             return;
         }
 
@@ -2958,6 +2984,17 @@ void PeerManagerImpl::ProcessHeadersMessage(CNode& pfrom, Peer& peer,
 
     if (processed && received_new_header) {
         LogBlockHeader(*pindexLast, pfrom, /*via_compact_block=*/false);
+    }
+
+    // Bitweb Params
+    // Bitweb patch for Argon2id extend the timeout after each successfully validated
+    // batch during REDOWNLOAD phase and normal IBD headers sync. Headers reaching this
+    // point have already passed CheckHeadersPoW and ProcessNewBlockHeaders,
+    // so the peer has proven it is doing real work. Resetting the deadline
+    // here implements the same sliding-window logic as in the PRESYNC branch
+    // above — the peer gets HEADERS_RESPONSE_TIME to deliver the next batch.
+    if (peer.m_headers_sync_timeout != std::chrono::microseconds::max()) {
+        peer.m_headers_sync_timeout = GetTime<std::chrono::microseconds>() + HEADERS_RESPONSE_TIME;
     }
 
     // Consider fetching more headers if we are not using our headers-sync mechanism.
@@ -5226,8 +5263,13 @@ void PeerManagerImpl::CheckForStaleTipAndEvictPeers()
         // Check whether our tip is stale, and if so, allow using an extra
         // outbound peer
         if (!m_chainman.m_blockman.LoadingBlocks() && m_connman.GetNetworkActive() && m_connman.GetUseAddrmanOutgoing() && TipMayBeStale()) {
-            LogPrintf("Potential stale tip detected, will try using extra outbound peer (last tip update: %d seconds ago)\n",
-                      count_seconds(now - m_last_tip_update.load()));
+            /* Bitweb Params */
+            // We do not need spam about stale tip at initial sync
+            if (!m_chainman.IsInitialBlockDownload()) {
+                LogPrintf("Potential stale tip detected, will try using extra outbound peer (last tip update: %d seconds ago)\n",
+                          count_seconds(now - m_last_tip_update.load()));
+            }
+            /* Bitweb Params */
             m_connman.SetTryNewOutboundPeer(true);
         } else if (m_connman.GetTryNewOutboundPeer()) {
             m_connman.SetTryNewOutboundPeer(false);

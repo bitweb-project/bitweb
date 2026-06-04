@@ -249,8 +249,14 @@ int main(int argc, char* argv[])
             std::cerr << "A block this one builds on is invalid" << std::endl;
             break;
         case BlockValidationResult::BLOCK_TIME_FUTURE:
-            std::cerr << "block timestamp was > 2 hours in the future (or our clock is bad)" << std::endl;
+            // Bitweb Params
+            std::cerr << "block timestamp was > 10 Minutes in the future (or our clock is bad)" << std::endl;
             break;
+        // Checkpoints restored
+        case BlockValidationResult::BLOCK_CHECKPOINT:
+            std::cerr << "the block failed to meet one of our checkpoints" << std::endl;
+            break;
+        // Checkpoints restored
         }
     }
 

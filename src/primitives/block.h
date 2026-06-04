@@ -53,6 +53,8 @@ public:
 
     uint256 GetHash() const;
 
+    uint256 GetArgon2idPoWHash() const; /* Bitweb Params */
+
     NodeSeconds Time() const
     {
         return NodeSeconds{std::chrono::seconds{nTime}};

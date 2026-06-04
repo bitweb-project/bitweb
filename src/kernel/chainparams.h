@@ -16,12 +16,26 @@
 
 #include <cstdint>
 #include <iterator>
+#include <map> // Checkpoints restored
 #include <memory>
 #include <optional>
 #include <string>
 #include <unordered_map>
 #include <utility>
 #include <vector>
+
+// Checkpoints restored
+typedef std::map<int, uint256> MapCheckpoints;
+
+struct CCheckpointData {
+    MapCheckpoints mapCheckpoints;
+
+    int GetHeight() const {
+        const auto& final_checkpoint = mapCheckpoints.rbegin();
+        return final_checkpoint->first /* height */;
+    }
+};
+// Checkpoints restored
 
 struct AssumeutxoHash : public BaseHash<uint256> {
     explicit AssumeutxoHash(const uint256& hash) : BaseHash(hash) {}
@@ -88,6 +102,8 @@ public:
     bool DefaultConsistencyChecks() const { return fDefaultConsistencyChecks; }
     /** If this chain is exclusively used for testing */
     bool IsTestChain() const { return m_chain_type != ChainType::MAIN; }
+    /** If this chain is exclusively used for regtest testing */
+    bool IsRegTestChain() const { return m_chain_type == ChainType::REGTEST; } // Bitweb Params
     /** If this chain allows time to be mocked */
     bool IsMockableChain() const { return m_is_mockable_chain; }
     uint64_t PruneAfterHeight() const { return nPruneAfterHeight; }
@@ -106,6 +122,7 @@ public:
     const std::vector<unsigned char>& Base58Prefix(Base58Type type) const { return base58Prefixes[type]; }
     const std::string& Bech32HRP() const { return bech32_hrp; }
     const std::vector<uint8_t>& FixedSeeds() const { return vFixedSeeds; }
+    const CCheckpointData& Checkpoints() const { return checkpointData; } // Checkpoints restored
 
     std::optional<AssumeutxoData> AssumeutxoForHeight(int height) const
     {
@@ -142,7 +159,7 @@ public:
         std::unordered_map<Consensus::DeploymentPos, VersionBitsParameters> version_bits_parameters{};
         std::unordered_map<Consensus::BuriedDeployment, int> activation_heights{};
         bool fastprune{false};
-        bool enforce_bip94{false};
+        // bool enforce_bip94{false}; // Bitweb Params
     };
 
     static std::unique_ptr<const CChainParams> RegTest(const RegTestOptions& options);
@@ -168,6 +185,7 @@ protected:
     std::vector<uint8_t> vFixedSeeds;
     bool fDefaultConsistencyChecks;
     bool m_is_mockable_chain;
+    CCheckpointData checkpointData; // Checkpoints restored
     std::vector<AssumeutxoData> m_assumeutxo_data;
     ChainTxData chainTxData;
 };

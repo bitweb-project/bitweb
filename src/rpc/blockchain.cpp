@@ -2026,7 +2026,12 @@ static RPCHelpMan getblockstats()
 
                 // The Genesis block and the repeated BIP30 block coinbases don't change the UTXO
                 // set counts, so they have to be excluded from the statistics
+                // Bitweb Params
+                // remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+                /*
                 if (pindex.nHeight == 0 || (IsBIP30Repeat(pindex) && tx->IsCoinBase())) continue;
+                */
+                if (pindex.nHeight == 0) continue;
                 // Skip unspendable outputs since they are not included in the UTXO set
                 if (out.scriptPubKey.IsUnspendable()) continue;
 
@@ -2706,7 +2711,7 @@ static RPCHelpMan getdescriptoractivity()
             },
         },
         RPCExamples{
-            HelpExampleCli("getdescriptoractivity", "'[\"000000000000000000001347062c12fded7c528943c8ce133987e2e2f5a840ee\"]' '[\"addr(bc1qzl6nsgqzu89a66l50cvwapnkw5shh23zarqkw9)\"]'")
+            HelpExampleCli("getdescriptoractivity", "'[\"111692c1b9b390c407ab74d7f924d4fa0f7589974ab61af96392feca11f209e6\"]' '[\"addr(web1q6vs73eh43wwxnn4c3un5u8l69mylcvlkn4d7pp)\"]'")
         },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
 {

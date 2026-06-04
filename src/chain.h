@@ -26,7 +26,7 @@
  * Maximum amount of time that a block timestamp is allowed to exceed the
  * current time before the block will be accepted.
  */
-static constexpr int64_t MAX_FUTURE_BLOCK_TIME = 2 * 60 * 60;
+static constexpr int64_t MAX_FUTURE_BLOCK_TIME = 600; /* 2 Blocks Time Wrape Protect - Bitweb Params */
 
 /**
  * Timestamp window used as a grace period by code that compares external
@@ -34,7 +34,7 @@ static constexpr int64_t MAX_FUTURE_BLOCK_TIME = 2 * 60 * 60;
  * to block timestamps. This should be set at least as high as
  * MAX_FUTURE_BLOCK_TIME.
  */
-static constexpr int64_t TIMESTAMP_WINDOW = MAX_FUTURE_BLOCK_TIME;
+static constexpr int64_t TIMESTAMP_WINDOW = 2 * 60 * 60; // 2 hours - original was MAX_FUTURE_BLOCK_TIME but it changed to prevent time stamp manipulations.
 
 /**
  * Maximum gap between node time and block time used
@@ -42,7 +42,7 @@ static constexpr int64_t TIMESTAMP_WINDOW = MAX_FUTURE_BLOCK_TIME;
  *
  * Ref: https://github.com/bitcoin/bitcoin/pull/1026
  */
-static constexpr int64_t MAX_BLOCK_TIME_GAP = 90 * 60;
+static constexpr int64_t MAX_BLOCK_TIME_GAP = 90 * 60; /* Bitweb Params */
 
 class CBlockFileInfo
 {
@@ -245,6 +245,13 @@ public:
         assert(phashBlock != nullptr);
         return *phashBlock;
     }
+
+    /* Bitweb Params */
+    uint256 GetBlockArgon2idPoWHash() const
+    {
+        return GetBlockHeader().GetArgon2idPoWHash();
+    }
+    /* Bitweb Params */
 
     /**
      * Check whether this block and all previous blocks back to the genesis block or an assumeutxo snapshot block have
