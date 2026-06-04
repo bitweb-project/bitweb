@@ -54,11 +54,11 @@
         <translation type="unfinished">&amp;चुनें</translation>
     </message>
     <message>
-        <source>These are your Bitcoin addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <source>These are your Bitweb addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
         <translation type="unfinished">भुगतान भेजने के लिए ये आपके बिटकॉइन पते हैं। कॉइन्स भेजने से पहले हमेशा राशि और प्राप्त करने वाले पते की जांच करें।</translation>
     </message>
     <message>
-        <source>These are your Bitcoin addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
+        <source>These are your Bitweb addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
 Signing is only possible with addresses of the type 'legacy'.</source>
         <translation type="unfinished">भुगतान प्राप्त करने के लिए ये आपके बिटकॉइन पते हैं। नए पते बनाने के लिए रिसिव टैब में 'नया प्राप्तकर्ता पता बनाएं' बटन का उपयोग करें।
 हस्ताक्षर केवल 'लेगसी' प्रकार के पते के साथ ही संभव है।</translation>
@@ -156,7 +156,7 @@ Signing is only possible with addresses of the type 'legacy'.</source>
         <translation type="unfinished">वॉलेट एन्क्रिप्शन की पुष्टि करें</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITWEBS&lt;/b&gt;!</source>
         <translation type="unfinished">चेतावनी: यदि आप अपना वॉलेट एन्क्रिप्ट करते हैं और अपना पासफ़्रेज़ खो देते हैं, तो आपअपने सभी बिटकॉइन &lt;b&gt; खो देंगे&lt;/b&gt; !</translation>
     </message>
     <message>
@@ -176,7 +176,7 @@ Signing is only possible with addresses of the type 'legacy'.</source>
         <translation type="unfinished">वॉलेट के लिए पुराना पासफ़्रेज़ और नया पासफ़्रेज़ डालिये।</translation>
     </message>
     <message>
-        <source>Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
+        <source>Remember that encrypting your wallet cannot fully protect your bitwebs from being stolen by malware infecting your computer.</source>
         <translation type="unfinished">याद रखें कि आपके वॉलेट को एन्क्रिप्ट करने से आपके बिटकॉइन को आपके कंप्यूटर को संक्रमित करने वाले मैलवेयर द्वारा चोरी होने से पूरी तरह से सुरक्षित नहीं किया जा सकता है।</translation>
     </message>
     <message>
@@ -431,7 +431,7 @@ Signing is only possible with addresses of the type 'legacy'.</source>
         <translation type="unfinished">प्रॉक्सी &lt;b&gt;अक्षम&lt;/b&gt; है: %1</translation>
     </message>
     <message>
-        <source>Send coins to a Bitcoin address</source>
+        <source>Send coins to a Bitweb address</source>
         <translation type="unfinished">बिटकॉइन पते पर कॉइन्स भेजें</translation>
     </message>
     <message>
@@ -479,11 +479,11 @@ Signing is only possible with addresses of the type 'legacy'.</source>
         <translation type="unfinished">कोई वॉलेट माइग्रेट करें</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to Bitcoin network.</source>
+        <source>%n active connection(s) to Bitweb network.</source>
         <extracomment>A substring of the tooltip.</extracomment>
         <translation type="unfinished">
-            <numerusform>%n active connection(s) to Bitcoin network.</numerusform>
-            <numerusform>%n active connection(s) to Bitcoin network.</numerusform>
+            <numerusform>%n active connection(s) to Bitweb network.</numerusform>
+            <numerusform>%n active connection(s) to Bitweb network.</numerusform>
         </translation>
     </message>
     <message>
@@ -683,7 +683,7 @@ The migration process will create a backup of the wallet before migrating. This 
         <translation type="unfinished">%1 संगत स्क्रिप्ट का पूर्ण पथ (उदा. C:\Downloads\hwi.exe या /Users/you/Downloads/hwi.py). सावधान: मैलवेयर आपके सिक्के चुरा सकता है!</translation>
     </message>
     <message>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports PCP or NAT-PMP and it is enabled. The external port could be random.</source>
+        <source>Automatically open the Bitweb client port on the router. This only works when your router supports PCP or NAT-PMP and it is enabled. The external port could be random.</source>
         <translation type="unfinished">राउटर पर बिटकॉइन क्लाइंट पोर्ट को स्वचालित रूप से खोलता है। यह केवल तभी काम करता है जब आपका राउटर PCP या NAT-PMP का समर्थन करता है और यह सक्षम है। बाहरी पोर्ट यादृच्छिक हो सकता है।</translation>
     </message>
     <message>
@@ -793,7 +793,7 @@ The migration process will create a backup of the wallet before migrating. This 
         <translation type="unfinished">स्थानीय पते</translation>
     </message>
     <message>
-        <source>Network addresses that your Bitcoin node is currently using to communicate with other nodes.</source>
+        <source>Network addresses that your Bitweb node is currently using to communicate with other nodes.</source>
         <translation type="unfinished">नेटवर्क पते जो आपका बिटकॉइन नोड वर्तमान में अन्य नोड्स के साथ संचार करने के लिए उपयोग कर रहा है।</translation>
     </message>
     <message>
@@ -1218,7 +1218,7 @@ For more information on using this console, type %6.
         <translation type="unfinished">&amp;संदेश:</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitcoin network.</source>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Bitweb network.</source>
         <translation type="unfinished">भुगतान अनुरोध के साथ संलग्न करने के लिए एक वैकल्पिक संदेश, जिसे अनुरोध खोले जाने पर प्रदर्शित किया जाएगा। नोट: बिटकॉइन नेटवर्क पर भुगतान के साथ संदेश नहीं भेजा जाएगा।</translation>
     </message>
     <message>
@@ -1499,7 +1499,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
 नोट: चूंकि शुल्क की गणना प्रति-बाइट के आधार पर की जाती है, इसलिए 500 वर्चुअल बाइट्स (1 केवीबी का आधा) के लेन-देन के आकार के लिए "100 सतोशी प्रति केवीबी" की शुल्क दर अंततः केवल 50 सतोशी का शुल्क देगी।</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for bitcoin transactions than the network can process.</source>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for bitweb transactions than the network can process.</source>
         <translation type="unfinished">जब ब्लॉक में स्थान की तुलना में कम लेन-देन की मात्रा होती है, तो खनिकों के साथ-साथ रिलेइंग नोड्स न्यूनतम शुल्क लागू कर सकते हैं। केवल इस न्यूनतम शुल्क का भुगतान करना ठीक है, लेकिन ध्यान रखें कि नेटवर्क की प्रक्रिया की तुलना में बिटकॉइन लेनदेन की अधिक मांग होने पर इसका परिणाम कभी भी पुष्टिकरण लेनदेन में नहीं हो सकता है।</translation>
     </message>
     <message>
@@ -1581,7 +1581,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">&amp;अहस्ताक्षरित बनाएं</translation>
     </message>
     <message>
-        <source>Creates a Partially Signed Bitcoin Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <source>Creates a Partially Signed Bitweb Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
         <translation type="unfinished">उदाहरण के लिए उपयोग के लिए आंशिक रूप से हस्ताक्षरित बिटकॉइन लेनदेन (PSBT) बनाता है। एक ऑफ़लाइन% 1 %1  वॉलेट, या एक PSBT-संगत हार्डवेयर वॉलेट।</translation>
     </message>
     <message>
@@ -1638,7 +1638,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">आप बाद में शुल्क बढ़ा सकते हैं (सिग्नलस रिप्लेसमेंट-बाय-फी, बीआईपी-125)।</translation>
     </message>
     <message>
-        <source>Please, review your transaction proposal. This will produce a Partially Signed Bitcoin Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <source>Please, review your transaction proposal. This will produce a Partially Signed Bitweb Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
         <extracomment>Text to inform a user attempting to create a transaction of their current options. At this stage, a user can only create a PSBT. This string is displayed when private keys are disabled and an external signer is not available.</extracomment>
         <translation type="unfinished">कृपया, अपने लेनदेन प्रस्ताव की समीक्षा करें। यह एक आंशिक रूप से हस्ताक्षरित बिटकॉइन लेनदेन (PSBT) का उत्पादन करेगा जिसे आप सहेज सकते हैं या कॉपी कर सकते हैं और फिर उदा। एक ऑफ़लाइन %1  वॉलेट, या एक PSBT-संगत हार्डवेयर वॉलेट।</translation>
     </message>
@@ -1652,7 +1652,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">क्या आप यह लेन-देन बनाना चाहते हैं?</translation>
     </message>
     <message>
-        <source>Please, review your transaction. You can create and send this transaction or create a Partially Signed Bitcoin Transaction (PSBT), which you can save or copy and then sign with, e.g., an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <source>Please, review your transaction. You can create and send this transaction or create a Partially Signed Bitweb Transaction (PSBT), which you can save or copy and then sign with, e.g., an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
         <extracomment>Text to inform a user attempting to create a transaction of their current options. At this stage, a user can send their transaction or create a PSBT. This string is displayed when both private keys and PSBT controls are enabled.</extracomment>
         <translation type="unfinished">कृपया, अपने लेन-देन की समीक्षा करें। आप इस लेन-देन को बना और भेज सकते हैं या आंशिक रूप से हस्ताक्षरित बिटकॉइन लेनदेन (पीएसबीटी) बना सकते हैं, जिसे आप सहेज सकते हैं या कॉपी कर सकते हैं और फिर हस्ताक्षर कर सकते हैं, उदाहरण के लिए, ऑफ़लाइन %1 वॉलेट, या पीएसबीटी-संगत हार्डवेयर वॉलेट।</translation>
     </message>
@@ -1728,7 +1728,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         </translation>
     </message>
     <message>
-        <source>Warning: Invalid Bitcoin address</source>
+        <source>Warning: Invalid Bitweb address</source>
         <translation type="unfinished">चेतावनी: अमान्य बिटकॉइन पता</translation>
     </message>
     <message>
@@ -1763,7 +1763,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">पहले इस्तेमाल किया गया पता चुनें</translation>
     </message>
     <message>
-        <source>The Bitcoin address to send the payment to</source>
+        <source>The Bitweb address to send the payment to</source>
         <translation type="unfinished">भुगतान भेजने के लिए बिटकॉइन पता</translation>
     </message>
     <message>
@@ -1787,7 +1787,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">चयनित इकाई में भेजने के लिए राशि</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less bitcoins than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less bitwebs than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
         <translation type="unfinished">भेजी जाने वाली राशि से शुल्क की कटौती की जाएगी। प्राप्तकर्ता को आपके द्वारा राशि फ़ील्ड में दर्ज किए जाने से कम बिटकॉइन प्राप्त होंगे। यदि कई प्राप्तकर्ताओं का चयन किया जाता है, तो शुल्क समान रूप से विभाजित किया जाता है।</translation>
     </message>
     <message>
@@ -1807,7 +1807,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">इस पते के लिए उपयोग किए गए पतों की सूची में जोड़ने के लिए एक लेबल दर्ज करें</translation>
     </message>
     <message>
-        <source>A message that was attached to the bitcoin: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitcoin network.</source>
+        <source>A message that was attached to the bitweb: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Bitweb network.</source>
         <translation type="unfinished">एक संदेश जो बिटकॉइन से जुड़ा था: यूआरआई जो आपके संदर्भ के लिए लेनदेन के साथ संग्रहीत किया जाएगा। नोट: यह संदेश बिटकॉइन नेटवर्क पर नहीं भेजा जाएगा।</translation>
     </message>
 </context>
@@ -1833,11 +1833,11 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">&amp;संदेश पर हस्ताक्षर करें</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your legacy (P2PKH) addresses to prove you can receive bitcoins sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <source>You can sign messages/agreements with your legacy (P2PKH) addresses to prove you can receive bitwebs sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
         <translation type="unfinished">आप अपने विरासत (P2PKH) पतों के साथ संदेश/समझौते पर हस्ताक्षर करके यह साबित कर सकते हैं कि आप उन्हें भेजे गए बिटकॉइन प्राप्त कर सकते हैं। सावधान रहें कि किसी भी अस्पष्ट या यादृच्छिक चीज़ पर हस्ताक्षर न करें, क्योंकि फ़िशिंग हमले आपको धोखा देकर अपनी पहचान उन्हें सौंपने की कोशिश कर सकते हैं। केवल पूरी तरह से विस्तृत कथनों पर हस्ताक्षर करें जिनसे आप सहमत हैं।</translation>
     </message>
     <message>
-        <source>The Bitcoin address to sign the message with</source>
+        <source>The Bitweb address to sign the message with</source>
         <translation type="unfinished">संदेश पर हस्ताक्षर करने के लिए बिटकॉइन पता</translation>
     </message>
     <message>
@@ -1865,7 +1865,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">हस्ताक्षर</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this Bitcoin address</source>
+        <source>Sign the message to prove you own this Bitweb address</source>
         <translation type="unfinished">यह साबित करने के लिए संदेश पर हस्ताक्षर करें कि आप इस बिटकॉइन पते के स्वामी हैं</translation>
     </message>
     <message>
@@ -1889,7 +1889,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">संदेश को सत्यापित करने के लिए नीचे प्राप्तकर्ता का पता, संदेश (सुनिश्चित करें कि आप लाइन ब्रेक, रिक्त स्थान, टैब आदि की प्रतिलिपि बनाते हैं) और हस्ताक्षर दर्ज करें। सावधान रहें कि हस्ताक्षरित संदेश में जो लिखा है, उससे अधिक हस्ताक्षर में न पढ़ें, ताकि बीच-बीच में किसी व्यक्ति द्वारा छल किए जाने से बचा जा सके। ध्यान दें कि यह केवल यह साबित करता है कि हस्ताक्षर करने वाला पक्ष पते के साथ प्राप्त करता है, यह किसी भी लेनदेन की प्रेषकता साबित नहीं कर सकता है!</translation>
     </message>
     <message>
-        <source>The Bitcoin address the message was signed with</source>
+        <source>The Bitweb address the message was signed with</source>
         <translation type="unfinished">संदेश के साथ हस्ताक्षर किए गए बिटकॉइन पते</translation>
     </message>
     <message>
@@ -1901,7 +1901,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
         <translation type="unfinished">संदेश पर हस्ताक्षर किए जाने पर दिए गए हस्ताक्षर</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
+        <source>Verify the message to ensure it was signed with the specified Bitweb address</source>
         <translation type="unfinished">यह सुनिश्चित करने के लिए संदेश सत्यापित करें कि यह निर्दिष्ट बिटकॉइन पते के साथ हस्ताक्षरित था</translation>
     </message>
     <message>
