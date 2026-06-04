@@ -101,6 +101,8 @@ EXPECTED_HOLDER_NAMES = [
     r"Intel Corporation ?",
     r"The Zcash developers",
     r"Jeremy Rubin",
+    r"The Bitweb Core developers",
+    r"Mraksoll",
 ]
 
 DOMINANT_STYLE_COMPILED = {}

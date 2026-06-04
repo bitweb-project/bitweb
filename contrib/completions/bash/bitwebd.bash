@@ -1,15 +1,15 @@
-# bash programmable completion for bitcoind(1) and bitcoin-qt(1)
+# bash programmable completion for bitwebd(1) and bitweb-qt(1)
 # Copyright (c) 2012-2022 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-_bitcoind() {
+_bitwebd() {
     local cur prev words=() cword
-    local bitcoind
+    local bitwebd
 
-    # save and use original argument to invoke bitcoind for -help
+    # save and use original argument to invoke bitwebd for -help
     # it might not be in $PATH
-    bitcoind="$1"
+    bitwebd="$1"
 
     COMPREPLY=()
     _get_comp_words_by_ref -n = cur prev words cword
@@ -33,7 +33,7 @@ _bitcoind() {
             # only parse -help if sensible
             if [[ -z "$cur" || "$cur" =~ ^- ]]; then
                 local helpopts
-                helpopts=$($bitcoind -help 2>&1 | awk '$1 ~ /^-/ { sub(/=.*/, "="); print $1 }' )
+                helpopts=$($bitwebd -help 2>&1 | awk '$1 ~ /^-/ { sub(/=.*/, "="); print $1 }' )
                 COMPREPLY=( $( compgen -W "$helpopts" -- "$cur" ) )
             fi
 
@@ -45,7 +45,7 @@ _bitcoind() {
             ;;
     esac
 } &&
-complete -F _bitcoind bitcoind bitcoin-qt
+complete -F _bitwebd bitwebd bitweb-qt
 
 # Local variables:
 # mode: shell-script

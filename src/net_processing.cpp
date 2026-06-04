@@ -2992,7 +2992,7 @@ void PeerManagerImpl::ProcessHeadersMessage(CNode& pfrom, Peer& peer,
     // point have already passed CheckHeadersPoW and ProcessNewBlockHeaders,
     // so the peer has proven it is doing real work. Resetting the deadline
     // here implements the same sliding-window logic as in the PRESYNC branch
-    // above — the peer gets HEADERS_RESPONSE_TIME to deliver the next batch.
+    // above - the peer gets HEADERS_RESPONSE_TIME to deliver the next batch.
     if (peer.m_headers_sync_timeout != std::chrono::microseconds::max()) {
         peer.m_headers_sync_timeout = GetTime<std::chrono::microseconds>() + HEADERS_RESPONSE_TIME;
     }
