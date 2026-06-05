@@ -28,8 +28,14 @@ TAR = os.getenv('TAR', 'tar')
 GITHUB_REPO = "bitweb-project/bitweb"
 
 SHA256_SUMS = {
-    "bf1c03ffc0916e80e92e35f48b0c6b71186382c2f44d1c5057864e752ece35d8": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-x86_64-linux-gnu.tar.gz"},
-    "df32692ae45d0d964c5aa2638e74334a2fff0ff0ee93f803925c7fce0ed0b2be": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-win64.zip"},
+    "3f69ac3312118ba433db7d6e9ae3d3a98f12be3f0378d71eb512d24edd69ef8b": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-aarch64-linux-gnu.tar.gz"},
+    "1ac7d58628d2a98ecf3eb2521c6d28a9fcbfba4a46132a67802daa316eaf9f02": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-arm-linux-gnueabihf.tar.gz"},
+    "ee0ea0837186d6bd7fd8cfb0925236ca68c3365ab9b2dd0937f25918a6297e18": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-arm64-apple-darwin.tar.gz"},
+    "497efe4b0a719108de365598e5eda3a62f903eaed176e92f8db94ae632c59e9a": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-powerpc64-linux-gnu.tar.gz"},
+    "79589c1d72849bf094aeb976149df77f5a14db764e973f88a434eb13d98ed9bd": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-riscv64-linux-gnu.tar.gz"},
+    "2c9f295df2981b6653c67b3808549de5777e28c0e47f54254c15355ead727ce7": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-x86_64-apple-darwin.tar.gz"},
+    "2f6e7a4488fc81904fcc100d7b663855c3784e312ca19b91bde1f1e9dda80d1d": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-x86_64-linux-gnu.tar.gz"},
+    "9702d89a407f699e2c177f2e3822910438ded5f3af7e6a553568718353b65072": {"tag": "v0.30.2", "archive": "bitweb-0.30.2-win64.zip"},
 }
 
 
