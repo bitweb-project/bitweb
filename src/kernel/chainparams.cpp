@@ -176,6 +176,7 @@ public:
             {
                 { 0, uint256{"111692c1b9b390c407ab74d7f924d4fa0f7589974ab61af96392feca11f209e6"}},
                 { 59782, uint256{"b8b609a39fd140217348701382f0b61d2e98a0357eff03177a544f6a24803ab7"}},
+                { 59955, uint256{"4c03be3f61e32be5f2cb9f5dfd7daf181baf07b52e0a7866d38a0d8423509f4b"}},
             }
         };
         // Checkpoints restored
