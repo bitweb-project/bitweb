@@ -144,7 +144,7 @@ options, as all its configuration is set at the top of the file. It runs many ti
 pypy3 contrib/devtools/headerssync-params.py
 ```
 
-gen-bitweb-conf.sh
+gen-bitcoin-conf.sh
 ===================
 
 Generates a bitweb.conf file in `share/examples/` by parsing the output from `bitwebd --help`. This script is run during the
@@ -156,7 +156,7 @@ To use it with a different build directory, set `BUILDDIR`.
 For example:
 
 ```bash
-BUILDDIR=$PWD/my-build-dir contrib/devtools/gen-bitweb-conf.sh
+BUILDDIR=$PWD/my-build-dir contrib/devtools/gen-bitcoin-conf.sh
 ```
 
 circular-dependencies.py

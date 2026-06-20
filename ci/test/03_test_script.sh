@@ -199,9 +199,9 @@ if [ "$RUN_FUNCTIONAL_TESTS" = "true" ]; then
 fi
 
 if [ "${RUN_TIDY}" = "true" ]; then
-  cmake -B /tidy-build -DLLVM_DIR=/usr/lib/llvm-"${TIDY_LLVM_V}"/cmake -DCMAKE_BUILD_TYPE=Release -S "${BASE_ROOT_DIR}"/contrib/devtools/bitweb-tidy
+  cmake -B /tidy-build -DLLVM_DIR=/usr/lib/llvm-"${TIDY_LLVM_V}"/cmake -DCMAKE_BUILD_TYPE=Release -S "${BASE_ROOT_DIR}"/contrib/devtools/bitcoin-tidy
   cmake --build /tidy-build "$MAKEJOBS"
-  cmake --build /tidy-build --target bitweb-tidy-tests "$MAKEJOBS"
+  cmake --build /tidy-build --target bitcoin-tidy-tests "$MAKEJOBS"
 
   set -eo pipefail
   # Filter out:
@@ -210,7 +210,7 @@ if [ "${RUN_TIDY}" = "true" ]; then
   mv tmp.json "${BASE_BUILD_DIR}/compile_commands.json"
 
   cd "${BASE_BUILD_DIR}/src/"
-  if ! ( run-clang-tidy-"${TIDY_LLVM_V}" -quiet -load="/tidy-build/libbitweb-tidy.so" "${MAKEJOBS}" | tee tmp.tidy-out.txt ); then
+  if ! ( run-clang-tidy-"${TIDY_LLVM_V}" -quiet -load="/tidy-build/libbitcoin-tidy.so" "${MAKEJOBS}" | tee tmp.tidy-out.txt ); then
     grep -C5 "error: " tmp.tidy-out.txt
     echo "^^^ ⚠️ Failure generated from clang-tidy"
     false

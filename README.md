@@ -4,7 +4,7 @@ Bitweb Core integration/staging tree
 https://bitwebcore.net.
 
 For an immediately usable, binary version of the Bitweb Core software, see
-https://bitwebcore.net/en/download/.
+https://bitwebcore.net/en/wallets/full-node/.
 
 What is Bitweb Core?
 ---------------------
@@ -27,7 +27,6 @@ Development Process
 The `master` branch is regularly built (see `doc/build-*.md` for instructions) and tested, but it is not guaranteed to be
 completely stable. [Tags](https://github.com/bitweb-project/bitweb/tags) are created
 regularly from release branches to indicate new official, stable release versions of Bitweb Core.
-
 
 The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md)
 and useful hints for developers can be found in [doc/developer-notes.md](doc/developer-notes.md).

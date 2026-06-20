@@ -305,7 +305,7 @@ mkdir -p "$DISTSRC"
                 ;;
         esac
 
-        # copy over the example bitweb.conf file. if contrib/devtools/gen-bitweb-conf.sh
+        # copy over the example bitweb.conf file. if contrib/devtools/gen-bitcoin-conf.sh
         # has not been run before buildling, this file will be a stub
         cp "${DISTSRC}/share/examples/bitweb.conf" "${DISTNAME}/"
 

@@ -329,7 +329,7 @@ jobs:
         if: matrix.job-type == 'fuzz'
         working-directory: build
         env:
-          BITWEBFUZZ: '${{ github.workspace }}\build\bin\Release\fuzz.exe'
+          BITCOINFUZZ: '${{ github.workspace }}\build\bin\Release\fuzz.exe'
         run: |
           py -3 test/fuzz/test_runner.py --par $NUMBER_OF_PROCESSORS --loglevel DEBUG "${RUNNER_TEMP}/qa-assets/fuzz_corpora"
 

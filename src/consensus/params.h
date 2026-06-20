@@ -56,12 +56,12 @@ struct BIP9Deployment {
     /** Period of blocks to check signalling in (usually retarget period, ie params.DifficultyAdjustmentInterval()) */
     uint32_t period{4032}; /* Bitweb Params */
     /**
-     * Minimum blocks including miner confirmation of the total of 2016 blocks in a retargeting period,
+     * Minimum blocks including miner confirmation of the total of 4032 blocks in a retargeting period,
      * which is also used for BIP9 deployments.
-     * Examples: 1916 for 95%, 1512 for testchains.
+     * Examples: 3024 for 75%.
      * Bitweb use 1 Month period in 5 Minute blocks
      */
-    uint32_t threshold{3628}; /* Bitweb Params */
+    uint32_t threshold{3024}; /* Bitweb Params */
 
     /** Constant for nTimeout very far in the future. */
     static constexpr int64_t NO_TIMEOUT = std::numeric_limits<int64_t>::max();

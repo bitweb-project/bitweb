@@ -138,7 +138,7 @@ This table describes the files installed by Bitweb Core across different platfor
 | **Path**                                                   | **Description**                                                             |
 |------------------------------------------------------------|-----------------------------------------------------------------------------|
 | [README.md](README.md) or [readme.txt](README_windows.txt) | Project information and instructions                                        |
-| bitweb.conf                                               | [Generated](../contrib/devtools/gen-bitweb-conf.sh) configuration file     |
+| bitweb.conf                                               | [Generated](../contrib/devtools/gen-bitcoin-conf.sh) configuration file     |
 | bin/bitweb                                                | Command-line tool for interacting with Bitweb. Calls other binaries below. |
 | bin/bitweb-cli                                            | Tool for making node and wallet RPC calls.                                  |
 | bin/bitweb-qt                                             | Bitweb node and wallet GUI                                                 |
