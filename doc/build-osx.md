@@ -221,5 +221,5 @@ tail -f $HOME/Library/Application\ Support/Bitweb/debug.log
 ./build/bin/bitwebd -daemon      # Starts the bitweb daemon.
 ./build/bin/bitweb-cli --help    # Outputs a list of command-line options.
 ./build/bin/bitweb-cli help      # Outputs a list of RPC commands when the daemon is running.
-./build/bin/bitweb-qt -server # Starts the bitweb-qt server mode, allows bitweb-cli control
+./build/bin/bitweb-qt -server    # Starts the bitweb-qt server mode, allows bitweb-cli control
 ```

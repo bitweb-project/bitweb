@@ -4,6 +4,7 @@
 # file COPYING or https://www.opensource.org/licenses/mit-license.php.
 
 import time
+
 from test_framework.blocktools import TIMESTAMP_WINDOW
 from test_framework.descriptors import descsum_create
 from test_framework.messages import (

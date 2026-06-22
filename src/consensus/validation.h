@@ -64,7 +64,7 @@ enum class BlockValidationResult {
     BLOCK_INVALID_PREV,      //!< A block this one builds on is invalid
     BLOCK_TIME_FUTURE,       //!< block timestamp was > 10 Minutes in the future (or our clock is bad) Bitweb Params
     BLOCK_CHECKPOINT,        //!< the block failed to meet one of our checkpoints // Checkpoints restored
-    BLOCK_HEADER_LOW_WORK    //!< the block header may be on a too-little-work chain
+    BLOCK_HEADER_LOW_WORK,   //!< the block header may be on a too-little-work chain
 };
 
 

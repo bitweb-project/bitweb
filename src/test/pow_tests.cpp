@@ -1749,8 +1749,8 @@ void sanity_check_chainparams(const ArgsManager& args, ChainType chain_type)
     BOOST_CHECK_EQUAL(consensus.hashGenesisBlock, chainParams->GenesisBlock().GetHash());
 
     /*
-        // target timespan is an even multiple of spacing
-        BOOST_CHECK_EQUAL(consensus.nPowTargetTimespan % consensus.nPowTargetSpacing, 0);
+    // target timespan is an even multiple of spacing
+    BOOST_CHECK_EQUAL(consensus.nPowTargetTimespan % consensus.nPowTargetSpacing, 0);
     */
 
     // Genesis nBits must be positive, must not overflow the compact format,
