@@ -101,10 +101,10 @@ public:
         consensus.SegwitHeight = 1; // Active from the start
         consensus.MinBIP9WarningHeight = 4032; // don't warn about unknown BIP9 activations below this height
         consensus.powLimit = uint256{"000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
-//        consensus.nPowTargetTimespan = 5 * 60; // 5m
+        // consensus.nPowTargetTimespan = 5 * 60; // 5m
         consensus.nPowTargetSpacing = 5 * 60;
         consensus.lwmaAveragingWindow = 576;
-//        consensus.fPowAllowMinDifficultyBlocks = false;
+        // consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
@@ -121,8 +121,8 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].threshold = 3024; // 75%
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].period = 4032;
 
-        consensus.nMinimumChainWork = uint256("00000000000000000000000000000000000000000000000000000000158b68cf"); //59782
-        consensus.defaultAssumeValid = uint256("b8b609a39fd140217348701382f0b61d2e98a0357eff03177a544f6a24803ab7"); //59782
+        consensus.nMinimumChainWork = uint256("0000000000000000000000000000000000000000000000000000002c40eb39e9"); //65200
+        consensus.defaultAssumeValid = uint256("07381477d79626a69b3d3546d2e333bd5014b213fb59991dd27e71a4f6f4702e"); //65200
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -177,6 +177,7 @@ public:
                 { 0, uint256{"111692c1b9b390c407ab74d7f924d4fa0f7589974ab61af96392feca11f209e6"}},
                 { 59782, uint256{"b8b609a39fd140217348701382f0b61d2e98a0357eff03177a544f6a24803ab7"}},
                 { 59955, uint256{"4c03be3f61e32be5f2cb9f5dfd7daf181baf07b52e0a7866d38a0d8423509f4b"}},
+                { 65200, uint256{"07381477d79626a69b3d3546d2e333bd5014b213fb59991dd27e71a4f6f4702e"}},
             }
         };
         // Checkpoints restored
@@ -187,14 +188,20 @@ public:
                 .hash_serialized  = AssumeutxoHash{uint256{"12d31e874fa1f6fb698aabd4121d7f67c794f01b6e14d25368bd6ff6b30bba21"}},
                 .m_chain_tx_count = 59864,
                 .blockhash        = consteval_ctor(uint256{"b8b609a39fd140217348701382f0b61d2e98a0357eff03177a544f6a24803ab7"}),
+            },
+            {
+                .height           = 65200,
+                .hash_serialized  = AssumeutxoHash{uint256{"cae07c774b278162352d4f1c3a6252672cd40c94e0d208a9e7aa1f4352da92df"}},
+                .m_chain_tx_count = 65355,
+                .blockhash        = consteval_ctor(uint256{"07381477d79626a69b3d3546d2e333bd5014b213fb59991dd27e71a4f6f4702e"}),
             }
         };
 
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 b8b609a39fd140217348701382f0b61d2e98a0357eff03177a544f6a24803ab7
-            .nTime    = 1780502775,
-            .tx_count = 59864,
-            .dTxRate  = 0.01615854484121918,
+            // Data from RPC: getchaintxstats 4096 07381477d79626a69b3d3546d2e333bd5014b213fb59991dd27e71a4f6f4702e
+            .nTime    = 1782048224,
+            .tx_count = 65355,
+            .dTxRate  = 0.003955907021327582,
         };
     }
 };
@@ -223,10 +230,10 @@ public:
         consensus.SegwitHeight = 1;
         consensus.MinBIP9WarningHeight = 4032; // don't warn about unknown BIP9 activations below this height
         consensus.powLimit = uint256{"000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
-//        consensus.nPowTargetTimespan = 5 * 60; // 5m
+        // consensus.nPowTargetTimespan = 5 * 60; // 5m
         consensus.nPowTargetSpacing = 5 * 60;
         consensus.lwmaAveragingWindow = 576;
-//        consensus.fPowAllowMinDifficultyBlocks = false;
+        // consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
@@ -325,10 +332,10 @@ public:
         consensus.SegwitHeight = 1;
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256{"000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
-//        consensus.nPowTargetTimespan = 5 * 60; // 5m
+        // consensus.nPowTargetTimespan = 5 * 60; // 5m
         consensus.nPowTargetSpacing = 5 * 60;
         consensus.lwmaAveragingWindow = 288;
-//        consensus.fPowAllowMinDifficultyBlocks = false;
+        // consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
 
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
@@ -480,10 +487,10 @@ public:
         consensus.BIP66Height = 1;
         consensus.CSVHeight = 1;
         consensus.SegwitHeight = 1;
-//        consensus.nPowTargetTimespan = 5 * 60; // 5m
+        // consensus.nPowTargetTimespan = 5 * 60; // 5m
         consensus.nPowTargetSpacing = 5 * 60;
         consensus.lwmaAveragingWindow = 576;
-//        consensus.fPowAllowMinDifficultyBlocks = false;
+        // consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256{"00377ae000000000000000000000000000000000000000000000000000000000"};
@@ -553,10 +560,10 @@ public:
         consensus.SegwitHeight = 0; // Always active unless overridden
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256{"7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
-//        consensus.nPowTargetTimespan = 5 * 60; // 5m
+        // consensus.nPowTargetTimespan = 5 * 60; // 5m
         consensus.nPowTargetSpacing = 5 * 60;
         consensus.lwmaAveragingWindow = 144;
-//        consensus.fPowAllowMinDifficultyBlocks = true;
+        // consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
 
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
