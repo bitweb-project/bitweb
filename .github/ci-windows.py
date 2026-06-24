@@ -101,21 +101,21 @@ def check_manifests(ci_type):
         return
 
     release_dir = Path.cwd() / "build" / "bin" / "Release"
-    manifest_path = release_dir / "bitcoind.manifest"
-    cmd_bitcoind_manifest = [
+    manifest_path = release_dir / "bitwebd.manifest"
+    cmd_bitwebd_manifest = [
         "mt.exe",
         "-nologo",
-        f"-inputresource:{release_dir / 'bitcoind.exe'}",
+        f"-inputresource:{release_dir / 'bitwebd.exe'}",
         f"-out:{manifest_path}",
     ]
-    run(cmd_bitcoind_manifest)
+    run(cmd_bitwebd_manifest)
     print(manifest_path.read_text())
 
     skips = {  # Skip as they currently do not have manifests
         "fuzz.exe",
-        "bench_bitcoin.exe",
-        "test_bitcoin-qt.exe",
-        "bitcoin-chainstate.exe",
+        "bench_bitweb.exe",
+        "test_bitweb-qt.exe",
+        "bitweb-chainstate.exe",
     }
     for entry in release_dir.iterdir():
         if entry.suffix.lower() != ".exe":
@@ -136,7 +136,7 @@ def check_manifests(ci_type):
 def prepare_tests(ci_type):
     workspace = Path.cwd()
     if ci_type == "standard":
-        run([sys.executable, "-m", "pip", "install", "pyzmq"])
+        run([sys.executable, "-m", "pip", "install", "pyzmq", "argon2-cffi"])
         dest = workspace / "unit_test_data"
         download_script_assets(dest)
     elif ci_type == "fuzz":
@@ -145,7 +145,7 @@ def prepare_tests(ci_type):
             "git",
             "clone",
             "--depth=1",
-            "https://github.com/bitcoin-core/qa-assets",
+            "https://github.com/bitweb-project/qa-assets",
             repo_dir,
         ]
         run(clone_cmd)
@@ -162,14 +162,14 @@ def run_tests(ci_type):
     if ci_type == "standard":
         os.environ["DIR_UNIT_TEST_DATA"] = str(workspace / "unit_test_data")
         test_envs = {
-            "BITCOIN_BIN": "bitcoin.exe",
-            "BITCOIND": "bitcoind.exe",
-            "BITCOINCLI": "bitcoin-cli.exe",
-            "BITCOIN_BENCH": "bench_bitcoin.exe",
-            "BITCOINTX": "bitcoin-tx.exe",
-            "BITCOINUTIL": "bitcoin-util.exe",
-            "BITCOINWALLET": "bitcoin-wallet.exe",
-            "BITCOINCHAINSTATE": "bitcoin-chainstate.exe",
+            "BITCOIN_BIN": "bitweb.exe",
+            "BITCOIND": "bitwebd.exe",
+            "BITCOINCLI": "bitweb-cli.exe",
+            "BITCOIN_BENCH": "bench_bitweb.exe",
+            "BITCOINTX": "bitweb-tx.exe",
+            "BITCOINUTIL": "bitweb-util.exe",
+            "BITCOINWALLET": "bitweb-wallet.exe",
+            "BITCOINCHAINSTATE": "bitweb-chainstate.exe",
         }
         for var, exe in test_envs.items():
             os.environ[var] = str(release_bin / exe)
