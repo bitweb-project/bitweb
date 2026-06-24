@@ -46,9 +46,11 @@
 #include <cstddef>
 #include <cstdio>
 #include <exception>
+#include <iterator>
 #include <map>
 #include <optional>
 #include <ostream>
+#include <ranges> // Checkpoints restored
 #include <span>
 #include <stdexcept>
 #include <system_error>
@@ -145,10 +147,21 @@ bool BlockTreeDB::LoadBlockIndexGuts(const Consensus::Params& consensusParams, s
                 pindexNew->nStatus        = diskindex.nStatus;
                 pindexNew->nTx            = diskindex.nTx;
 
-                if (!CheckProofOfWork(pindexNew->GetBlockHash(), pindexNew->nBits, consensusParams)) {
+                /* Bitweb Params */
+                /* Bitweb - we use Litcoin solution */
+                /*
+                Bitweb: Disable PoW Sanity check while loading block index from disk.
+                We use the sha256 hash for the block index for performance reasons, which is recorded for later use.
+                CheckProofOfWork() uses the Argon2id hash which is discarded after a block is accepted.
+                While it is technically feasible to verify the PoW, doing so takes several minutes as it
+                requires recomputing every PoW hash during every Bitweb startup.
+                We opt instead to simply trust the data that is on your local disk.
+
+                    if (!CheckProofOfWork(pindexNew->GetBlockHash(), pindexNew->nBits, consensusParams)) {
                     LogError("%s: CheckProofOfWork failed: %s\n", __func__, pindexNew->ToString());
                     return false;
                 }
+                */
 
                 pcursor->Next();
             } else {
@@ -419,6 +432,22 @@ CBlockIndex* BlockManager::InsertBlockIndex(const uint256& hash)
     }
     return pindex;
 }
+
+// Checkpoints restored
+const CBlockIndex* BlockManager::GetLastCheckpoint(const CCheckpointData& data)
+{
+    const MapCheckpoints& checkpoints = data.mapCheckpoints;
+
+    for (const MapCheckpoints::value_type& i : checkpoints | std::views::reverse) {
+        const uint256& hash = i.second;
+        const CBlockIndex* pindex = LookupBlockIndex(hash);
+        if (pindex) {
+            return pindex;
+        }
+    }
+    return nullptr;
+}
+// Checkpoints restored
 
 bool BlockManager::LoadBlockIndex(const std::optional<uint256>& snapshot_blockhash)
 {
@@ -1053,11 +1082,13 @@ bool BlockManager::ReadBlock(CBlock& block, const FlatFilePos& pos, const std::o
 
     const auto block_hash{block.GetHash()};
 
+     /* Bitweb Params */
     // Check the header
-    if (!CheckProofOfWork(block_hash, block.nBits, GetConsensus())) {
+    if (!CheckProofOfWork(block.GetArgon2idPoWHash(), block.nBits, GetConsensus())) {
         LogError("Errors in block header at %s while reading block", pos.ToString());
         return false;
     }
+    /* Bitweb Params */
 
     // Signet only: check block solution
     if (GetConsensus().signet_blocks && !CheckSignetBlockSolution(block, GetConsensus())) {

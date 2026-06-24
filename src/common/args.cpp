@@ -743,7 +743,7 @@ std::string HelpMessageOpt(const std::string &option, const std::string &message
 const std::vector<std::string> TEST_OPTIONS_DOC{
     "addrman (use deterministic addrman)",
     "reindex_after_failure_noninteractive_yes (When asked for a reindex after failure interactively, simulate as-if answered with 'yes')",
-    "bip94 (enforce BIP94 consensus rules)",
+    // "bip94 (enforce BIP94 consensus rules)", /* Bitweb Params */
 };
 
 bool HasTestOption(const ArgsManager& args, const std::string& test_option)

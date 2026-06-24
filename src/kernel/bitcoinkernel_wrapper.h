@@ -76,6 +76,9 @@ enum class BlockValidationResult : btck_BlockValidationResult {
     MISSING_PREV = btck_BlockValidationResult_MISSING_PREV,
     INVALID_PREV = btck_BlockValidationResult_INVALID_PREV,
     TIME_FUTURE = btck_BlockValidationResult_TIME_FUTURE,
+    /* Bitweb Params */
+    CHECKPOINT = btck_BlockValidationResult_CHECKPOINT,
+    /* Bitweb Params */
     HEADER_LOW_WORK = btck_BlockValidationResult_HEADER_LOW_WORK
 };
 

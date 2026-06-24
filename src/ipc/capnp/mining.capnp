@@ -12,7 +12,7 @@ using Proxy = import "/mp/proxy.capnp";
 $Proxy.include("interfaces/mining.h");
 $Proxy.includeTypes("ipc/capnp/mining-types.h");
 
-const maxMoney :Int64 = 2100000000000000;
+const maxMoney :Int64 = 4200000000000000;
 const maxDouble :Float64 = 1.7976931348623157e308;
 const defaultBlockReservedWeight :UInt32 = 8000;
 const defaultCoinbaseOutputMaxAdditionalSigops :UInt32 = 400;
@@ -64,4 +64,12 @@ struct CoinbaseTx $Proxy.wrap("node::CoinbaseTx") {
     blockRewardRemaining @4 :Int64 $Proxy.name("block_reward_remaining");
     requiredOutputs @5 :List(Data) $Proxy.name("required_outputs");
     lockTime @6 :UInt32 $Proxy.name("lock_time");
+}
+
+# // Checkpoints restored
+struct BlockValidationState {
+    mode         @0 :Int32;
+    result       @1 :Int32;
+    rejectReason @2 :Text;
+    debugMessage @3 :Text;
 }
