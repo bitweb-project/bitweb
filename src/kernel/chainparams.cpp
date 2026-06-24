@@ -454,7 +454,6 @@ public:
             bin = "51210289344323689631739c2da6c9c1a31c442289e8dc0b00fd60d7bc041c967522b351ae"_hex_v_u8;
             vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_signet), std::end(chainparams_seed_signet));
             vSeeds.emplace_back("signetseed.bitwebcore.net.");
-            vSeeds.emplace_back("signetseed.bitwebcore.net.");
             vSeeds.emplace_back("signetseed1.bitwebcore.net.");
             vSeeds.emplace_back("signetseed2.bitwebcore.net.");
             vSeeds.emplace_back("signetseed3.bitwebcore.net.");
