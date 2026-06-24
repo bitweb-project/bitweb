@@ -4,7 +4,7 @@
 
 # Do not use generator expressions in test sources because the
 # SOURCES property is processed to gather test suite macros.
-add_executable(test_bitcoin
+add_executable(test_bitweb
   main.cpp
   addrman_tests.cpp
   allocator_tests.cpp
@@ -37,6 +37,7 @@ add_executable(test_bitcoin
   common_url_tests.cpp
   compress_tests.cpp
   crypto_tests.cpp
+  crypto_argon2id_tests.cpp
   cuckoocache_tests.cpp
   dbwrapper_tests.cpp
   denialofservice_tests.cpp
@@ -78,6 +79,8 @@ add_executable(test_bitcoin
   policyestimator_tests.cpp
   pool_tests.cpp
   pow_tests.cpp
+  pow_argon2id_tests.cpp # Bitweb Params
+  permitted_difficulty_tests.cpp # Bitweb Params
   prevector_tests.cpp
   private_broadcast_tests.cpp
   raii_event_tests.cpp
@@ -137,10 +140,11 @@ add_executable(test_bitcoin
   validation_tests.cpp
   validationinterface_tests.cpp
   versionbits_tests.cpp
+  bip53_tests.cpp
 )
 
 include(TargetDataSources)
-target_json_data_sources(test_bitcoin
+target_json_data_sources(test_bitweb
   data/base58_encode_decode.json
   data/bip341_wallet_vectors.json
   data/blockfilters.json
@@ -150,14 +154,15 @@ target_json_data_sources(test_bitcoin
   data/sighash.json
   data/tx_invalid.json
   data/tx_valid.json
+  data/argon2id_vectors.json
 )
-target_raw_data_sources(test_bitcoin NAMESPACE test::data
+target_raw_data_sources(test_bitweb NAMESPACE test::data
   data/asmap.raw
 )
 
-add_windows_application_manifest(test_bitcoin)
+add_windows_application_manifest(test_bitweb)
 
-target_link_libraries(test_bitcoin
+target_link_libraries(test_bitweb
   core_interface
   test_util
   bitcoin_cli
@@ -195,7 +200,7 @@ function(add_boost_test source_file)
   list(REMOVE_ITEM test_suite_macro "mock_process")
   foreach(test_suite_name IN LISTS test_suite_macro)
     add_test(NAME ${test_suite_name}
-      COMMAND test_bitcoin --run_test=${test_suite_name} --catch_system_error=no --log_level=test_suite -- DEBUG_LOG_OUT
+      COMMAND test_bitweb --run_test=${test_suite_name} --catch_system_error=no --log_level=test_suite -- DEBUG_LOG_OUT
     )
     set_property(TEST ${test_suite_name} PROPERTY
       SKIP_REGULAR_EXPRESSION
@@ -207,8 +212,8 @@ function(add_boost_test source_file)
 endfunction()
 
 function(add_all_test_targets)
-  get_target_property(test_source_dir test_bitcoin SOURCE_DIR)
-  get_target_property(test_sources test_bitcoin SOURCES)
+  get_target_property(test_source_dir test_bitweb SOURCE_DIR)
+  get_target_property(test_sources test_bitweb SOURCES)
   foreach(test_source ${test_sources})
     cmake_path(IS_RELATIVE test_source result)
     if(result)
@@ -220,4 +225,21 @@ endfunction()
 
 add_all_test_targets()
 
-install_binary_component(test_bitcoin INTERNAL)
+# Argon2id ISA availability - forward the same macros to test_bitweb
+if(HAVE_ARGON2_SSE2)
+  target_compile_definitions(test_bitweb PRIVATE ENABLE_ARGON2_SSE2)
+endif()
+if(HAVE_ARGON2_SSSE3)
+  target_compile_definitions(test_bitweb PRIVATE ENABLE_ARGON2_SSSE3)
+endif()
+if(HAVE_ARGON2_AVX2)
+  target_compile_definitions(test_bitweb PRIVATE ENABLE_ARGON2_AVX2)
+endif()
+if(HAVE_ARGON2_AVX512)
+  target_compile_definitions(test_bitweb PRIVATE ENABLE_ARGON2_AVX512)
+endif()
+if(HAVE_ARGON2_NEON)
+  target_compile_definitions(test_bitweb PRIVATE ENABLE_ARGON2_NEON)
+endif()
+
+install_binary_component(test_bitweb INTERNAL)

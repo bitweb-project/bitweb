@@ -109,15 +109,15 @@ CBlockHeader ConsumeHeader(FuzzedDataProvider& fuzzed_data_provider, const uint2
     // target comes from the bits value of mainnet block 840000, which is 0x17034219.
     // Calling lower_target.SetCompact(0x17034219) and upper_target.SetCompact(0x1d00ffff)
     // should return the values below.
-    //
+    // Bitweb use genesis block 0 and 64905.
     // RPC commands to verify:
-    // getblockheader 000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f
-    // getblockheader 0000000000000000000320283a032748cef8227873ff4872689bf23f1cda83a5
+    // getblockheader 111692c1b9b390c407ab74d7f924d4fa0f7589974ab61af96392feca11f209e6
+    // getblockheader 0c6c52f4e741007cb2db4e1f2bc1c2b059a3df2a3117651f0ac8f624b5060d17
     if (fuzzed_data_provider.ConsumeBool()) {
         header.nBits = prev_nbits;
     } else {
-        arith_uint256 lower_target = UintToArith256(uint256{"0000000000000000000342190000000000000000000000000000000000000000"});
-        arith_uint256 upper_target = UintToArith256(uint256{"00000000ffff0000000000000000000000000000000000000000000000000000"});
+        arith_uint256 lower_target = UintToArith256(uint256{"00000029f0fe0000000000000000000000000000000000000000000000000000"});
+        arith_uint256 upper_target = UintToArith256(uint256{"000fffff00000000000000000000000000000000000000000000000000000000"});
         arith_uint256 target = ConsumeArithUInt256InRange(fuzzed_data_provider, lower_target, upper_target);
         header.nBits = target.GetCompact();
     }
@@ -145,7 +145,7 @@ CBlock ConsumeBlock(FuzzedDataProvider& fuzzed_data_provider, const uint256& pre
 
 void FinalizeHeader(CBlockHeader& header, const ChainstateManager& chainman)
 {
-    while (!CheckProofOfWork(header.GetHash(), header.nBits, chainman.GetParams().GetConsensus())) {
+    while (!CheckProofOfWork(header.GetArgon2idPoWHash(), header.nBits, chainman.GetParams().GetConsensus())) {
         ++(header.nNonce);
     }
 }
@@ -159,6 +159,7 @@ void initialize()
     static auto setup{
         MakeNoLogFileContext<HeadersSyncSetup>(ChainType::MAIN,
                                                {
+                                                   .extra_args = {"-checkpoints=0"},  // Checkpoints restored
                                                    .setup_validation_interface = false,
                                                }),
     };
@@ -241,6 +242,8 @@ FUZZ_TARGET(p2p_headers_presync, .init = initialize)
     total_work += CalculateClaimedHeadersWork(all_headers);
 
     // This test should never create a chain with more work than MinimumChainWork.
+    // Verified: 1600 headers * work_per_block(64905) ~= 163.2B < nMinimumChainWork (190B at block 65200).
+
     assert(total_work < chainman.MinimumChainWork());
 
     // The headers/blocks sent in this test should never be stored, as the chains don't have the work required

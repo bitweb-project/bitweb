@@ -59,6 +59,14 @@ void sanity_check_snapshot()
     auto& cs{node.chainman->ActiveChainstate()};
     cs.ForceFlushStateToDisk(/*wipe_cache=*/false);
     const auto stats{*Assert(kernel::ComputeUTXOStats(kernel::CoinStatsHashType::HASH_SERIALIZED, &cs.CoinsDB(), node.chainman->m_blockman))};
+    // === BITWEB: Print real values for chainparams.cpp ===
+    //fprintf(stderr, "\n=== assumeutxo values for chainparams.cpp (height %d) ===\n", stats.nHeight);
+    //fprintf(stderr, "  .height = %d,\n", stats.nHeight);
+    //fprintf(stderr, "  .hash_serialized = AssumeutxoHash{uint256{\"%s\"}},\n", stats.hashSerialized.ToString().c_str());
+    //fprintf(stderr, "  .m_chain_tx_count = %llu,\n", (unsigned long long)(stats.nTransactions + 1));
+    //fprintf(stderr, "  .blockhash = consteval_ctor(uint256{\"%s\"}),\n", stats.hashBlock.ToString().c_str());
+    //fprintf(stderr, "=======================================================\n\n");
+    // === END BITWEB ===
     const auto cp_au_data{*Assert(node.chainman->GetParams().AssumeutxoForHeight(2 * COINBASE_MATURITY))};
     Assert(stats.nHeight == cp_au_data.height);
     Assert(stats.nTransactions + 1 == cp_au_data.m_chain_tx_count); // +1 for the genesis tx.
@@ -103,7 +111,7 @@ void utxo_snapshot_fuzz(FuzzBufferType buffer)
 {
     SeedRandomStateForTest(SeedRand::ZEROS);
     FuzzedDataProvider fuzzed_data_provider(buffer.data(), buffer.size());
-    SetMockTime(ConsumeTime(fuzzed_data_provider, /*min=*/1296688602)); // regtest genesis block timestamp
+    SetMockTime(ConsumeTime(fuzzed_data_provider, /*min=*/1761888888)); // regtest genesis block timestamp
     auto& setup{*g_setup};
     bool dirty_chainman{false}; // Reuse the global chainman, but reset it when it is dirty
     auto& chainman{*setup.m_node.chainman};

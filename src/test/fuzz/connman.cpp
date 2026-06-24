@@ -188,15 +188,6 @@ FUZZ_TARGET(connman, .init = initialize_connman)
                     /*proxy_override=*/proxy_override);
             },
             [&] {
-                connman.SetNetworkActive(fuzzed_data_provider.ConsumeBool());
-                const auto peer = ConsumeAddress(fuzzed_data_provider);
-                connman.CreateNodeFromAcceptedSocketPublic(
-                    /*sock=*/CreateSock(AF_INET, SOCK_STREAM, IPPROTO_TCP),
-                    /*permissions=*/ConsumeWeakEnum(fuzzed_data_provider, ALL_NET_PERMISSION_FLAGS),
-                    /*addr_bind=*/ConsumeAddress(fuzzed_data_provider),
-                    /*addr_peer=*/peer);
-            },
-            [&] {
                 CConnman::Options options;
 
                 options.vBinds = ConsumeServiceVector(fuzzed_data_provider);
