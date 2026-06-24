@@ -4,11 +4,11 @@
 # Copyright (c) 2010-present The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-"""Bitcoin test framework primitive and message structures
+"""Bitweb test framework primitive and message structures
 
 CBlock, CTransaction, CBlockHeader, CTxIn, CTxOut, etc....:
     data structures that should map to corresponding structures in
-    bitcoin/primitives
+    bitweb/primitives
 
 msg_block, msg_tx, msg_headers, etc.:
     data structures that represent network messages
@@ -27,12 +27,21 @@ import random
 import socket
 import time
 import unittest
+from argon2.low_level import hash_secret_raw, Type
 
+import argon2
 from test_framework.crypto.siphash import siphash256
 from test_framework.util import (
     assert_equal,
     assert_not_equal,
 )
+def GetArgon2idHash(input, salts, cost):
+    hash = argon2.low_level.hash_secret_raw(
+        time_cost=3, memory_cost=cost, parallelism=1,
+        hash_len=32, secret=input, salt=salts,
+        type=argon2.low_level.Type.ID,
+    )
+    return hash
 
 MAX_LOCATOR_SZ = 101
 MAX_BLOCK_WEIGHT = 4000000
@@ -42,7 +51,7 @@ MAX_BLOOM_FILTER_SIZE = 36000
 MAX_BLOOM_HASH_FUNCS = 50
 
 COIN = 100000000  # 1 btc in satoshis
-MAX_MONEY = 21000000 * COIN
+MAX_MONEY = 42000000 * COIN
 
 MAX_BIP125_RBF_SEQUENCE = 0xfffffffd  # Sequence number that is rbf-opt-in (BIP 125) and csv-opt-out (BIP 68)
 MAX_SEQUENCE_NONFINAL = 0xfffffffe  # Sequence number that is csv-opt-out (BIP 68)
@@ -88,10 +97,11 @@ TX_MIN_STANDARD_VERSION = 1
 TX_MAX_STANDARD_VERSION = 3
 
 MAGIC_BYTES = {
-    "mainnet": b"\xf9\xbe\xb4\xd9",
-    "testnet4": b"\x1c\x16\x3f\x28",
-    "regtest": b"\xfa\xbf\xb5\xda",
-    "signet": b"\x0a\x03\xcf\x40",
+    "mainnet": b"\xfe\xae\xd5\xca",
+    "testnet3": b"\x1b\xcc\x08\x05", # // Checkpoints restored
+    "testnet4": b"\x2c\x22\x3c\xad",
+    "regtest": b"\xea\xb1\xa5\xde",
+    "signet": b"\x2d\xea\xd0\xd9",
 }
 
 def sha256(s):
@@ -465,7 +475,7 @@ class CBlockLocator:
 
     def serialize(self):
         r = b""
-        r += (0).to_bytes(4, "little", signed=True)  # Bitcoin Core ignores the version field. Set it to 0.
+        r += (0).to_bytes(4, "little", signed=True)  # Bitweb Core ignores the version field. Set it to 0.
         r += ser_uint256_vector(self.vHave)
         return r
 
@@ -708,7 +718,7 @@ class CTransaction:
 
     def is_valid(self):
         for tout in self.vout:
-            if tout.nValue < 0 or tout.nValue > 21000000 * COIN:
+            if tout.nValue < 0 or tout.nValue > 42000000 * COIN:
                 return False
         return True
 
@@ -781,6 +791,28 @@ class CBlockHeader:
         """Return block header hash as integer."""
         return uint256_from_str(hash256(self._serialize_header()))
 
+    @property
+    def argon2id(self):
+        """Argon2id PoW hash computed on-the-fly from the serialized 80-byte header.
+        Header bytes serve as BOTH password AND salt - mirrors GetArgon2idPoWHash() in block.cpp.
+        Parameters are consensus-critical (must not be changed):
+          t (time_cost)   = 3
+          m (memory_cost) = 1024 KiB  (ARGON2ID_MEM_COST_KB)
+          p (parallelism) = 1
+          hash_len        = 32 bytes
+        """
+        header_bytes = self._serialize_header()
+        digest = hash_secret_raw(
+            secret=header_bytes,
+            salt=header_bytes,  # same 80-byte header as salt, identical to C++
+            time_cost=3,
+            memory_cost=1024,   # KiB, matches ARGON2ID_MEM_COST_KB = 1024
+            parallelism=1,
+            hash_len=32,
+            type=Type.ID,
+        )
+        return uint256_from_str(digest)
+
     def __repr__(self):
         return "CBlockHeader(nVersion=%i hashPrevBlock=%064x hashMerkleRoot=%064x nTime=%s nBits=%08x nNonce=%08x)" \
             % (self.nVersion, self.hashPrevBlock, self.hashMerkleRoot,
@@ -839,7 +871,7 @@ class CBlock(CBlockHeader):
 
     def is_valid(self):
         target = uint256_from_compact(self.nBits)
-        if self.hash_int > target:
+        if self.argon2id > target:
             return False
         for tx in self.vtx:
             if not tx.is_valid():
@@ -850,7 +882,7 @@ class CBlock(CBlockHeader):
 
     def solve(self):
         target = uint256_from_compact(self.nBits)
-        while self.hash_int > target:
+        while self.argon2id > target:
             self.nNonce += 1
 
     # Calculate the block weight using witness and non-witness

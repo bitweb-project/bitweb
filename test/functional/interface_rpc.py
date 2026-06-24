@@ -120,7 +120,7 @@ class RPCInterfaceTest(BitcoinTestFramework):
         results = [
             {"result": 0},
             {"error": {"code": RPC_METHOD_NOT_FOUND, "message": "Method not found"}},
-            {"result": "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"},
+            {"result": "fff478736711da54031b170a3a95739bb06bd0f66518eb82876d1a4b39a261b6"},
             {"error": {"code": RPC_INVALID_REQUEST, "message": "Missing method"}},
         ]
 
