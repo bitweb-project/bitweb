@@ -21,7 +21,9 @@
  * Text used to signify that a signed message follows and to prevent
  * inadvertently signing a transaction.
  */
-const std::string MESSAGE_MAGIC = "Bitcoin Signed Message:\n";
+/* Bitweb Params */
+const std::string MESSAGE_MAGIC = "Bitweb Signed Message:\n";
+/* Bitweb Params */
 
 MessageVerificationResult MessageVerify(
     const std::string& address,

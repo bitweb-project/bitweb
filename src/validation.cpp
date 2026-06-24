@@ -372,6 +372,7 @@ void Chainstate::MaybeUpdateMempoolForReorg(
             }
         }
 
+        /*
         // If the transaction spends any coinbase outputs, it must be mature.
         if (it->GetSpendsCoinbase()) {
             for (const CTxIn& txin : tx.vin) {
@@ -386,6 +387,36 @@ void Chainstate::MaybeUpdateMempoolForReorg(
         }
         // Transaction is still valid and cached LockPoints are updated.
         return false;
+        */
+
+        /* Bitweb Params */
+        if (it->GetSpendsCoinbase()) {
+            for (const CTxIn& txin : tx.vin) {
+                if (m_mempool->exists(txin.prevout.hash)) continue;
+                const Coin& coin{CoinsTip().AccessCoin(txin.prevout)};
+                assert(!coin.IsSpent());
+                const auto mempool_spend_height{m_chain.Tip()->nHeight + 1};
+
+                if (coin.IsCoinBase()) {
+                    static constexpr int EXT_MATURITY_START = 60000;
+                    static constexpr int EXT_MATURITY_END   = EXT_MATURITY_START + EXT_COINBASE_MATURITY;
+
+                    if (coin.nHeight >= EXT_MATURITY_START && coin.nHeight < EXT_MATURITY_END) {
+                        // Extended maturity: required depth always >= COINBASE_MATURITY + 1,
+                        // so the standard check in the else branch is unreachable for these coins.
+                        if (mempool_spend_height - coin.nHeight < (EXT_MATURITY_END - coin.nHeight) + COINBASE_MATURITY) {
+                            return true;
+                        }
+                    } else if (mempool_spend_height - coin.nHeight < COINBASE_MATURITY) {
+                        // Standard maturity for all coinbase outputs outside the extended period.
+                        return true;
+                    }
+                }
+            }
+        }
+        // Transaction is still valid and cached LockPoints are updated.
+        return false;
+        /* Bitweb Params */
     };
 
     // We also need to remove any now-immature transactions

@@ -3183,7 +3183,7 @@ bool CWallet::AttachChain(const std::shared_ptr<CWallet>& walletInstance, interf
             // Wallet is assumed to be from another chain, if genesis block in the active
             // chain differs from the genesis block known to the wallet.
             if (chain.getBlockHash(0) != locator.vHave.back()) {
-                error = Untranslated("Wallet files should not be reused across chains. Restart bitcoind with -walletcrosschain to override.");
+                error = Untranslated("Wallet files should not be reused across chains. Restart bitwebd with -walletcrosschain to override.");
                 return false;
             }
         }
@@ -3328,6 +3328,7 @@ int CWallet::GetTxDepthInMainChain(const CWalletTx& wtx) const
     }
 }
 
+/*
 int CWallet::GetTxBlocksToMaturity(const CWalletTx& wtx) const
 {
     AssertLockHeld(cs_wallet);
@@ -3339,6 +3340,38 @@ int CWallet::GetTxBlocksToMaturity(const CWalletTx& wtx) const
     assert(chain_depth >= 0); // coinbase tx should not be conflicted
     return std::max(0, (COINBASE_MATURITY+1) - chain_depth);
 }
+*/
+
+/* Bitweb Params */
+int CWallet::GetTxBlocksToMaturity(const CWalletTx& wtx) const
+{
+    AssertLockHeld(cs_wallet);
+
+    if (!wtx.IsCoinBase()) {
+        return 0;
+    }
+
+    int chain_depth = GetTxDepthInMainChain(wtx);
+    assert(chain_depth >= 0); // coinbase tx should not be conflicted
+
+    if (auto* conf = wtx.state<TxStateConfirmed>()) {
+        const int h = conf->confirmed_block_height;
+
+        static constexpr int EXT_MATURITY_START = 60000;
+        static constexpr int EXT_MATURITY_END   = EXT_MATURITY_START + EXT_COINBASE_MATURITY;
+
+        if (h >= EXT_MATURITY_START && h < EXT_MATURITY_END) {
+            // Extended maturity period: early return means the standard check below
+            // is unreachable for these coins. +1 matches standard Bitcoin convention
+            // and is consistent with transactiondesc.cpp display.
+            return std::max(0, (EXT_MATURITY_END - h) + COINBASE_MATURITY + 1 - chain_depth);
+        }
+    }
+    // Standard maturity for all coinbase outputs outside the extended period,
+    // and as fallback if confirmed state is unavailable.
+    return std::max(0, (COINBASE_MATURITY+1) - chain_depth);
+}
+/* Bitweb Params */
 
 bool CWallet::IsTxImmatureCoinBase(const CWalletTx& wtx) const
 {
