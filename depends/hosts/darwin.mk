@@ -67,7 +67,7 @@ darwin_LDFLAGS=-Wl,-platform_version,macos,$(OSX_MIN_VERSION),$(OSX_SDK_VERSION)
 ifneq ($(build_os),darwin)
 darwin_CFLAGS += -mlinker-version=$(LLD_VERSION)
 darwin_CXXFLAGS += -mlinker-version=$(LLD_VERSION)
-darwin_LDFLAGS += -Wl,-no_adhoc_codesign -fuse-ld=lld
+darwin_LDFLAGS += -fuse-ld=lld
 endif
 
 darwin_release_CFLAGS=-O2
@@ -79,4 +79,4 @@ darwin_debug_CXXFLAGS=$(darwin_debug_CFLAGS)
 darwin_cmake_system_name=Darwin
 # Darwin version, which corresponds to OSX_MIN_VERSION.
 # See https://en.wikipedia.org/wiki/Darwin_(operating_system)
-darwin_cmake_system_version=20.1
+darwin_cmake_system_version=22.1
