@@ -263,6 +263,8 @@ mkdir -p "$DISTSRC"
             mv build/bitweb-win64-setup.exe "${OUTDIR}/${DISTNAME}-win64-setup.exe"
             ;;
         *darwin*)
+            find build -name 'cmake_install.cmake' \
+                -exec sed -i 's| -u -r | |g' {} +
             cmake --build build -j "$JOBS" -t deploy ${V:+--verbose}
             mv build/dist/bitweb-macos-app.zip "${OUTDIR}/${DISTNAME}-${HOST}.zip"
             ;;
