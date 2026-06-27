@@ -97,7 +97,7 @@
    <item row="3" column="1" alignment="Qt::AlignTop">
     <widget class="QLabel" name="address_content">
      <property name="text">
-      <string notr="true">bc1…</string>
+      <string notr="true">web1…</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
