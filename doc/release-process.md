@@ -203,7 +203,7 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
 
 - Announce the release:
 
-  - Bitweb Core release list https://bitwebcore.net/en/releases/
+  - Bitweb Core release list https://bitwebcore.net/en/blog/
 
   - Bitweb Core X https://x.com/Bitweb_Project
 
