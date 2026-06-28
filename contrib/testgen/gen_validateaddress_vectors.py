@@ -7,11 +7,11 @@ Usage:
 
     # Print generated blocks to stdout (inspect before applying):
     python3 gen_validateaddress_vectors.py
-    python3 gen_validateaddress_vectors.py --hrp xbt
+    python3 gen_validateaddress_vectors.py --hrp web
 
     # Apply directly to rpc_validateaddress.py (replaces INVALID_DATA and VALID_DATA in-place):
     python3 gen_validateaddress_vectors.py --apply
-    python3 gen_validateaddress_vectors.py --hrp xbt --apply
+    python3 gen_validateaddress_vectors.py --hrp web --apply
 
     The script can also be run from test/functional/ - it locates
     test_framework and rpc_validateaddress.py automatically in both cases.
@@ -74,7 +74,7 @@ _TARGET_CANDIDATES = [
     os.path.join(_here, "rpc_validateaddress.py"),
 ]
 
-DEFAULT_HRP = "bte"
+DEFAULT_HRP = "web"
 
 BECH32_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
