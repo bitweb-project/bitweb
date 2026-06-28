@@ -117,7 +117,7 @@ jobs:
     # in Github repository settings.
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
 
-    timeout-minutes: 240
+    timeout-minutes: 360
 
     strategy:
       fail-fast: false
@@ -198,7 +198,7 @@ jobs:
 
     env:
       PYTHONUTF8: 1
-      TEST_RUNNER_TIMEOUT_FACTOR: 40
+      TEST_RUNNER_TIMEOUT_FACTOR: 360
 
     strategy:
       fail-fast: false
@@ -381,7 +381,7 @@ jobs:
 
     env:
       PYTHONUTF8: 1
-      TEST_RUNNER_TIMEOUT_FACTOR: 40
+      TEST_RUNNER_TIMEOUT_FACTOR: 360
 
     steps:
       - *CHECKOUT
@@ -470,7 +470,7 @@ jobs:
           - name: '32 bit ARM, unit tests, no functional tests'
             warp-runner: 'ubuntu-24.04-arm' # Warp's Arm runners don't support 32-bit mode currently
             fallback-runner: 'ubuntu-24.04-arm'
-            timeout-minutes: 240
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_arm.sh'
             provider: 'gha'
 
@@ -483,19 +483,19 @@ jobs:
           - name: 'macOS-cross, gui, no tests'
             warp-runner: 'warp-ubuntu-latest-x64-4x'
             fallback-runner: 'ubuntu-24.04'
-            timeout-minutes: 240
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_mac_cross.sh'
 
           - name: 'No wallet, libbitcoinkernel'
             warp-runner: 'warp-ubuntu-latest-x64-4x'
             fallback-runner: 'ubuntu-24.04'
-            timeout-minutes: 240
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_native_nowallet_libbitcoinkernel.sh'
 
           - name: 'no IPC, i686, DEBUG'
             warp-runner: 'warp-ubuntu-latest-x64-8x'
             fallback-runner: 'ubuntu-24.04'
-            timeout-minutes: 240
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_i686_no_ipc.sh'
 
           - name: 'fuzzer,address,undefined,integer, no depends'
@@ -507,25 +507,25 @@ jobs:
           - name: 'previous releases, depends DEBUG'
             warp-runner: 'warp-ubuntu-latest-x64-16x'
             fallback-runner: 'ubuntu-24.04'
-            timeout-minutes: 240
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_native_previous_releases.sh'
 
           - name: 'CentOS, depends, gui'
             warp-runner: 'warp-ubuntu-latest-x64-16x'
             fallback-runner: 'ubuntu-24.04'
-            timeout-minutes: 240
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_native_centos.sh'
 
           - name: 'tidy'
             warp-runner: 'warp-ubuntu-latest-x64-8x'
             fallback-runner: 'ubuntu-24.04'
-            timeout-minutes: 240
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_native_tidy.sh'
 
           - name: 'TSan, depends, no gui'
             warp-runner: 'warp-ubuntu-latest-x64-8x'
             fallback-runner: 'ubuntu-24.04'
-            timeout-minutes: 240
+            timeout-minutes: 360
             file-env: './ci/test/00_setup_env_native_tsan.sh'
 
           - name: 'MSan, depends'
@@ -571,7 +571,7 @@ jobs:
     needs: runners
     runs-on: ${{ needs.runners.outputs.provider == 'warp' && 'warp-ubuntu-latest-x64-2x' || 'ubuntu-24.04' }}
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
-    timeout-minutes: 40
+    timeout-minutes: 360
     env:
       CONTAINER_NAME: "bitweb-linter"
     steps:

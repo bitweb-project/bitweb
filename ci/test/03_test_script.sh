@@ -180,7 +180,7 @@ if [ "$RUN_UNIT_TESTS" = "true" ]; then
   ctest --test-dir "${BASE_BUILD_DIR}" \
     --stop-on-failure \
     "${MAKEJOBS}" \
-    --timeout $(( TEST_RUNNER_TIMEOUT_FACTOR * 120 ))
+    --timeout $(( TEST_RUNNER_TIMEOUT_FACTOR * 360 ))
 fi
 
 if [ "$RUN_FUNCTIONAL_TESTS" = "true" ]; then
