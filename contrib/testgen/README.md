@@ -15,12 +15,12 @@ test/functional/rpc_validateaddress.py for an arbitrary bech32 HRP.
     # Print generated blocks to stdout (inspect before applying):
     chmod +x gen_validateaddress_vectors.py
     ./gen_validateaddress_vectors.py
-    ./gen_validateaddress_vectors.py --hrp bte
+    ./gen_validateaddress_vectors.py --hrp web
 
     # Patch rpc_validateaddress.py in-place (recommended):
     chmod +x gen_validateaddress_vectors.py
     ./gen_validateaddress_vectors.py --apply
-    ./gen_validateaddress_vectors.py --hrp bte --apply
+    ./gen_validateaddress_vectors.py --hrp web --apply
 
 ### regenerate_test_data.py ###
 Regenerates bitweb-tx utility test data (.hex / .json).
