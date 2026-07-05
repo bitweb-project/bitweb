@@ -143,7 +143,8 @@ static RPCHelpMan getprivatebroadcastinfo()
 {
     return RPCHelpMan{
         "getprivatebroadcastinfo",
-        "Returns information about transactions that are currently being privately broadcast.\n",
+        "Returns information about transactions that are currently being privately broadcast.\n"
+        "This method is only available when running with -privatebroadcast enabled.\n",
         {},
         RPCResult{
             RPCResult::Type::OBJ, "", "",
@@ -155,6 +156,7 @@ static RPCHelpMan getprivatebroadcastinfo()
                                 {RPCResult::Type::STR_HEX, "txid", "The transaction hash in hex"},
                                 {RPCResult::Type::STR_HEX, "wtxid", "The transaction witness hash in hex"},
                                 {RPCResult::Type::STR_HEX, "hex", "The serialized, hex-encoded transaction data"},
+                                {RPCResult::Type::NUM_TIME, "time_added", "The time this transaction was added to the private broadcast queue (seconds since epoch)"},
                                 {RPCResult::Type::ARR, "peers", "Per-peer send and acknowledgment information for this transaction",
                                     {
                                         {RPCResult::Type::OBJ, "", "",
@@ -175,6 +177,12 @@ static RPCHelpMan getprivatebroadcastinfo()
         {
             const NodeContext& node{EnsureAnyNodeContext(request.context)};
             const PeerManager& peerman{EnsurePeerman(node)};
+            // BACKPORT (upstream bitcoin/bitcoin commit 7b821ef9b7, PR #35267; not yet in
+            // 31.x as of 2026-07-04): DO NOT DROP ON NEXT UPSTREAM MERGE/REBASE.
+            if (!peerman.GetInfo().private_broadcast) {
+                throw JSONRPCError(RPC_METHOD_NOT_FOUND, "Private broadcast is not enabled. Ensure you're running Bitcoin Core with -privatebroadcast=1.");
+            }
+
             const auto txs{peerman.GetPrivateBroadcastInfo()};
 
             UniValue transactions(UniValue::VARR);
@@ -183,6 +191,7 @@ static RPCHelpMan getprivatebroadcastinfo()
                 o.pushKV("txid", tx_info.tx->GetHash().ToString());
                 o.pushKV("wtxid", tx_info.tx->GetWitnessHash().ToString());
                 o.pushKV("hex", EncodeHexTx(*tx_info.tx));
+                o.pushKV("time_added", TicksSinceEpoch<std::chrono::seconds>(tx_info.time_added));
                 UniValue peers(UniValue::VARR);
                 for (const auto& peer : tx_info.peers) {
                     UniValue p(UniValue::VOBJ);
@@ -209,7 +218,8 @@ static RPCHelpMan abortprivatebroadcast()
     return RPCHelpMan{
         "abortprivatebroadcast",
         "Abort private broadcast attempts for a transaction currently being privately broadcast.\n"
-        "The transaction will be removed from the private broadcast queue.\n",
+        "The transaction will be removed from the private broadcast queue.\n"
+        "This method is only available when running with -privatebroadcast enabled.\n",
         {
             {"id", RPCArg::Type::STR_HEX, RPCArg::Optional::NO, "A transaction identifier to abort. It will be matched against both txid and wtxid for all transactions in the private broadcast queue.\n"
                                                                 "If the provided id matches a txid that corresponds to multiple transactions with different wtxids, multiple transactions will be removed and returned."},
@@ -234,10 +244,15 @@ static RPCHelpMan abortprivatebroadcast()
         },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
         {
-            const uint256 id{ParseHashV(self.Arg<UniValue>("id"), "id")};
-
             const NodeContext& node{EnsureAnyNodeContext(request.context)};
             PeerManager& peerman{EnsurePeerman(node)};
+            // BACKPORT (upstream bitcoin/bitcoin commit 7b821ef9b7, PR #35267; not yet in
+            // 31.x as of 2026-07-04): DO NOT DROP ON NEXT UPSTREAM MERGE/REBASE.
+            if (!peerman.GetInfo().private_broadcast) {
+                throw JSONRPCError(RPC_METHOD_NOT_FOUND, "Private broadcast is not enabled. Ensure you're running Bitcoin Core with -privatebroadcast=1.");
+            }
+
+            const uint256 id{ParseHashV(self.Arg<UniValue>("id"), "id")};
 
             const auto removed_txs{peerman.AbortPrivateBroadcast(id)};
             if (removed_txs.empty()) {

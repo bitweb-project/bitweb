@@ -1854,6 +1854,7 @@ PeerManagerInfo PeerManagerImpl::GetInfo() const
     return PeerManagerInfo{
         .median_outbound_time_offset = m_outbound_time_offsets.Median(),
         .ignores_incoming_txs = m_opts.ignore_incoming_txs,
+        .private_broadcast = m_opts.private_broadcast,
     };
 }
 
@@ -1868,7 +1869,8 @@ std::vector<CTransactionRef> PeerManagerImpl::AbortPrivateBroadcast(const uint25
     std::vector<CTransactionRef> removed_txs;
 
     size_t connections_cancelled{0};
-    for (const auto& [tx, _] : snapshot) {
+    for (const auto& tx_info : snapshot) {
+        const CTransactionRef& tx{tx_info.tx};
         if (tx->GetHash().ToUint256() != id && tx->GetWitnessHash().ToUint256() != id) continue;
         if (const auto peer_acks{m_tx_for_private_broadcast.Remove(tx)}) {
             removed_txs.push_back(tx);
@@ -3914,9 +3916,18 @@ void PeerManagerImpl::ProcessMessage(Peer& peer, CNode& pfrom, const std::string
     }
 
     if (msg_type == NetMsgType::SENDCMPCT) {
-        bool sendcmpct_hb{false};
+        // BACKPORT (upstream bitcoin/bitcoin PR #35550, commit 2d0dce0af5; not yet in 31.x
+        // as of 2026-07-04): DO NOT DROP ON NEXT UPSTREAM MERGE/REBASE.
+        uint8_t sendcmpct_hb{0};
         uint64_t sendcmpct_version{0};
         vRecv >> sendcmpct_hb >> sendcmpct_version;
+
+        // BIP152: the first integer is interpreted as a boolean and MUST have a
+        // value of either 1 or 0.
+        if (sendcmpct_hb > 1) {
+            Misbehaving(peer, "invalid sendcmpct announce field");
+            return;
+        }
 
         // Only support compact block relay with witnesses
         if (sendcmpct_version != CMPCTBLOCKS_VERSION) return;

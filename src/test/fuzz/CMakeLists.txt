@@ -97,6 +97,7 @@ add_executable(fuzz
   pow_cache_check.cpp # Bitweb Params: fuzz CheckProofOfWorkCached
   prevector.cpp
   primitives_transaction.cpp
+  private_broadcast.cpp
   process_message.cpp
   process_messages.cpp
   protocol.cpp

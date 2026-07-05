@@ -30,6 +30,20 @@
 class PrivateBroadcast
 {
 public:
+    // BACKPORT (upstream bitcoin/bitcoin commits 999d18ab1ca6 + 325afe664d10; not yet in
+    // 31.x as of 2026-07-04): DO NOT DROP ON NEXT UPSTREAM MERGE/REBASE.
+    // Fixes a freshly-added, not-yet-picked private-broadcast transaction being immediately
+    // considered stale (Priority::last_confirmed defaulted to the Unix epoch), causing an
+    // unnecessary extra rebroadcast attempt seconds after the original send (upstream #34862).
+
+    /// If a transaction is not sent to any peer for this duration,
+    /// then we consider it stale / for rebroadcasting.
+    static constexpr auto INITIAL_STALE_DURATION{5min};
+
+    /// If a transaction is not received back from the network for this duration
+    /// after it is broadcast, then we consider it stale / for rebroadcasting.
+    static constexpr auto STALE_DURATION{1min};
+
     struct PeerSendInfo {
         CService address;
         NodeClock::time_point sent;
@@ -38,6 +52,7 @@ public:
 
     struct TxBroadcastInfo {
         CTransactionRef tx;
+        NodeClock::time_point time_added;
         std::vector<PeerSendInfo> peers;
     };
 
@@ -64,7 +79,9 @@ public:
      * Pick the transaction with the fewest send attempts, and confirmations,
      * and oldest send/confirm times.
      * @param[in] will_send_to_nodeid Will remember that the returned transaction
-     * was picked for sending to this node.
+     * was picked for sending to this node. Calling this method more than once with
+     * the same `will_send_to_nodeid` is not allowed because sending more than one
+     * transaction to one node would be a privacy leak.
      * @param[in] will_send_to_address Address of the peer to which this transaction
      * will be sent.
      * @return Most urgent transaction or nullopt if there are no transactions.
@@ -178,8 +195,16 @@ private:
     std::optional<TxAndSendStatusForNode> GetSendStatusByNode(const NodeId& nodeid)
         EXCLUSIVE_LOCKS_REQUIRED(m_mutex);
 
+    // BACKPORT (upstream 999d18ab1ca6, part of the stale-eval fix above): wraps the per-tx
+    // send-status vector together with the time the transaction was added, needed to apply
+    // INITIAL_STALE_DURATION before any send attempt has happened.
+    struct TxSendStatus {
+        const NodeClock::time_point time_added{NodeClock::now()};
+        std::vector<SendStatus> send_statuses;
+    };
+
     mutable Mutex m_mutex;
-    std::unordered_map<CTransactionRef, std::vector<SendStatus>, CTransactionRefHash, CTransactionRefComp>
+    std::unordered_map<CTransactionRef, TxSendStatus, CTransactionRefHash, CTransactionRefComp>
         m_transactions GUARDED_BY(m_mutex);
 };
 
