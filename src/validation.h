@@ -412,6 +412,47 @@ BlockValidationState TestBlockValidity(
 /** Check with the proof of work on each blockheader matches the value in nBits */
 bool HasValidProofOfWork(const std::vector<CBlockHeader>& headers, const Consensus::Params& consensusParams);
 
+/* Bitweb Params */
+/**
+ * Argon2id proof-of-work check for a single header, meant to be run
+ * through CCheckQueue so a batch of headers can be verified across
+ * several worker threads at once. Each header's PoW is independent of
+ * every other header in the batch -- only the hash computation itself is
+ * parallelized; link continuity and chainwork accounting happen
+ * afterwards, sequentially, in the original order.
+ *
+ * Verification goes through CheckProofOfWorkCached() (see pow_cache.h),
+ * which makes the cache bidirectional across header-sync phases: a header
+ * verified during PRESYNC's anti-DoS pass is already cached when the same
+ * header (same hash, same content) is re-sent from scratch for
+ * REDOWNLOAD, so REDOWNLOAD hits the cache instead of recomputing
+ * Argon2id. Sequential re-checks in CheckBlockHeader() benefit the same
+ * way.
+ */
+class CHeaderPoWCheck
+{
+private:
+    const CBlockHeader* m_header;
+    const Consensus::Params* m_params;
+
+public:
+    CHeaderPoWCheck(const CBlockHeader& header, const Consensus::Params& params)
+        : m_header(&header), m_params(&params) {}
+
+    std::optional<bool> operator()() const;
+};
+
+//! Worker threads dedicated to verifying header PoW in parallel. Kept
+//! small and independent of hardware_concurrency(): Argon2id is
+//! memory-hard, so gains past a handful of threads are eaten by memory
+//! bandwidth contention, and this queue competes for CPU with
+//! m_script_check_queue and the rest of the node.
+constexpr unsigned int MAX_HEADER_POW_CHECK_THREADS{6};
+
+//! Below this many headers, queue dispatch overhead isn't worth it.
+constexpr size_t HEADER_POW_PARALLEL_THRESHOLD{32};
+/* Bitweb Params */
+
 /** Check if a block has been mutated (with respect to its merkle root and witness commitments). */
 bool IsBlockMutated(const CBlock& block, bool check_witness_root);
 

@@ -16,7 +16,7 @@
 #include <kernel/messagestartchars.h>
 #include <kernel/notifications_interface.h>
 #include <logging.h>
-#include <pow.h>
+#include <pow_cache.h> // Bitweb Params
 #include <primitives/block.h>
 #include <primitives/transaction.h>
 #include <random.h>
@@ -1046,8 +1046,12 @@ bool BlockManager::ReadBlock(CBlock& block, const FlatFilePos& pos, const std::o
     const auto block_hash{block.GetHash()};
 
      /* Bitweb Params */
-    // Check the header
-    if (!CheckProofOfWork(block.GetArgon2idPoWHash(), block.nBits, GetConsensus())) {
+    // Check the header. [Bitweb] Cached via CheckProofOfWorkCached() --
+    // this block's PoW was almost certainly already verified once when it
+    // was first accepted (see pow_cache.h), so most getdata/RPC/reindex
+    // re-reads of historical blocks hit the cache instead of recomputing
+    // Argon2id.
+    if (!CheckProofOfWorkCached(block, GetConsensus())) {
         LogError("Errors in block header at %s while reading block", pos.ToString());
         return false;
     }

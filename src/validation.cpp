@@ -38,6 +38,7 @@
 #include <policy/settings.h>
 #include <policy/truc_policy.h>
 #include <pow.h>
+#include <pow_cache.h> // Bitweb Params
 #include <primitives/block.h>
 #include <primitives/transaction.h>
 #include <random.h>
@@ -73,6 +74,7 @@
 #include <ranges>
 #include <span>
 #include <string>
+#include <thread> // Bitweb Params
 #include <tuple>
 #include <utility>
 
@@ -3991,12 +3993,24 @@ void ChainstateManager::ReceivedBlockTransactions(const CBlock& block, CBlockInd
     }
 }
 
+// [Bitweb] CheckProofOfWorkCached() -- the HeaderPoWCache-backed choke
+// point used below by CheckBlockHeader(), CHeaderPoWCheck::operator(), and
+// HasValidProofOfWork()'s small-batch path -- lives in pow_cache.h/.cpp,
+// a standalone module with no knowledge of CBlockHeader beyond a forward
+// declaration; it depends on pow.h (for the plain CheckProofOfWork()), not
+// the other way around. It's a shared primitive: node/blockstorage.cpp's
+// ReadBlock() also calls it on every disk read. See pow_cache.h for the
+// full safety argument (positive-only, keyed on GetHash(), miss-safe
+// fallback) and pow_cache.cpp for the HeaderPoWCache class + singleton.
+
 /* Bitweb Params */
 static bool CheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
-    // Check proof of work matches claimed amount
-    if (fCheckPOW && !CheckProofOfWork(block.GetArgon2idPoWHash(), block.nBits, consensusParams))
+    // Check proof of work matches claimed amount.
+    // [Bitweb] Cached via CheckProofOfWorkCached() -- see its doc above.
+    if (fCheckPOW && !CheckProofOfWorkCached(block, consensusParams)) {
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "high-hash", "proof of work failed");
+    }
 
     return true;
 }
@@ -4190,10 +4204,57 @@ std::vector<unsigned char> ChainstateManager::GenerateCoinbaseCommitment(CBlock&
 }
 
 /* Bitweb Params */
+std::optional<bool> CHeaderPoWCheck::operator()() const
+{
+    // value is unused on failure; presence alone signals failure.
+    if (!CheckProofOfWorkCached(*m_header, *m_params)) {
+        return false;
+    }
+    return std::nullopt;
+}
+
+//! Queue used to verify header PoW across several worker threads at once.
+//! Not exposed outside this file: callers use HasValidProofOfWork(), and
+//! tests that need a queue build their own local CCheckQueue<CHeaderPoWCheck>
+//! instead of reaching into this singleton.
+static CCheckQueue<CHeaderPoWCheck>& GetHeaderPoWCheckQueue()
+{
+    // Constructed once, lazily, on first use, and lives for the rest of
+    // the process. Initialization of function-local statics is
+    // thread-safe since C++11, so no extra locking is needed here.
+    //
+    // total_participants is how many threads -- including the calling
+    // (master) thread itself, which always helps out via
+    // CCheckQueueControl::Complete(), same convention as -par's
+    // worker_threads_num -- will be hashing concurrently for one batch.
+    // One core is left free for the rest of the node whenever more than
+    // one core is available, so this never starves the system on small
+    // boxes (e.g. a Raspberry Pi).
+    const int cores{static_cast<int>(std::thread::hardware_concurrency())};
+    const int total_participants{std::clamp(cores > 1 ? cores - 1 : cores, 1, static_cast<int>(MAX_HEADER_POW_CHECK_THREADS))};
+    static CCheckQueue<CHeaderPoWCheck> queue{/*batch_size=*/64, total_participants - 1};
+    return queue;
+}
+
 bool HasValidProofOfWork(const std::vector<CBlockHeader>& headers, const Consensus::Params& consensusParams)
 {
-    return std::all_of(headers.cbegin(), headers.cend(),
-            [&](const auto& header) { return CheckProofOfWork(header.GetArgon2idPoWHash(), header.nBits, consensusParams);});
+    // Below the parallel-dispatch threshold, checked sequentially through
+    // the same CheckProofOfWorkCached() choke point CHeaderPoWCheck uses --
+    // so this path stays behaviorally identical to the queued one.
+    if (headers.size() < HEADER_POW_PARALLEL_THRESHOLD) {
+        return std::all_of(headers.cbegin(), headers.cend(), [&](const auto& header) {
+            return CheckProofOfWorkCached(header, consensusParams);
+        });
+    }
+
+    CCheckQueueControl<CHeaderPoWCheck> control(GetHeaderPoWCheckQueue());
+    std::vector<CHeaderPoWCheck> checks;
+    checks.reserve(headers.size());
+    for (const auto& header : headers) {
+        checks.emplace_back(header, consensusParams);
+    }
+    control.Add(std::move(checks));
+    return !control.Complete().has_value();
 }
 /* Bitweb Params */
 

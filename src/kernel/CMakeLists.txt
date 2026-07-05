@@ -43,6 +43,7 @@ add_library(bitcoinkernel
   ../policy/settings.cpp
   ../policy/truc_policy.cpp
   ../pow.cpp
+  ../pow_cache.cpp # Bitweb Params
   ../primitives/block.cpp
   ../primitives/transaction.cpp
   ../pubkey.cpp
