@@ -6,7 +6,6 @@
 
 WARNING:
 This test uses 4GB of disk space.
-This test takes 30 mins or more (up to 2 hours)
 """
 import os
 
@@ -293,6 +292,54 @@ class PruneTest(BitcoinTestFramework):
         self.log.info(f"Usage should be below target: {usage}")
         assert_greater_than(550, usage)
 
+    def nodes_linked(self, a, b):
+        """Check whether nodes[a] and nodes[b] are currently connected to
+        each other (mirrors the subversion-matching logic connect_nodes()
+        itself uses internally)."""
+        subver_a = self.nodes[a].getnetworkinfo()['subversion']
+        subver_b = self.nodes[b].getnetworkinfo()['subversion']
+        linked_from_b = any(p['subver'] == subver_a for p in self.nodes[b].getpeerinfo())
+        linked_from_a = any(p['subver'] == subver_b for p in self.nodes[a].getpeerinfo())
+        return linked_from_a and linked_from_b
+
+    def wait_for_height_with_reconnect(self, node_a, node_b, height_getter, goal_height, timeout=1200):
+        """wait_until() variant for redownload/reorg waits that can outlive
+        a single P2P connection.
+
+        BACKPORT-ADJACENT FIX (bitweb-local, not from upstream bitcoin/bitcoin):
+        connect_nodes()/addnode("onetry") establishes a ConnectionType::MANUAL
+        link. Manual connections are NOT retried by the node's own
+        ThreadOpenAddedConnections()/addrman outbound logic -- that automatic
+        reconnect only applies to `addnode add` (persistent) peers. If the
+        link stalls mid-transfer (net_processing.cpp BLOCK_STALLING_TIMEOUT
+        fires -> "Timeout downloading block ..., disconnecting"), the socket
+        is closed permanently and no one ever calls connect_nodes() again.
+        Under a fast/idle machine this basically never triggers (233 blocks
+        relay in a couple seconds), which is why the test is stable when run
+        alone -- but under full test-suite CPU/disk contention the transfer
+        can slow down enough to hit the stall timeout, and the node then
+        waits forever for blocks that will never arrive.
+        This has nothing to do with the m_blocks_unlinked/AddUnlinkedBlock
+        C++ backport; it reproduces identically with that backport fully
+        reverted, as long as the invalidateblock height stays at 1295 (i.e.
+        the redownload is made large enough to be contention-sensitive).
+        DO NOT replace this with a plain self.wait_until(...) on
+        height_getter alone -- that reintroduces the permanent hang.
+        """
+        def check():
+            if height_getter() >= goal_height:
+                return True
+            if not self.nodes_linked(node_a, node_b):
+                self.log.info(
+                    f"nodes[{node_a}]<->nodes[{node_b}] link is down "
+                    f"(likely BLOCK_STALLING_TIMEOUT disconnect) while still "
+                    f"below goal height {goal_height}; reconnecting"
+                )
+                self.connect_nodes(node_a, node_b)
+            return False
+
+        self.wait_until(check, timeout=timeout, check_interval=5)
+
     def reorg_back(self):
         # Verify that a block on the old main chain fork has been pruned away
         assert_raises_rpc_error(-1, "Block not available (pruned data)", self.nodes[2].getblock, self.forkhash)
@@ -307,8 +354,15 @@ class PruneTest(BitcoinTestFramework):
         self.nodes[2].getblock(self.nodes[2].getblockhash(self.forkheight))
 
         first_reorg_height = self.nodes[2].getblockcount()
-        curchainhash = self.nodes[2].getblockhash(self.mainchainheight)
-        self.nodes[2].invalidateblock(curchainhash)
+        # BACKPORT (upstream bitcoin/bitcoin PR #35070; not yet in 31.x as of 2026-07-04):
+        # invalidate the block at height 1295 (not the mainchain tip) so this test actually
+        # exercises the m_blocks_unlinked duplicate-entry path fixed by AddUnlinkedBlock()
+        # in node/blockstorage.cpp and validation.cpp. Without that fix, this reliably fails
+        # an invariant assert in CheckBlockIndex() when run with -checkblockindex.
+        # DO NOT DROP ON NEXT UPSTREAM MERGE/REBASE, and do not revert this back to
+        # invalidating self.mainchainheight -- that reverts test coverage for the fix above.
+        block_hash_1295 = self.nodes[2].getblockhash(1295)
+        self.nodes[2].invalidateblock(block_hash_1295)
         goalbestheight = self.mainchainheight
         goalbesthash = self.mainchainhash2
 
@@ -323,7 +377,7 @@ class PruneTest(BitcoinTestFramework):
         if self.nodes[2].getblockcount() < self.mainchainheight:
             blocks_to_mine = first_reorg_height + 1 - self.mainchainheight
             self.log.info(f"Rewind node 0 to prev main chain to mine longer chain to trigger redownload. Blocks needed: {blocks_to_mine}")
-            self.nodes[0].invalidateblock(curchainhash)
+            self.nodes[0].invalidateblock(block_hash_1295)
             assert_equal(self.nodes[0].getblockcount(), self.mainchainheight)
             assert_equal(self.nodes[0].getbestblockhash(), self.mainchainhash2)
             # FIX: node 0's tip timestamp >> real time; set mocktime on node 0 (to generate)
@@ -333,8 +387,18 @@ class PruneTest(BitcoinTestFramework):
             goalbestheight = first_reorg_height + 1
 
         self.log.info("Verify node 2 reorged back to the main chain, some blocks of which it had to redownload")
-        # Wait for Node 2 to reorg to proper height
-        self.wait_until(lambda: self.nodes[2].getblockcount() >= goalbestheight, timeout=900)
+        # Wait for Node 2 to reorg to proper height.
+        # FIX: use the reconnect-aware wait instead of a plain wait_until --
+        # see wait_for_height_with_reconnect() docstring for why. The 233-block
+        # redownload triggered above can stall out node0<->node2's manual P2P
+        # link under load; a plain wait_until(timeout=N) just hangs until N
+        # regardless of how large N is, since nothing ever fetches the peer back.
+        self.wait_for_height_with_reconnect(
+            node_a=0, node_b=2,
+            height_getter=self.nodes[2].getblockcount,
+            goal_height=goalbestheight,
+            timeout=1200,
+        )
         reset_mocktime([self.nodes[0], self.nodes[2]])  # FIX: reset after node 2 has finished reorg
         assert_equal(self.nodes[2].getbestblockhash(), goalbesthash)
         # Verify we can now have the data for a block previously pruned
@@ -442,9 +506,15 @@ class PruneTest(BitcoinTestFramework):
         # Use restart_node_mocktime to pass -mocktime at startup, cleared immediately.
         self.restart_node_mocktime(2, extra_args=["-prune=550"])
 
-        wallet_info = self.nodes[2].getwalletinfo()
-        self.wait_until(lambda: wallet_info["scanning"] == False)
-        self.wait_until(lambda: wallet_info["lastprocessedblock"]["height"] == self.nodes[2].getblockcount())
+        # BACKPORT (upstream bitcoin/bitcoin PR #35070, commit 0852925bd8d4; not yet in 31.x
+        # as of 2026-07-05): re-fetch getwalletinfo() inside each wait_until predicate instead
+        # of checking a snapshot captured once beforehand. The old `wallet_info = ...` pattern
+        # froze the dict at call time, so the lambda kept re-checking the same stale values
+        # forever -- passing trivially if scanning was already False at capture time, or
+        # hanging until timeout if it was True, regardless of the wallet's real progress.
+        # DO NOT DROP ON NEXT UPSTREAM MERGE/REBASE.
+        self.wait_until(lambda: self.nodes[2].getwalletinfo()["scanning"] == False)
+        self.wait_until(lambda: self.nodes[2].getwalletinfo()["lastprocessedblock"]["height"] == self.nodes[2].getblockcount())
 
         # check that wallet loads successfully when restarting a pruned node after IBD.
         # this was reported to fail in #7494.
@@ -452,9 +522,8 @@ class PruneTest(BitcoinTestFramework):
         # (tip timestamps >> real clock); cleared via setmocktime(0) right after.
         self.restart_node_mocktime(5, extra_args=["-prune=550", "-blockfilterindex=1"])
 
-        wallet_info = self.nodes[5].getwalletinfo()
-        self.wait_until(lambda: wallet_info["scanning"] == False)
-        self.wait_until(lambda: wallet_info["lastprocessedblock"]["height"] == self.nodes[0].getblockcount())
+        self.wait_until(lambda: self.nodes[5].getwalletinfo()["scanning"] == False)
+        self.wait_until(lambda: self.nodes[5].getwalletinfo()["lastprocessedblock"]["height"] == self.nodes[0].getblockcount())
 
     def run_test(self):
         self.log.info("Warning! This test requires 4GB of disk space")
