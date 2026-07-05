@@ -3727,9 +3727,20 @@ void PeerManagerImpl::ProcessMessage(CNode& pfrom, const std::string& msg_type, 
     }
 
     if (msg_type == NetMsgType::SENDCMPCT) {
-        bool sendcmpct_hb{false};
+        // BACKPORT (upstream bitcoin/bitcoin PR #35550, commit 2d0dce0af5; not in
+        // official 30.x/31.x as of 2026-07-05): DO NOT DROP ON NEXT UPSTREAM MERGE/REBASE.
+        // Read the announce field as an integer instead of bool so out-of-range values can
+        // be detected and treated as misbehavior, per BIP152.
+        uint8_t sendcmpct_hb{0};
         uint64_t sendcmpct_version{0};
         vRecv >> sendcmpct_hb >> sendcmpct_version;
+
+        // BIP152: the first integer is interpreted as a boolean and MUST have a
+        // value of either 1 or 0.
+        if (sendcmpct_hb > 1) {
+            Misbehaving(*peer, "invalid sendcmpct announce field");
+            return;
+        }
 
         // Only support compact block relay with witnesses
         if (sendcmpct_version != CMPCTBLOCKS_VERSION) return;
