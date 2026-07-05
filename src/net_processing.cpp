@@ -3020,31 +3020,6 @@ void PeerManagerImpl::ProcessHeadersMessage(CNode& pfrom, Peer& peer,
         // So just check whether we still have headers that we need to process,
         // or not.
         if (headers.empty()) {
-            /* Bitweb Params */
-            // Bitweb uses Argon2id as the PoW algorithm. Unlike SHA-256,
-            // Argon2id validation is CPU and memory intensive 7980xe (~700 hashes per core/sec),
-            // which means headers verification takes significantly longer per batch.
-            // As the chain grows, the PRESYNC phase spans more and more batches,
-            // and the original one-shot timeout (set once at sync start) becomes
-            // inadequate - it expires long before PRESYNC+REDOWNLOAD can complete
-            // on an honest peer.
-            //
-            // Tuning the global timeout is not a solution: a value large enough
-            // for today's chain length will be too small tomorrow as more blocks
-            // are mined, requiring constant manual adjustment.
-            //
-            // The correct fix is a sliding window: reset the timeout after each
-            // successfully received batch. If a peer stops responding for more
-            // than HEADERS_RESPONSE_TIME (4 min), it gets disconnected. A peer
-            // that keeps sending valid batches will never be disconnected
-            // prematurely, regardless of chain length.
-            //
-            // This path is only active during initial sync (IBD). After sync
-            // completes, m_headers_sync_timeout is set to max() and this entire
-            // mechanism is disabled.
-            if (peer.m_headers_sync_timeout != std::chrono::microseconds::max()) {
-                peer.m_headers_sync_timeout = GetTime<std::chrono::microseconds>() + HEADERS_RESPONSE_TIME;
-            }
             return;
         }
 
@@ -3126,17 +3101,6 @@ void PeerManagerImpl::ProcessHeadersMessage(CNode& pfrom, Peer& peer,
 
     if (processed && received_new_header) {
         LogBlockHeader(*pindexLast, pfrom, /*via_compact_block=*/false);
-    }
-
-    /* Bitweb Params */
-    // Bitweb patch for Argon2id extend the timeout after each successfully validated
-    // batch during REDOWNLOAD phase and normal IBD headers sync. Headers reaching this
-    // point have already passed CheckHeadersPoW and ProcessNewBlockHeaders,
-    // so the peer has proven it is doing real work. Resetting the deadline
-    // here implements the same sliding-window logic as in the PRESYNC branch
-    // above - the peer gets HEADERS_RESPONSE_TIME to deliver the next batch.
-    if (peer.m_headers_sync_timeout != std::chrono::microseconds::max()) {
-        peer.m_headers_sync_timeout = GetTime<std::chrono::microseconds>() + HEADERS_RESPONSE_TIME;
     }
 
     // Consider fetching more headers if we are not using our headers-sync mechanism.

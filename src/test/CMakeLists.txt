@@ -80,6 +80,7 @@ add_executable(test_bitweb
   pool_tests.cpp
   pow_tests.cpp
   pow_argon2id_tests.cpp # Bitweb Params
+  pow_cache_tests.cpp # Bitweb Params
   permitted_difficulty_tests.cpp # Bitweb Params
   prevector_tests.cpp
   private_broadcast_tests.cpp
