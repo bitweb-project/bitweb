@@ -2095,7 +2095,7 @@ static RPCHelpMan getblockstats()
                 // The Genesis block and the repeated BIP30 block coinbases don't change the UTXO
                 // set counts, so they have to be excluded from the statistics
                 // Bitweb Params
-                // remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+                // remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
                 /*
                 if (pindex.nHeight == 0 || (IsBIP30Repeat(pindex) && tx->IsCoinBase())) continue;
                 */
