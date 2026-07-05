@@ -126,10 +126,10 @@ void PruneBlockFilesManual(Chainstate& active_chainstate, int nManualPruneHeight
 struct MempoolAcceptResult {
     /** Used to indicate the results of mempool validation. */
     enum class ResultType {
-        VALID, //!> Fully validated, valid.
-        INVALID, //!> Invalid.
-        MEMPOOL_ENTRY, //!> Valid, transaction was already in the mempool.
-        DIFFERENT_WITNESS, //!> Not validated. A same-txid-different-witness tx (see m_other_wtxid) already exists in the mempool and was not replaced.
+        VALID, //!< Fully validated, valid.
+        INVALID, //!< Invalid.
+        MEMPOOL_ENTRY, //!< Valid, transaction was already in the mempool.
+        DIFFERENT_WITNESS, //!< Not validated. A same-txid-different-witness tx (see m_other_wtxid) already exists in the mempool and was not replaced.
     };
     /** Result type. Present in all MempoolAcceptResults. */
     const ResultType m_result_type;
@@ -1401,14 +1401,14 @@ bool DeploymentEnabled(const ChainstateManager& chainman, DEP dep)
 }
 
 // Bitweb Params
-// remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+// remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
 /** Identifies blocks that overwrote an existing coinbase output in the UTXO set (see BIP30) */
 /*
 bool IsBIP30Repeat(const CBlockIndex& block_index);
 */
 
 /** Identifies blocks which coinbase output was subsequently overwritten in the UTXO set (see BIP30) */
-// remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+// remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
 /*
 bool IsBIP30Unspendable(const uint256& block_hash, int block_height);
 */

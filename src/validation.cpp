@@ -2322,7 +2322,7 @@ DisconnectResult Chainstate::DisconnectBlock(const CBlock& block, const CBlockIn
     // unwinds the blocks in reverse. As a result, the inconsistency is not discovered until the earlier
     // blocks with the duplicate coinbase transactions are disconnected.
     // Bitweb Params
-    // remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+    // remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
     /*
     bool fEnforceBIP30 = !((pindex->nHeight==91722 && pindex->GetBlockHash() == uint256{"00000000000271a2dc26e7667f8419f2e15416dc6955e5a6c6cdf3f2574dd08e"}) ||
                            (pindex->nHeight==91812 && pindex->GetBlockHash() == uint256{"00000000000af0aed4792b1acee3d966af36cf5def14935db8de83d6f9306f2f"}));
@@ -2334,7 +2334,7 @@ DisconnectResult Chainstate::DisconnectBlock(const CBlock& block, const CBlockIn
         Txid hash = tx.GetHash();
         bool is_coinbase = tx.IsCoinBase();
         // Bitwb Params
-        // remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+        // remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
         /*
         bool is_bip30_exception = (is_coinbase && !fEnforceBIP30);
         */
@@ -2348,7 +2348,7 @@ DisconnectResult Chainstate::DisconnectBlock(const CBlock& block, const CBlockIn
                 bool is_spent = view.SpendCoin(out, &coin);
                 if (!is_spent || tx.vout[o] != coin.out || pindex->nHeight != coin.nHeight || is_coinbase != coin.fCoinBase) {
                     // Bitweb Params
-                    // remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+                    // remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
                     /*
                     if (!is_bip30_exception) {
                     */
@@ -2528,7 +2528,7 @@ bool Chainstate::ConnectBlock(const CBlock& block, BlockValidationState& state, 
     // two in the chain that violate it. This prevents exploiting the issue against nodes during their
     // initial block download.
     // Bitweb Params
-    // remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+    // remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
     // bool fEnforceBIP30 = !IsBIP30Repeat(*pindex);
     bool fEnforceBIP30 = true;
     // Once BIP34 activated it was not possible to create new duplicate coinbases and thus other than starting
@@ -2558,7 +2558,7 @@ bool Chainstate::ConnectBlock(const CBlock& block, BlockValidationState& state, 
     // will actually prevent ever creating any duplicate coinbases in the
     // future.
     // Bitweb Params
-    // remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+    // remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
     // static constexpr int BIP34_IMPLIES_BIP30_LIMIT = 1983702;
 
     // There is no potential to create a duplicate coinbase at block 209,921
@@ -2597,7 +2597,7 @@ bool Chainstate::ConnectBlock(const CBlock& block, BlockValidationState& state, 
     // consensus change that ensures coinbases at those heights cannot
     // duplicate earlier coinbases.
     // Bitweb Params
-    // remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+    // remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
     /*
     if (fEnforceBIP30 || pindex->nHeight >= BIP34_IMPLIES_BIP30_LIMIT) {
     */
@@ -6477,7 +6477,7 @@ Chainstate& ChainstateManager::ActivateExistingSnapshot(uint256 base_blockhash)
 }
 
 // Bitweb Params
-// remove BIP30 exepctions - we dont have that blocks sow we skip bip30 tx's
+// remove BIP30 exceptions - we don't have those blocks so we skip BIP30 tx's
 /*
 bool IsBIP30Repeat(const CBlockIndex& block_index)
 {
