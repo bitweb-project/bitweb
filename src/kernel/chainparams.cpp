@@ -121,8 +121,8 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].threshold = 3024; // 75%
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].period = 4032;
 
-        consensus.nMinimumChainWork = uint256("0000000000000000000000000000000000000000000000000000002c40eb39e9"); //65200
-        consensus.defaultAssumeValid = uint256("07381477d79626a69b3d3546d2e333bd5014b213fb59991dd27e71a4f6f4702e"); //65200
+        consensus.nMinimumChainWork = uint256("0000000000000000000000000000000000000000000000000000006875ae2312"); //69000
+        consensus.defaultAssumeValid = uint256("f7d7bc1f26d28853cc2d782bcbc8bc149d7b745c8f268e464774ff6d95df6f31"); //69000
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -178,6 +178,7 @@ public:
                 { 59782, uint256{"b8b609a39fd140217348701382f0b61d2e98a0357eff03177a544f6a24803ab7"}},
                 { 59955, uint256{"4c03be3f61e32be5f2cb9f5dfd7daf181baf07b52e0a7866d38a0d8423509f4b"}},
                 { 65200, uint256{"07381477d79626a69b3d3546d2e333bd5014b213fb59991dd27e71a4f6f4702e"}},
+                { 69000, uint256{"f7d7bc1f26d28853cc2d782bcbc8bc149d7b745c8f268e464774ff6d95df6f31"}},
             }
         };
         // Checkpoints restored
@@ -194,14 +195,20 @@ public:
                 .hash_serialized  = AssumeutxoHash{uint256{"cae07c774b278162352d4f1c3a6252672cd40c94e0d208a9e7aa1f4352da92df"}},
                 .m_chain_tx_count = 65355,
                 .blockhash        = consteval_ctor(uint256{"07381477d79626a69b3d3546d2e333bd5014b213fb59991dd27e71a4f6f4702e"}),
+            },
+            {
+                .height           = 69000,
+                .hash_serialized  = AssumeutxoHash{uint256{"a801080d082c339636b5eac07768a40ae24f5acd8d2781d474cf2280dc384817"}},
+                .m_chain_tx_count = 69166,
+                .blockhash        = consteval_ctor(uint256{"f7d7bc1f26d28853cc2d782bcbc8bc149d7b745c8f268e464774ff6d95df6f31"}),
             }
         };
 
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 07381477d79626a69b3d3546d2e333bd5014b213fb59991dd27e71a4f6f4702e
-            .nTime    = 1782048224,
-            .tx_count = 65355,
-            .dTxRate  = 0.003955907021327582,
+            // Data from RPC: getchaintxstats 4096 f7d7bc1f26d28853cc2d782bcbc8bc149d7b745c8f268e464774ff6d95df6f31
+            .nTime    = 1783310492,
+            .tx_count = 69166,
+            .dTxRate  = 0.003073079437018994,
         };
     }
 };
