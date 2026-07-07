@@ -106,7 +106,7 @@ private:
 
 void HeadersGeneratorSetup::FindProofOfWork(CBlockHeader& starting_header)
 {
-    while (!CheckProofOfWork(starting_header.GetHash(), starting_header.nBits, Params().GetConsensus())) {
+    while (!CheckProofOfWork(starting_header.GetArgon2idPoWHash(), starting_header.nBits, Params().GetConsensus())) {
         ++starting_header.nNonce;
     }
 }
