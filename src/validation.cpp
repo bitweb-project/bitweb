@@ -4229,30 +4229,22 @@ std::optional<bool> CHeaderPoWCheck::operator()() const
     return std::nullopt;
 }
 
-//! Queue used to verify header PoW across several worker threads at once.
-//! Not exposed outside this file: callers use HasValidProofOfWork(), and
-//! tests that need a queue build their own local CCheckQueue<CHeaderPoWCheck>
-//! instead of reaching into this singleton.
-static CCheckQueue<CHeaderPoWCheck>& GetHeaderPoWCheckQueue()
+//! Number of worker threads to hand CCheckQueue<CHeaderPoWCheck> at
+//! construction time. total_participants is how many threads -- including
+//! the calling (master) thread itself, which always helps out via
+//! CCheckQueueControl::Complete(), same convention as -par's
+//! worker_threads_num -- will be hashing concurrently for one batch. One
+//! core is left free for the rest of the node whenever more than one core
+//! is available, so this never starves the system on small boxes (e.g. a
+//! Raspberry Pi).
+static int HeaderPoWCheckQueueWorkerThreads()
 {
-    // Constructed once, lazily, on first use, and lives for the rest of
-    // the process. Initialization of function-local statics is
-    // thread-safe since C++11, so no extra locking is needed here.
-    //
-    // total_participants is how many threads -- including the calling
-    // (master) thread itself, which always helps out via
-    // CCheckQueueControl::Complete(), same convention as -par's
-    // worker_threads_num -- will be hashing concurrently for one batch.
-    // One core is left free for the rest of the node whenever more than
-    // one core is available, so this never starves the system on small
-    // boxes (e.g. a Raspberry Pi).
     const int cores{static_cast<int>(std::thread::hardware_concurrency())};
     const int total_participants{std::clamp(cores > 1 ? cores - 1 : cores, 1, static_cast<int>(MAX_HEADER_POW_CHECK_THREADS))};
-    static CCheckQueue<CHeaderPoWCheck> queue{/*batch_size=*/64, total_participants - 1};
-    return queue;
+    return total_participants - 1;
 }
 
-bool HasValidProofOfWork(const std::vector<CBlockHeader>& headers, const Consensus::Params& consensusParams)
+bool HasValidProofOfWork(const std::vector<CBlockHeader>& headers, const Consensus::Params& consensusParams, CCheckQueue<CHeaderPoWCheck>& queue)
 {
     // Below the parallel-dispatch threshold, checked sequentially through
     // the same CheckProofOfWorkCached() choke point CHeaderPoWCheck uses --
@@ -4263,7 +4255,7 @@ bool HasValidProofOfWork(const std::vector<CBlockHeader>& headers, const Consens
         });
     }
 
-    CCheckQueueControl<CHeaderPoWCheck> control(GetHeaderPoWCheckQueue());
+    CCheckQueueControl<CHeaderPoWCheck> control(queue);
     std::vector<CHeaderPoWCheck> checks;
     checks.reserve(headers.size());
     for (const auto& header : headers) {
@@ -6437,6 +6429,7 @@ static ChainstateManager::Options&& Flatten(ChainstateManager::Options&& opts)
 
 ChainstateManager::ChainstateManager(const util::SignalInterrupt& interrupt, Options options, node::BlockManager::Options blockman_options)
     : m_script_check_queue{/*batch_size=*/128, std::clamp(options.worker_threads_num, 0, MAX_SCRIPTCHECK_THREADS)},
+      m_header_pow_check_queue{/*batch_size=*/64, HeaderPoWCheckQueueWorkerThreads()}, // Bitweb Params
       m_interrupt{interrupt},
       m_options{Flatten(std::move(options))},
       m_blockman{interrupt, std::move(blockman_options)},

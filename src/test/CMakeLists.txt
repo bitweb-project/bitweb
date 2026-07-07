@@ -47,6 +47,7 @@ add_executable(test_bitweb
   fs_tests.cpp
   getarg_tests.cpp
   hash_tests.cpp
+  header_pow_queue_tests.cpp # Bitweb Params
   headers_sync_chainwork_tests.cpp
   httpserver_tests.cpp
   i2p_tests.cpp

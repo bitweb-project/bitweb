@@ -2491,7 +2491,8 @@ void PeerManagerImpl::SendBlockTransactions(CNode& pfrom, Peer& peer, const CBlo
 bool PeerManagerImpl::CheckHeadersPoW(const std::vector<CBlockHeader>& headers, const Consensus::Params& consensusParams, Peer& peer)
 {
     // Do these headers have proof-of-work matching what's claimed?
-    if (!HasValidProofOfWork(headers, consensusParams)) {
+    // Bitweb Params addet m_chainman.GetHeaderCheckQueue()
+    if (!HasValidProofOfWork(headers, consensusParams, m_chainman.GetHeaderCheckQueue())) {
         Misbehaving(peer, "header with invalid proof of work");
         return false;
     }
