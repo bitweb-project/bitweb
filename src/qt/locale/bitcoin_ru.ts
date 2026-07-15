@@ -4852,7 +4852,7 @@ Unable to restore backup of wallet.</source>
     </message>
     <message>
         <source>Creating wallet…</source>
-        <translation type="unfinished">Створення гаманця…</translation>
+        <translation type="unfinished">Создание кошелька…</translation>
     </message>
     <message>
         <source>Duplicate binding configuration for address %s. Please check your -bind, -bind=...=onion and -whitebind settings.</source>
