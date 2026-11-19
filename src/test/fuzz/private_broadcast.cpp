@@ -78,7 +78,7 @@ FUZZ_TARGET(private_broadcast)
                     tx = PickIterator(fdp, transactions)->first;
                     from_transactions = true;
                 }
-                if (pb.Add(tx)) {
+                if (pb.Add(tx) == PrivateBroadcast::AddResult::Added) {
                     Assert(!from_transactions);
                     transactions.emplace(tx, 0);
                 }
