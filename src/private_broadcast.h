@@ -30,11 +30,6 @@
 class PrivateBroadcast
 {
 public:
-    // BACKPORT (upstream bitcoin/bitcoin commits 999d18ab1ca6 + 325afe664d10; not yet in
-    // 31.x as of 2026-07-04): DO NOT DROP ON NEXT UPSTREAM MERGE/REBASE.
-    // Fixes a freshly-added, not-yet-picked private-broadcast transaction being immediately
-    // considered stale (Priority::last_confirmed defaulted to the Unix epoch), causing an
-    // unnecessary extra rebroadcast attempt seconds after the original send (upstream #34862).
 
     /// If a transaction is not sent to any peer for this duration,
     /// then we consider it stale / for rebroadcasting.
@@ -43,6 +38,15 @@ public:
     /// If a transaction is not received back from the network for this duration
     /// after it is broadcast, then we consider it stale / for rebroadcasting.
     static constexpr auto STALE_DURATION{1min};
+
+    /// Maximum number of transactions tracked simultaneously.
+    /// Additions that would exceed this are rejected (see Add()).
+    static constexpr size_t MAX_TRANSACTIONS{10'000};
+
+    /// @param[in] max_transactions Cap on the number of simultaneously tracked
+    /// transactions. Defaults to MAX_TRANSACTIONS.
+    explicit PrivateBroadcast(size_t max_transactions = MAX_TRANSACTIONS)
+        : m_max_transactions{max_transactions} {}
 
     struct PeerSendInfo {
         CService address;
@@ -56,13 +60,23 @@ public:
         std::vector<PeerSendInfo> peers;
     };
 
+    /// Outcome of Add().
+    enum class AddResult {
+        //! The transaction was newly added.
+        Added,
+        //! The transaction was already present; no change.
+        AlreadyPresent,
+        //! Rejected: the queue is already at MAX_TRANSACTIONS.
+        QueueFull,
+    };
+
     /**
      * Add a transaction to the storage.
      * @param[in] tx The transaction to add.
-     * @retval true The transaction was added.
-     * @retval false The transaction was already present.
+     * @return Whether the transaction was newly added, was already present, or
+     * was rejected because the queue is full (see AddResult).
      */
-    bool Add(const CTransactionRef& tx)
+    [[nodiscard]] AddResult Add(const CTransactionRef& tx)
         EXCLUSIVE_LOCKS_REQUIRED(!m_mutex);
 
     /**
@@ -194,15 +208,12 @@ private:
      */
     std::optional<TxAndSendStatusForNode> GetSendStatusByNode(const NodeId& nodeid)
         EXCLUSIVE_LOCKS_REQUIRED(m_mutex);
-
-    // BACKPORT (upstream 999d18ab1ca6, part of the stale-eval fix above): wraps the per-tx
-    // send-status vector together with the time the transaction was added, needed to apply
-    // INITIAL_STALE_DURATION before any send attempt has happened.
     struct TxSendStatus {
         const NodeClock::time_point time_added{NodeClock::now()};
         std::vector<SendStatus> send_statuses;
     };
-
+    /// Cap on the number of simultaneously tracked transactions (see Add()).
+    const size_t m_max_transactions;
     mutable Mutex m_mutex;
     std::unordered_map<CTransactionRef, TxSendStatus, CTransactionRefHash, CTransactionRefComp>
         m_transactions GUARDED_BY(m_mutex);

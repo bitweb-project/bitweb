@@ -21,7 +21,7 @@ BITWEBD_OPTS="${BITWEBD_OPTS:-${BITWEB_OPTS}}"
 name="Bitweb Core Daemon"
 description="Bitweb cryptocurrency P2P network daemon"
 
-command="/usr/bin/bitwebd"
+command="${BITWEBD_BIN}"
 command_args="-pid=\"${BITWEBD_PIDFILE}\" \
 		-conf=\"${BITWEBD_CONFIGFILE}\" \
 		-datadir=\"${BITWEBD_DATADIR}\" \
@@ -30,6 +30,7 @@ command_args="-pid=\"${BITWEBD_PIDFILE}\" \
 
 required_files="${BITWEBD_CONFIGFILE}"
 start_stop_daemon_args="-u ${BITWEBD_USER} \
+			-g ${BITWEBD_GROUP} \
 			-N ${BITWEBD_NICE} -w 2000"
 pidfile="${BITWEBD_PIDFILE}"
 
